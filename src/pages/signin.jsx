@@ -1,130 +1,75 @@
-import ThemeToggler from '@/components/themeToggler';
-import InputAlert from '@/components/InputAlert';
-import { useForm } from '@mantine/form';
-import passwordChecker from '../../lib/passwordChecker';
-import Head from 'next/head';
+import {
+  Paper,
+  createStyles,
+  TextInput,
+  PasswordInput,
+  Checkbox,
+  Button,
+  Title,
+  Text,
+  Anchor,
+  rem
+} from '@mantine/core';
+import ThemeToggle from '@/components/ThemeToggle';
 import Image from 'next/image';
-import { useState } from 'react';
 
-export default function Home() {
-  const form = useForm({
-    initialValues: {
-      email: '',
-      password: ''
-    },
+const useStyles = createStyles((theme) => ({
+  wrapper: {
+    minHeight: rem(900),
+    backgroundSize: 'cover',
+    backgroundPosition: 'bottom',
+    backgroundImage:
+      theme.colorScheme === 'light'
+        ? 'url(https://images.pexels.com/photos/406014/pexels-photo-406014.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)'
+        : "url('https://images.pexels.com/photos/1074882/pexels-photo-1074882.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')"
+  },
 
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-      password: (value) => (passwordChecker(value) ? passwordChecker(value) : null)
+  form: {
+    borderRight: `${rem(1)} solid ${
+      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]
+    }`,
+    position: 'relative',
+    minHeight: rem(900),
+    maxWidth: rem(450),
+    paddingTop: rem(80),
+
+    [theme.fn.smallerThan('sm')]: {
+      maxWidth: '100%'
     }
-  });
+  },
 
-  const handleSubmit = form.onSubmit((values) => {
-    signIn('email', { email });
-  });
+  title: {
+    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    fontFamily: `Greycliff CF, ${theme.fontFamily}`
+  }
+}));
 
+export default function AuthenticationImage() {
+  const { classes } = useStyles();
   return (
-    <>
-      <Head>
-        <title>Bid4Paws: Login</title>
-      </Head>
-      <section className="bg-light-login bg-no-repeat bg-right dark:sm:bg-center bg-cover dark:bg-dark-login">
-        <div className="h-screen flex flex-col items-center justify-center px-6 py-8 mx-auto md:lg:py-0">
-          <a
-            href="#"
-            className="flex items-center  text-2xl font-semibold text-gray-900 dark:text-white">
-            <Image src="/logo-2.gif" alt="logo" width={120} height={120} />
-          </a>
-          <div className="opacity-80 w-full bg-white rounded-lg shadow dark:border md:mt-0 xs:max-w-lg xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div className="p-6 flex flex-col space-y-4 md:space-y-6 sm:p-8">
-              <div className="flex justify-between">
-                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Sign in to your account
-                </h1>
-                <ThemeToggler />
-              </div>
-
-              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-                <div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Your email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      id="email"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="name@company.com"
-                      required
-                      {...form.getInputProps('email')}
-                    />
-                  </div>
-                  {form.errors.email && <InputAlert message={form.errors.email} />}
-                </div>
-
-                <div>
-                  <div>
-                    <label
-                      htmlFor="password"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      placeholder="••••••••"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
-                      {...form.getInputProps('password')}
-                    />
-                  </div>
-                  {form.errors.password && <InputAlert message={form.errors.password} />}
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="remember"
-                        aria-describedby="remember"
-                        type="checkbox"
-                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                        // required
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">
-                        Remember me
-                      </label>
-                    </div>
-                  </div>
-                  <a
-                    href="#"
-                    className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400">
-                    Forgot password?
-                  </a>
-                </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                  Sign in
-                </button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Don’t have an account yet?{' '}
-                  <a
-                    href="#"
-                    className="font-medium text-primary-600 hover:underline dark:text-primary-500">
-                    Sign up
-                  </a>
-                </p>
-              </form>
-            </div>
-          </div>
+    <div className={classes.wrapper}>
+      <Paper className={classes.form} radius={0} p={30}>
+        <div className="flex justify-center items-center my-10">
+          <Image src="/logo-2.gif" alt="Logo" width={200} height={200} />
         </div>
-      </section>
-    </>
+        <div className="inline-block absolute top-5 right-5">
+          <ThemeToggle />
+        </div>
+
+        <TextInput label="Email address" placeholder="hello@gmail.com" size="md" />
+        <PasswordInput label="Password" placeholder="Your password" mt="md" size="md" />
+        <Checkbox label="Keep me logged in" mt="xl" size="md" />
+        <Button fullWidth mt="xl" size="md" color="orange">
+          Login
+        </Button>
+
+        <Text ta="center" mt="md">
+          Don&apos;t have an account?{' '}
+          <Anchor href="#" color="orange" weight={700} onClick={(event) => event.preventDefault()}>
+            Register
+          </Anchor>
+        </Text>
+      </Paper>
+    </div>
   );
 }
