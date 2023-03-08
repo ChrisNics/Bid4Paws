@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { DatePicker } from '@mantine/dates';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import {
   Stepper,
   Button,
@@ -30,7 +31,14 @@ const MapboxComponent = dynamic(() => import('@/components/mapBoxComponent'), {
 
 const Signup = () => {
   const [active, setActive] = useState(0);
-  const nextStep = () => setActive((current) => (current < 3 ? current + 1 : current));
+  const nextStep = () =>
+    setActive((current) => {
+      if (form.validate().hasErrors) {
+        return current;
+      }
+      return current < 1 ? current + 1 : current;
+    });
+
   const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
 
   const matches = useMediaQuery(`(min-width: ${useMantineTheme().breakpoints.sm})`);
@@ -38,6 +46,39 @@ const Signup = () => {
   const [lng, setLng] = useState(121.0529);
   const [lat, setLat] = useState(14.7483);
   const [zoom, setZoom] = useState(9);
+
+  const validates =
+    active === 0
+      ? {
+          firstName: (value) => (value ? null : 'Please provide this field'),
+          lastName: (value) => (value ? null : 'Please provide this field'),
+          email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+          age: (value) =>
+            value < 18
+              ? 'You should be atleast 18 years old or above'
+              : value > 70
+              ? 'Age limit exceeded. The maximum age limit is 70 years old.'
+              : null,
+          gender: (value) => (value ? null : 'Please provide this field'),
+          phoneNumber: (value) => (phoneChecker(`+63${value}`) ? null : 'Invalid PhoneNumber'),
+
+          address: {
+            city: (value) => (value ? null : 'Please provide this field'),
+            province: (value) => (value ? null : 'Please provide this field'),
+            street: (value) => (value ? null : 'Please provide this field'),
+            postalCode: (value) => (value ? null : 'Please provide this field'),
+            barangay: (value) => (value ? null : 'Please provide this field'),
+            geocoding: {
+              landmark: (value) => (value ? null : 'Please provide this field')
+            }
+          }
+        }
+      : {
+          username: (value) => (value ? null : 'Please provide this field'),
+          avatar: (value) => (value ? null : 'Please provide your avatar'),
+          password: (value) => (passwordChecker(value) ? passwordChecker(value) : null),
+          passwordConfirm: (value) => (value ? null : 'Please provide this field')
+        };
 
   const form = useForm({
     initialValues: {
@@ -62,33 +103,7 @@ const Signup = () => {
       }
     },
 
-    validate: {
-      firstName: (value) => (value ? null : 'Please provide this field'),
-      lastName: (value) => (value ? null : 'Please provide this field'),
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-      age: (value) =>
-        value < 18
-          ? 'You should be atleast 18 years old or above'
-          : value > 70
-          ? 'Age limit exceeded. The maximum age limit is 70 years old.'
-          : null,
-      gender: (value) => (value ? null : 'Please provide this field'),
-      phoneNumber: (value) => (phoneChecker(`+63${value}`) ? null : 'Invalid PhoneNumber'),
-      username: (value) => (value ? null : 'Please provide this field'),
-      avatar: (value) => (value ? null : 'Please provide your avatar'),
-      password: (value) => (passwordChecker(value) ? passwordChecker(value) : null),
-      passwordConfirm: (value) => (value ? null : 'Please provide this field'),
-      address: {
-        city: (value) => (value ? null : 'Please provide this field'),
-        province: (value) => (value ? null : 'Please provide this field'),
-        street: (value) => (value ? null : 'Please provide this field'),
-        postalCode: (value) => (value ? null : 'Please provide this field'),
-        barangay: (value) => (value ? null : 'Please provide this field'),
-        geocoding: {
-          landmark: (value) => (value ? null : 'Please provide this field')
-        }
-      }
-    }
+    validate: { ...validates }
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
@@ -122,6 +137,8 @@ const Signup = () => {
     form.setFieldValue('age', age);
   };
 
+  console.log(form.errors);
+
   return (
     <section>
       <div className="container mx-auto sm:p-10 lg:p-5">
@@ -130,7 +147,9 @@ const Signup = () => {
           <p>
             Already have an account?{' '}
             <span className=" text-orange-500 cursor-pointer hover:text-orange-400 hover:underline transition duration-75">
-              Sign-in
+              <Link href="/signin" legacyBehavior>
+                <a>Sign-in</a>
+              </Link>
             </span>
           </p>
         </div>

@@ -1,5 +1,6 @@
 import { model, models, Schema } from 'mongoose';
 import Address from './addressModel';
+import bcrypt from 'bcrypt';
 
 const UserSchema = new Schema(
   {
@@ -13,11 +14,13 @@ const UserSchema = new Schema(
     },
     username: {
       type: String,
-      required: [true, 'Please provide your username']
+      required: [true, 'Please provide your username'],
+      unique: true
     },
     password: {
       type: String,
-      required: [true, 'Please provide your password']
+      required: [true, 'Please provide your password'],
+      select: false
     },
     passwordConfirm: {
       type: String,
@@ -61,6 +64,20 @@ const UserSchema = new Schema(
     timestamps: true
   }
 );
+
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  this.fullName = `${this.firstName} ${this.lastName}`;
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+  this.passwordResetExpires = undefined;
+  this.passwordResetToken = undefined;
+  next();
+});
+
+UserSchema.methods.checkPassword = async function (candidatePassword, userPassword) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = models.User || model('User', UserSchema);
 export default User;

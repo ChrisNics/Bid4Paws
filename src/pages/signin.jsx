@@ -12,6 +12,11 @@ import {
 } from '@mantine/core';
 import ThemeToggle from '@/components/ThemeToggle';
 import Image from 'next/image';
+import Link from 'next/link';
+import { signIn, signOut } from 'next-auth/react';
+import { useForm } from '@mantine/form';
+import showNotification from '../../lib/showNotification';
+import useCurrentUser from '@/store/useCurrentUser';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -46,6 +51,36 @@ const useStyles = createStyles((theme) => ({
 
 export default function AuthenticationImage() {
   const { classes } = useStyles();
+  const { currentUser, loading } = useCurrentUser((state) => ({
+    currentUser: state.currentUser,
+    loading: state.loading
+  }));
+
+  const form = useForm({
+    initialValues: {
+      username: '',
+      password: ''
+    },
+
+    validate: {
+      username: (value) => (value ? null : 'Please provide this field'),
+      password: (value) => (value ? null : 'Please provide this field')
+    }
+  });
+
+  console.log(currentUser, loading);
+  const handleSubmit = form.onSubmit(async (values) => {
+    if (currentUser) {
+      signOut();
+      return;
+    }
+    const res = await signIn('credentials', { redirect: false, ...values }); // We dont need it to convert it to json, next-auth already handles it.
+    if (!res.ok) {
+      showNotification({ title: 'Invalid Credentials', message: res.error, color: 'red' });
+      return;
+    }
+  });
+
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
@@ -56,20 +91,39 @@ export default function AuthenticationImage() {
           <ThemeToggle />
         </div>
 
-        <TextInput label="Email address" placeholder="hello@gmail.com" size="md" />
-        <PasswordInput label="Password" placeholder="Your password" mt="md" size="md" />
+        <TextInput
+          label="Username"
+          placeholder="Your Username"
+          size="md"
+          {...form.getInputProps('username')}
+        />
+        <PasswordInput
+          label="Password"
+          placeholder="Your password"
+          mt="md"
+          size="md"
+          {...form.getInputProps('password')}
+        />
         <Checkbox label="Keep me logged in" mt="xl" size="md" />
-        <Button fullWidth mt="xl" size="md" color="orange">
+        <Button fullWidth mt="xl" size="md" color="orange" onClick={handleSubmit}>
           Login
         </Button>
 
         <Text ta="center" mt="md">
           Don&apos;t have an account?{' '}
-          <Anchor href="#" color="orange" weight={700} onClick={(event) => event.preventDefault()}>
-            Register
-          </Anchor>
+          <Link href="/signup" legacyBehavior>
+            <Anchor color="orange" weight={700}>
+              Register
+            </Anchor>
+          </Link>
         </Text>
       </Paper>
     </div>
   );
 }
+
+export const getServerSideProps = async (context) => {
+  return {
+    props: {} // will be passed to the page component as props
+  };
+};
