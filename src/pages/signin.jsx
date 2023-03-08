@@ -8,7 +8,8 @@ import {
   Title,
   Text,
   Anchor,
-  rem
+  rem,
+  Blockquote
 } from '@mantine/core';
 import ThemeToggle from '@/components/ThemeToggle';
 import Image from 'next/image';
@@ -17,6 +18,7 @@ import { signIn, signOut } from 'next-auth/react';
 import { useForm } from '@mantine/form';
 import showNotification from '../../lib/showNotification';
 import useCurrentUser from '@/store/useCurrentUser';
+import DogFacts from '@/components/DogFacts';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -69,6 +71,7 @@ export default function AuthenticationImage() {
   });
 
   console.log(currentUser, loading);
+
   const handleSubmit = form.onSubmit(async (values) => {
     if (currentUser) {
       signOut();
@@ -84,11 +87,12 @@ export default function AuthenticationImage() {
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
-        <div className="flex justify-center items-center my-10">
-          <Image src="/logo-2.gif" alt="Logo" width={200} height={200} />
-        </div>
         <div className="inline-block absolute top-5 right-5">
           <ThemeToggle />
+        </div>
+
+        <div className="flex justify-center items-center my-10">
+          <Image src="/logo-2.gif" alt="Logo" width={200} height={200} />
         </div>
 
         <TextInput
@@ -117,6 +121,8 @@ export default function AuthenticationImage() {
             </Anchor>
           </Link>
         </Text>
+
+        <DogFacts />
       </Paper>
     </div>
   );
