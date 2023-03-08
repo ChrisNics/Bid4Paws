@@ -107,7 +107,6 @@ const Signup = () => {
     }
 
     const data = await res.json();
-    console.log(data);
     showNotification({
       title: 'Success',
       message: 'Hooray! You have successfully created an account.',

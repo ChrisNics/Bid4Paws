@@ -46,7 +46,7 @@ const RegistrationForm = () => {
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${e.lngLat.lng},${e.lngLat.lat}.json?access_token=${mapboxgl.accessToken}`
       );
       const data = await res.json();
-      console.log(data.query);
+
       setAddress(data.features[0].place_name);
       marker.setLngLat(e.lngLat).addTo(map);
     });
@@ -58,8 +58,6 @@ const RegistrationForm = () => {
     });
   }, []);
 
-  console.log(address);
-  console.log(lng, lat);
   return (
     <div>
       <label>Address:</label>
