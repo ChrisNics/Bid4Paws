@@ -1,11 +1,20 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import showNotification from '../../lib/showNotification';
 
 const useCurrentUser = create(
   immer((set) => ({
     currentUser: null,
-    loading: false,
+    loading: true,
     fetchCurrentUser: async (userID) => {
+      if (!userID) {
+        set((state) => {
+          state.loading = false;
+        });
+
+        return;
+      }
+
       set((state) => {
         state.loading = true;
       });

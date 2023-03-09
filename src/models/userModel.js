@@ -66,8 +66,11 @@ const UserSchema = new Schema(
 );
 
 UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  this.fullName = `${this.firstName} ${this.lastName}`;
+  if (!this.isModified('password')) {
+    this.fullName = `${this.firstName} ${this.lastName}`;
+    return next();
+  }
+
   this.password = await bcrypt.hash(this.password, 12);
   this.passwordConfirm = undefined;
   this.passwordResetExpires = undefined;

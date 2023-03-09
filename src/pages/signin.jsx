@@ -14,11 +14,12 @@ import {
 import ThemeToggle from '@/components/ThemeToggle';
 import Image from 'next/image';
 import Link from 'next/link';
-import { signIn, signOut } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
 import { useForm } from '@mantine/form';
 import showNotification from '../../lib/showNotification';
 import useCurrentUser from '@/store/useCurrentUser';
 import DogFacts from '@/components/DogFacts';
+import signOut from '../../lib/signOut';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -53,9 +54,8 @@ const useStyles = createStyles((theme) => ({
 
 export default function AuthenticationImage() {
   const { classes } = useStyles();
-  const { currentUser, loading } = useCurrentUser((state) => ({
-    currentUser: state.currentUser,
-    loading: state.loading
+  const { currentUser } = useCurrentUser((state) => ({
+    currentUser: state.currentUser
   }));
 
   const form = useForm({
@@ -70,7 +70,7 @@ export default function AuthenticationImage() {
     }
   });
 
-  console.log(currentUser, loading);
+  console.log(currentUser);
 
   const handleSubmit = form.onSubmit(async (values) => {
     if (currentUser) {

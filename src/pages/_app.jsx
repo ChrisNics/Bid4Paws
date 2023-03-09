@@ -51,24 +51,23 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
 
 const Auth = ({ children }) => {
   const { data: session, status } = useSession();
-  const { fetchCurrentUser, logoutCurrentUser } = useCurrentUser((state) => ({
+  const { fetchCurrentUser, loading } = useCurrentUser((state) => ({
     fetchCurrentUser: state.fetchCurrentUser,
 
-    logoutCurrentUser: state.logoutCurrentUser
+    loading: state.loading
   }));
 
   useEffect(() => {
-    const fetchUser = async () => {
-      // Check if user is authenticated
-      if (session) {
-        await fetchCurrentUser(session.id);
-      } else {
-        logoutCurrentUser();
-      }
-    };
+    // We need to wait the useSession before calling our customize session
+    if (status !== 'loading') {
+      const fetchUser = async () => {
+        await fetchCurrentUser(session?.id);
+      };
 
-    fetchUser();
+      fetchUser();
+    }
   }, [session]);
 
+  if (loading) return <h1>LOading</h1>;
   return children;
 };
