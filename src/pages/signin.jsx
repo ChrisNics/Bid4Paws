@@ -70,8 +70,6 @@ export default function AuthenticationImage() {
     }
   });
 
-  console.log(currentUser);
-
   const handleSubmit = form.onSubmit(async (values) => {
     if (currentUser) {
       signOut();

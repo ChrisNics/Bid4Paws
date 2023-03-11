@@ -26,6 +26,7 @@ const useCurrentUser = create(
       }
 
       const { user } = await res.json();
+      console.log(user);
 
       set((state) => {
         state.currentUser = user;

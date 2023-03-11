@@ -1,38 +1,35 @@
-import React from 'react';
-import 'sendbird-uikit/dist/index.css';
-import useCurrentUser from '@/store/useCurrentUser';
 import dynamic from 'next/dynamic';
-const SendbirdApp = dynamic(() => import('sendbird-uikit').then((mod) => mod.App));
-// import "./styles.css";
+import 'sendbird-uikit/dist/index.css';
+import { TextInput, Button } from '@mantine/core';
+import sendMessage from '../../lib/sendMessage';
 
-const APP_ID = 'C0896859-3FF1-4F0E-83E7-068BA265220D';
+const Chat = dynamic(() => import('../components/Chat'), {
+  ssr: false,
+  loading: () => <h1>Loadings</h1>
+});
 
-// // set your own USER_ID and NICKNAME
-// const USER_ID = 'Kamote';
-// const NICKNAME = 'Awit';
-const THEME = 'light' || 'dark';
+const data = {
+  name: 'Saturday soccer members',
+  channel_url: 'private_chat_room_424',
+  cover_url: 'https://sendbird.com/main/img/cover/cover_08.jpg',
+  custom_type: 'esports',
+  is_distinct: true,
+  invited_id: 'Smeb',
+  user_ids: ['Smeb', 'The Shy'],
+  operator_ids: ['Smeb']
+};
+
+const data1 = {
+  message_type: 'MESG',
+  user_id: 'The Shy',
+  message: 'Holycrap'
+};
 
 const RegistrationForm = () => {
-  const { currentUser, loading } = useCurrentUser((state) => ({
-    currentUser: state.currentUser,
-    loading: state.loading
-  }));
-
   return (
     <div className="customized-app">
-      {!loading && (
-        <SendbirdApp
-          accessToken="c5abce8f752c44399119adbb4c6830efea1db698"
-          appId={APP_ID}
-          userId="Smeb"
-          nickname={currentUser.fullName}
-          theme={THEME}
-          useReaction={true}
-          useMessageGrouping={true}
-          showSearchIcon={true}
-          channelUrl={`sendbird_group_channel_${[currentUser._id, 'The Shy'].sort().join('_')}`}
-        />
-      )}
+      <Chat />
+      <Button onClick={() => sendMessage({ channelBody: data, messageBody: data1 })}>Submit</Button>
     </div>
   );
 };

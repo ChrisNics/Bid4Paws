@@ -67,6 +67,7 @@ const Auth = ({ children }) => {
       fetchUser();
     }
   }, [session]);
+  console.log(session, loading);
 
   if (loading) return <h1>LOading</h1>;
   return children;
