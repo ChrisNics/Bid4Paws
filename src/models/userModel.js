@@ -17,11 +17,16 @@ const UserSchema = new Schema(
       required: [true, 'Please provide your username'],
       unique: true
     },
+    avatar: {
+      type: String,
+      required: [true, 'Please provide your avatar']
+    },
     password: {
       type: String,
       required: [true, 'Please provide your password'],
       select: false
     },
+
     passwordConfirm: {
       type: String,
       validate: {

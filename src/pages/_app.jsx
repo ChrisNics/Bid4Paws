@@ -5,6 +5,7 @@ import { Notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
 import useCurrentUser from '@/store/useCurrentUser';
 import { useSession } from 'next-auth/react';
+import ApplicationContainer from '@/components/ApplicationContainer';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const [colorScheme, setColorScheme] = useState('light');
@@ -28,12 +29,12 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
           fontFamilyMonospace: 'Monaco, Courier, monospace',
           headings: { fontFamily: 'Merriweather, serif' },
           breakpoints: {
-            xs: '375px',
-            sm: '640px',
-            md: '768px',
-            lg: '1024px',
-            xl: '1280px',
-            '2xl': '1536px'
+            xs: '23.44em',
+            sm: '40em',
+            md: '48em',
+            lg: '64em',
+            xl: '80em',
+            '2xl': '96em'
           }
         }}
         withGlobalStyles
@@ -41,7 +42,9 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
         <Notifications />
         <SessionProvider session={session}>
           <Auth>
-            <Component {...pageProps} />
+            <ApplicationContainer>
+              <Component {...pageProps} />
+            </ApplicationContainer>
           </Auth>
         </SessionProvider>
       </MantineProvider>

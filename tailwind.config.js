@@ -12,14 +12,26 @@ module.exports = {
       mono: ['Merriweather, serif']
     },
     screens: {
-      xs: '375px',
-      sm: '640px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
-      '2xl': '1536px'
+      xs: '23.44em',
+      sm: '40em',
+      md: '48em',
+      lg: '64em',
+      xl: '80em',
+      '2xl': '96em'
     },
-    extend: {}
+
+    extend: {
+      height: {
+        card: '20rem',
+        cardSmall: '32rem',
+        cardLg: '40rem'
+      },
+      width: {
+        card: '20rem',
+        cardSmall: '32rem',
+        cardLg: '40rem'
+      }
+    }
   },
   plugins: [require('tailwindcss-debug-screens'), require('flowbite/plugin')]
 };

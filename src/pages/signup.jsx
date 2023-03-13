@@ -137,8 +137,6 @@ const Signup = () => {
     form.setFieldValue('age', age);
   };
 
-  console.log(form.errors);
-
   return (
     <section>
       <div className="container mx-auto sm:p-10 lg:p-5">

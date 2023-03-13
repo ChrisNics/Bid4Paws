@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Blockquote } from '@mantine/core';
+import { Blockquote, Text } from '@mantine/core';
 
-function DogFacts() {
+function DogFacts({ color = 'black' }) {
   const [fact, setFact] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,7 +42,9 @@ function DogFacts() {
     <>
       {!loading && (
         <Blockquote cite="– Fact about dogs" mt={50}>
-          {fact}
+          <div>
+            <p className={`font-sans text-sm text-${color}`}>{fact}</p>
+          </div>
         </Blockquote>
       )}
     </>

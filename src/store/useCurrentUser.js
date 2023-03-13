@@ -6,6 +6,11 @@ const useCurrentUser = create(
   immer((set) => ({
     currentUser: null,
     loading: true,
+    setCurrentUser: (currentUser) =>
+      set((state) => {
+        console.log(currentUser);
+        state.currentUser = currentUser;
+      }),
     fetchCurrentUser: async (userID) => {
       if (!userID) {
         set((state) => {
@@ -25,11 +30,10 @@ const useCurrentUser = create(
         return;
       }
 
-      const { user } = await res.json();
-      console.log(user);
+      const { data } = await res.json();
 
       set((state) => {
-        state.currentUser = user;
+        state.currentUser = data;
         state.loading = false;
       });
     },

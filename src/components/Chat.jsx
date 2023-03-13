@@ -5,8 +5,6 @@ const Chat = () => {
   const currentUser = useCurrentUser((state) => state.currentUser);
   const THEME = 'light' || 'dark';
 
-  console.log(process.env.NEXT_PUBLIC_SENDBIRD_APP_ID);
-
   return (
     <div style={{ height: 'calc(100vh - 40px)', width: '100vw' }}>
       <SendbirdApp
