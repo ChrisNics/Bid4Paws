@@ -7,7 +7,10 @@ import { useRouter } from 'next/router';
 export default function ApplicationContainer({ children }) {
   const theme = useMantineTheme();
   const router = useRouter();
-  const isMatching = router.pathname.includes('/matching');
+  const isMatching =
+    router.pathname.includes('/matching') ||
+    router.pathname.includes('/signin') ||
+    router.pathname.includes('/signup');
 
   if (isMatching) return children;
 

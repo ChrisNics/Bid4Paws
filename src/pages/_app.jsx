@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import useCurrentUser from '@/store/useCurrentUser';
 import { useSession } from 'next-auth/react';
 import ApplicationContainer from '@/components/ApplicationContainer';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const [colorScheme, setColorScheme] = useState('light');
@@ -44,6 +45,9 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
           <Auth>
             <ApplicationContainer>
               <Component {...pageProps} />
+              <div className="fixed bottom-10 right-10">
+                <ThemeToggle />
+              </div>
             </ApplicationContainer>
           </Auth>
         </SessionProvider>
@@ -70,7 +74,6 @@ const Auth = ({ children }) => {
       fetchUser();
     }
   }, [session]);
-  console.log(session, loading);
 
   if (loading) return <h1>LOading</h1>;
   return children;
