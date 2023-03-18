@@ -4,10 +4,9 @@ import Address from '@/models/addressModel';
 import mongoDBErrorHandler from '../../../../lib/mongoDBErrorHandler';
 
 export default async function handler(req, res) {
+  await dbConnect();
   if (req.method === 'GET') {
     try {
-      await dbConnect();
-
       const user = await User.findById(req.query.userID).populate('address');
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
@@ -38,7 +37,8 @@ export default async function handler(req, res) {
         const updatedAddress = await Address.findByIdAndUpdate(updatedUser.address, address, {
           new: true
         });
-        updatedUser.address = updatedAddress._id;
+
+        updatedUser.address = updatedAddress;
       }
 
       return res

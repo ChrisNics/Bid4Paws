@@ -8,7 +8,6 @@ const useCurrentUser = create(
     loading: true,
     setCurrentUser: (currentUser) =>
       set((state) => {
-        console.log(currentUser);
         state.currentUser = currentUser;
       }),
     fetchCurrentUser: async (userID) => {

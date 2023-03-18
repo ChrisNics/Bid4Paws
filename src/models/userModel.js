@@ -70,6 +70,15 @@ const UserSchema = new Schema(
   }
 );
 
+UserSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'address',
+    model: 'Address'
+  });
+
+  next();
+});
+
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     this.fullName = `${this.firstName} ${this.lastName}`;

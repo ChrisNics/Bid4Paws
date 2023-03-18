@@ -40,19 +40,12 @@ const MapboxComponent = ({ lng, lat, zoom, onAddressChange, setLng, setLat, setZ
       marker.setLngLat(e.result.center).addTo(map);
     });
 
-    map.on('idle', function () {
-      map.resize();
-    });
-
-    map.on('load', function () {
-      map.resize();
-    });
-
     map.on('click', async (e) => {
       const res = await fetch(
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${e.lngLat.lng},${e.lngLat.lat}.json?access_token=${mapboxgl.accessToken}`
       );
       const data = await res.json();
+
       onAddressChange.landmark(data.features[0].place_name);
       onAddressChange.coordinates([data.query[0], data.query[1]]);
 

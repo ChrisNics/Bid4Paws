@@ -1,29 +1,17 @@
-import {
-  Tabs,
-  TextInput,
-  NumberInput,
-  Tooltip,
-  Select,
-  Text,
-  PasswordInput,
-  Button
-} from '@mantine/core';
+import { Tabs, Button } from '@mantine/core';
 import dynamic from 'next/dynamic';
 import showNotification from '../../lib/showNotification';
 import phoneChecker from '../../lib/phoneChecker';
-import { DatePicker } from '@mantine/dates';
 import { IconPhoto, IconMessageCircle, IconSettings } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
 import useCurrentUser from '@/store/useCurrentUser';
-import { current } from 'tailwindcss/colors';
-import SingleImageDropZone from '@/components/SingleImageDropZone';
-import Image from 'next/image';
-import passwordChecker from '../../lib/passwordChecker';
 
-const MapboxComponent = dynamic(() => import('@/components/mapBoxComponent'), {
-  loading: () => 'Loading...'
-});
+import passwordChecker from '../../lib/passwordChecker';
+import FormPersonalInfo from '@/components/MyAccount/FormPersonalInfo';
+import FormAddress from '@/components/MyAccount/FormAddress';
+import FormUsernameAndAvatar from '@/components/MyAccount/FormUsernameAndAvatar';
+import FormChangePassword from '@/components/MyAccount/FormChangePassword';
 
 const MyAccount = () => {
   const { currentUser, setCurrentUser } = useCurrentUser((state) => ({
@@ -31,10 +19,7 @@ const MyAccount = () => {
     setCurrentUser: state.setCurrentUser
   }));
   const [tab, setTab] = useState('Personal Information');
-
-  const [lng, setLng] = useState(121.0529);
-  const [lat, setLat] = useState(14.7483);
-  const [zoom, setZoom] = useState(9);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formPersonalInfo = useForm({
     initialValues: {
@@ -88,51 +73,76 @@ const MyAccount = () => {
     }
   });
 
-  const formLoginCredentials = useForm({
+  const formUsernameAndAvatar = useForm({
     initialValues: {
       username: '',
-      password: '',
-      passwordConfirm: '',
-      passwordCurrent: '',
       avatar: ''
     },
 
     validate: {
       username: (value) => (value ? null : 'Please provide this field'),
-      avatar: (value) => (value ? null : 'Please provide your avatar'),
+      avatar: (value) => (value ? null : 'Please provide your avatar')
+    }
+  });
+
+  const formChangePassword = useForm({
+    initialValues: {
+      passwordCurrent: '',
+      password: '',
+      passwordConfirm: ''
+    },
+
+    validate: {
+      passwordCurrent: (value) => (value ? null : 'Please provide this field'),
       password: (value) => (passwordChecker(value) ? passwordChecker(value) : null),
       passwordConfirm: (value) => (value ? null : 'Please provide this field')
     }
   });
 
-  const updateUser = async (values) => {
-    console.log(values);
-    const res = await fetch(`/api/user/${currentUser._id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(values),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+  const updateUser = async (values, isPasswordChange = false) => {
+    const url = isPasswordChange
+      ? `/api/auth/changePassword/${currentUser._id}`
+      : `/api/user/${currentUser._id}`;
 
-    if (!res.ok) {
-      const errorData = await res.json();
+    try {
+      setIsLoading(true);
+      const res = await fetch(url, {
+        method: 'PATCH',
+        body: JSON.stringify(values),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        showNotification({
+          title: 'Invalid Credentials',
+          message: errorData.message,
+          color: 'red'
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      const { data, message } = await res.json();
+      setCurrentUser(data);
+      setIsLoading(false);
+      formChangePassword.reset();
       showNotification({
-        title: 'Invalid Credentials',
-        message: errorData.message,
+        title: 'Success',
+        message: message,
+        color: 'green'
+      });
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+      showNotification({
+        title: 'Error',
+        message: 'An error occurred. Please try again later.',
         color: 'red'
       });
-      return;
     }
-
-    const { data, message } = await res.json();
-    console.log(data);
-    setCurrentUser(data);
-    showNotification({
-      title: 'Success',
-      message: message,
-      color: 'green'
-    });
   };
 
   const handleSubmit =
@@ -140,7 +150,9 @@ const MyAccount = () => {
       ? formPersonalInfo.onSubmit(async (values) => updateUser(values))
       : tab === 'Address'
       ? formAddress.onSubmit(async (values) => updateUser(values))
-      : formLoginCredentials.onSubmit(async (values) => updateUser(values));
+      : tab === 'Change Password'
+      ? formChangePassword.onSubmit(async (values) => updateUser(values, true))
+      : formUsernameAndAvatar.onSubmit(async (values) => updateUser(values));
 
   useEffect(() => {
     if (!currentUser) return; // Guard Clause
@@ -160,11 +172,15 @@ const MyAccount = () => {
         province: currentUser.address.province,
         street: currentUser.address.street,
         postalCode: currentUser.address.postalCode,
-        barangay: currentUser.address.barangay
+        barangay: currentUser.address.barangay,
+        geocoding: {
+          coordinates: currentUser.address.geocoding.coordinates,
+          landmark: currentUser.address.geocoding.landmark
+        }
       }
     });
 
-    formLoginCredentials.setValues({
+    formUsernameAndAvatar.setValues({
       username: currentUser.username,
       avatar: currentUser.avatar
     });
@@ -177,6 +193,7 @@ const MyAccount = () => {
       </div>
       <Tabs
         defaultValue="Personal Information"
+        color="orange"
         activateTabWithKeyboard={true}
         onTabChange={(i) => setTab(i)}>
         <Tabs.List>
@@ -186,224 +203,28 @@ const MyAccount = () => {
           <Tabs.Tab value="Address" icon={<IconMessageCircle size="0.8rem" />}>
             Address
           </Tabs.Tab>
-          <Tabs.Tab value="Login credentials" icon={<IconSettings size="0.8rem" />}>
-            Login credentials
+          <Tabs.Tab value="Username and Avatar" icon={<IconSettings size="0.8rem" />}>
+            Username and Avatar
+          </Tabs.Tab>
+          <Tabs.Tab value="Change Password" icon={<IconSettings size="0.8rem" />}>
+            Change Password
           </Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="Personal Information" pt="xs">
-          <div className="flex flex-col gap-y-5">
-            {/* First Children */}
-            <div className="w-full flex flex-col gap-y-5 md:gap-y-0 md:flex-row md:gap-x-5">
-              <TextInput
-                {...formPersonalInfo.getInputProps('firstName')}
-                placeholder="Your first name"
-                label="First name"
-                withAsterisk
-                className="grow"
-              />
-              <TextInput
-                {...formPersonalInfo.getInputProps('lastName')}
-                placeholder="Your last name"
-                label="Last name"
-                withAsterisk
-                className="grow"
-              />
-            </div>
-
-            {/* Second Children */}
-            <div>
-              <TextInput
-                {...formPersonalInfo.getInputProps('email')}
-                placeholder="Your email"
-                label="Email"
-                withAsterisk
-                className="grow"
-              />
-            </div>
-
-            {/* Third Children */}
-            <div className="flex flex-col gap-y-5 sm:justify-between sm:gap-x-5 sm:flex-row sm:gap-y-0 lg:justify-start">
-              <div>
-                <p className="text-sm">Birth Date</p>
-                <DatePicker
-                  {...formPersonalInfo.getInputProps('birthDate')}
-                  // onChange={dateToAge}
-                  // value={form.values.birthDate}
-                  allowDeselect
-                />
-              </div>
-
-              <div className="flex flex-col gap-y-5 lg:flex-row lg:gap-y-0 lg:gap-x-5">
-                <NumberInput
-                  disabled
-                  {...formPersonalInfo.getInputProps('age')}
-                  placeholder="Your age"
-                  label="Your age"
-                  withAsterisk
-                />
-
-                <Select
-                  {...formPersonalInfo.getInputProps('gender')}
-                  label="Gender"
-                  placeholder="Gender"
-                  data={[
-                    { value: 'male', label: 'Male' },
-                    { value: 'female', label: 'Female' }
-                  ]}
-                />
-                <NumberInput
-                  {...formPersonalInfo.getInputProps('phoneNumber')}
-                  maxLength={10}
-                  placeholder="Phone number"
-                  label="Phone number"
-                  withAsterisk
-                  parser={(value) => {
-                    const parsedValue = value.replace(/\D/g, '');
-                    return parsedValue.startsWith('0') ? parsedValue.slice(1) : parsedValue;
-                  }}
-                  hideControls
-                  icon={<Text>+63</Text>}
-                />
-              </div>
-            </div>
-          </div>
+          <FormPersonalInfo form={formPersonalInfo} />
         </Tabs.Panel>
 
         <Tabs.Panel value="Address" pt="xs">
-          <div className="flex flex-col gap-y-5">
-            <div className="flex flex-col gap-y-5 md:flex md:flex-row md:gap-y-0 md:gap-x-5">
-              <TextInput
-                {...formAddress.getInputProps('address.city')}
-                placeholder="City"
-                label="City"
-                withAsterisk
-                className="grow"
-              />
-              <TextInput
-                {...formAddress.getInputProps('address.province')}
-                placeholder="Province"
-                label="Province"
-                withAsterisk
-                className="grow"
-              />
-            </div>
-
-            <div className="flex flex-col gap-y-5 md:flex md:flex-row md:gap-y-0 md:gap-x-5">
-              <TextInput
-                {...formAddress.getInputProps('address.street')}
-                placeholder="Street Address"
-                label="Street Address"
-                withAsterisk
-                className="grow"
-              />
-              <TextInput
-                {...formAddress.getInputProps('address.barangay')}
-                placeholder="Barangay"
-                label="Barangay"
-                withAsterisk
-                className="grow"
-              />
-              <NumberInput
-                maxLength={4}
-                {...formAddress.getInputProps('address.postalCode')}
-                placeholder="Postal Code"
-                label="Postal Code"
-                withAsterisk
-                className="grow"
-                hideControls
-                parser={(value) => {
-                  const parsedValue = value.replace(/\D/g, '');
-                  return parsedValue;
-                }}
-              />
-            </div>
-            <MapboxComponent
-              lng={lng}
-              lat={lat}
-              zoom={zoom}
-              setLng={setLng}
-              setLat={setLat}
-              setZoom={setZoom}
-              onAddressChange={{
-                landmark: (value) => formAddress.setFieldValue('address.geocoding.landmark', value),
-                coordinates: (value) =>
-                  formAddress.setFieldValue('address.geocoding.coordinates', value)
-              }}
-            />
-            <Tooltip
-              label="Location information is necessary for our app's matchmaking feature to work properly."
-              position="top-start">
-              <p className="text-xs text-orange-500 cursor-pointer">Why we need this?</p>
-            </Tooltip>
-
-            <TextInput
-              {...formAddress.getInputProps('address.geocoding.landmark')}
-              placeholder="Nearest Landmark"
-              label="Nearest Landmark"
-              withAsterisk
-              className="grow"
-              disabled
-            />
-          </div>
+          <FormAddress form={formAddress} tab={tab} />
         </Tabs.Panel>
 
-        <Tabs.Panel value="Login credentials" pt="xs">
-          <div className="flex flex-col gap-y-5">
-            <div className="flex justify-center items-center">
-              <div className="max-w-sm flex flex-col gap-y-5">
-                <div className="relative border rounded-full h-60 w-60 overflow-hidden">
-                  <Image
-                    priority
-                    fill
-                    alt="image"
-                    src={
-                      formLoginCredentials.values.avatar
-                        ? formLoginCredentials.values.avatar
-                        : 'https://uploads.commoninja.com/searchengine/wordpress/random-avatars-of-user.png'
-                    }
-                    // imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
-                  />
-                </div>
-                <SingleImageDropZone
-                  title="avatar"
-                  hooks={(value) => formLoginCredentials.setFieldValue('avatar', value)}
-                />
-                {formLoginCredentials.errors.avatar && (
-                  <div>
-                    <p className="text-sm text-red-500">{formLoginCredentials.errors.avatar}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-5">
-              <TextInput
-                {...formLoginCredentials.getInputProps('username')}
-                placeholder="Username"
-                label="Username"
-                withAsterisk
-              />
-              <PasswordInput
-                {...formLoginCredentials.getInputProps('passwordCurrent')}
-                placeholder="Current Password"
-                label="Current Password"
-                withAsterisk
-              />
-              <PasswordInput
-                {...formLoginCredentials.getInputProps('password')}
-                placeholder="Password"
-                label="Password"
-                description="Password must include at least one letter, number and special character"
-                withAsterisk
-              />
-              <PasswordInput
-                {...formLoginCredentials.getInputProps('passwordConfirm')}
-                placeholder="Password Confirm"
-                label="Password Confirm"
-                withAsterisk
-              />
-            </div>
-          </div>
+        <Tabs.Panel value="Username and Avatar" pt="xs">
+          <FormUsernameAndAvatar form={formUsernameAndAvatar} />
+        </Tabs.Panel>
+
+        <Tabs.Panel value="Change Password" pt="xs">
+          <FormChangePassword form={formChangePassword} />
         </Tabs.Panel>
       </Tabs>
 
@@ -412,8 +233,8 @@ const MyAccount = () => {
           <Button variant="outline" color="orange" fullWidth>
             Back
           </Button>
-          <Button color="orange" fullWidth onClick={handleSubmit}>
-            Submit
+          <Button color="orange" fullWidth onClick={handleSubmit} loading={isLoading}>
+            Update
           </Button>
         </div>
       </div>

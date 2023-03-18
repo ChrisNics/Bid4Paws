@@ -58,16 +58,12 @@ const matching = () => {
   );
 
   const swiped = (direction, character) => {
-    console.log(direction);
     setLastDirection(direction);
   };
 
   const outOfFrame = () => {
-    console.log('test');
     loadData();
   };
-
-  console.log(characters);
 
   return (
     <section className="relative background">

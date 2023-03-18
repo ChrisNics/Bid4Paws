@@ -297,7 +297,7 @@ const Signup = () => {
               <Tooltip
                 label="Location information is necessary for our app's matchmaking feature to work properly."
                 position="top-start">
-                <p className="text-xs text-orange-500 cursor-pointer">Why we need this?</p>
+                <p className="text-xs w-max text-orange-500 cursor-pointer">Why we need this?</p>
               </Tooltip>
 
               <TextInput
