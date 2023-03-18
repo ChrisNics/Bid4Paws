@@ -16,6 +16,8 @@ const MapboxComponent = ({ lng, lat, zoom, onAddressChange, setLng, setLat, setZ
       zoom: zoom
     });
 
+    map.addControl(new mapboxgl.FullscreenControl());
+
     const geocoder = new MapboxGeocoder({
       accessToken: mapboxgl.accessToken,
       mapboxgl: mapboxgl
@@ -36,6 +38,14 @@ const MapboxComponent = ({ lng, lat, zoom, onAddressChange, setLng, setLat, setZ
         zoom: 15
       });
       marker.setLngLat(e.result.center).addTo(map);
+    });
+
+    map.on('idle', function () {
+      map.resize();
+    });
+
+    map.on('load', function () {
+      map.resize();
     });
 
     map.on('click', async (e) => {

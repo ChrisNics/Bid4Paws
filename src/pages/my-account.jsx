@@ -8,6 +8,7 @@ import {
   PasswordInput,
   Button
 } from '@mantine/core';
+import dynamic from 'next/dynamic';
 import showNotification from '../../lib/showNotification';
 import phoneChecker from '../../lib/phoneChecker';
 import { DatePicker } from '@mantine/dates';
@@ -20,12 +21,20 @@ import SingleImageDropZone from '@/components/SingleImageDropZone';
 import Image from 'next/image';
 import passwordChecker from '../../lib/passwordChecker';
 
+const MapboxComponent = dynamic(() => import('@/components/mapBoxComponent'), {
+  loading: () => 'Loading...'
+});
+
 const MyAccount = () => {
   const { currentUser, setCurrentUser } = useCurrentUser((state) => ({
     currentUser: state.currentUser,
     setCurrentUser: state.setCurrentUser
   }));
   const [tab, setTab] = useState('Personal Information');
+
+  const [lng, setLng] = useState(121.0529);
+  const [lat, setLat] = useState(14.7483);
+  const [zoom, setZoom] = useState(9);
 
   const formPersonalInfo = useForm({
     initialValues: {
@@ -309,9 +318,7 @@ const MyAccount = () => {
                 }}
               />
             </div>
-
-            {/* form.setValues((prev) => ({ ...prev, ...values })); */}
-            {/* <MapboxComponent
+            <MapboxComponent
               lng={lng}
               lat={lat}
               zoom={zoom}
@@ -319,10 +326,11 @@ const MyAccount = () => {
               setLat={setLat}
               setZoom={setZoom}
               onAddressChange={{
-                landmark: (value) => form.setFieldValue('address.geocoding.landmark', value),
-                coordinates: (value) => form.setFieldValue('address.geocoding.coordinates', value)
+                landmark: (value) => formAddress.setFieldValue('address.geocoding.landmark', value),
+                coordinates: (value) =>
+                  formAddress.setFieldValue('address.geocoding.coordinates', value)
               }}
-            /> */}
+            />
             <Tooltip
               label="Location information is necessary for our app's matchmaking feature to work properly."
               position="top-start">
@@ -330,7 +338,7 @@ const MyAccount = () => {
             </Tooltip>
 
             <TextInput
-              // {...form.getInputProps('address.geocoding.landmark')}
+              {...formAddress.getInputProps('address.geocoding.landmark')}
               placeholder="Nearest Landmark"
               label="Nearest Landmark"
               withAsterisk
