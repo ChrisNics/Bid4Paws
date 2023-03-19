@@ -1,5 +1,6 @@
 import dbConnect from '@/utils/dbConnect';
 import User from '@/models/userModel';
+import mongoDBErrorHandler from '../../../../../lib/mongoDBErrorHandler';
 
 export default async function handler(req, res) {
   try {
@@ -21,7 +22,6 @@ export default async function handler(req, res) {
 
     res.status(200).json({ success: true, data: users });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: 'Internal server error.' });
+    mongoDBErrorHandler(res, error);
   }
 }

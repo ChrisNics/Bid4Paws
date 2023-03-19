@@ -1,0 +1,313 @@
+[
+  {
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "username": "janesmith",
+    "avatar": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "janesmith@example.com",
+    "phoneNumber": 987654322,
+    "birthDate": "1980-02-02",
+    "age": 41,
+    "gender": "Female",
+    "address": {
+      "street": "456 Main St",
+      "barangay": "Barangay 2",
+      "postalCode": 5678,
+      "city": "Cebu",
+      "province": "Cebu",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 2",
+        "coordinates": [456.789, 45.678]
+      }
+    }
+  },
+
+  {
+    "firstName": "Michael",
+    "lastName": "Johnson",
+    "username": "michaeljohnson",
+    "avatar": "https://images.pexels.com/photos/207962/pexels-photo-207962.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "michaeljohnson@example.com",
+    "phoneNumber": 987653221,
+    "birthDate": "1985-03-03",
+    "age": 36,
+    "gender": "Male",
+    "address": {
+      "street": "789 Main St",
+      "barangay": "Barangay 3",
+      "postalCode": 9012,
+      "city": "Davao",
+      "province": "Davao del Sur",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 3",
+        "coordinates": [789.123, 78.901]
+      }
+    }
+  },
+
+  {
+    "firstName": "Jessica",
+    "lastName": "Williams",
+    "username": "jessicawilliams",
+    "avatar": "https://images.pexels.com/photos/207963/pexels-photo-207963.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "jessicawilliams@example.com",
+    "phoneNumber": 9123154321,
+    "birthDate": "1995-04-04",
+    "age": 26,
+    "gender": "Female",
+    "address": {
+      "street": "123 Main St",
+      "barangay": "Barangay 4",
+      "postalCode": 1234,
+      "city": "Cagayan de Oro",
+      "province": "Misamis Oriental",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 4",
+        "coordinates": [123.456, 12.345]
+      }
+    }
+  },
+
+  {
+    "firstName": "Andrew",
+    "lastName": "Brown",
+    "username": "andrewbrown",
+    "avatar": "https://images.pexels.com/photos/207964/pexels-photo-207964.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "andrewbrown@example.com",
+    "phoneNumber": 98732131321,
+    "birthDate": "2005-05-05",
+    "age": 16,
+    "gender": "Male",
+    "address": {
+      "street": "123 Main St",
+      "barangay": "Barangay 4",
+      "postalCode": 1234,
+      "city": "Cagayan de Oro",
+      "province": "Misamis Oriental",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 4",
+        "coordinates": [123.456, 12.345]
+      }
+    }
+  },
+
+  {
+    "firstName": "Emily",
+    "lastName": "Jones",
+    "username": "emilyjones",
+    "avatar": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "emilyjones@example.com",
+    "phoneNumber": 987312313321,
+    "birthDate": "1975-06-06",
+    "age": 46,
+    "gender": "Female",
+    "address": {
+      "street": "789 Main St",
+      "barangay": "Barangay 6",
+      "postalCode": 9012,
+      "city": "Iloilo",
+      "province": "Iloilo",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 6",
+        "coordinates": [789.123, 78.901]
+      }
+    }
+  },
+
+  {
+    "firstName": "Matthew",
+    "lastName": "Miller",
+    "username": "matthewmiller",
+    "avatar": "https://images.pexels.com/photos/207962/pexels-photo-207962.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "matthewmiller@example.com",
+    "phoneNumber": 9321314321,
+    "birthDate": "1980-07-07",
+    "age": 41,
+    "gender": "Male",
+    "address": {
+      "street": "123 Main St",
+      "barangay": "Barangay 7",
+      "postalCode": 1234,
+      "city": "Dumaguete",
+      "province": "Negros Oriental",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 7",
+        "coordinates": [123.456, 12.345]
+      }
+    }
+  },
+
+  {
+    "firstName": "Olivia",
+    "lastName": "Wilson",
+    "username": "oliviawilson",
+    "avatar": "https://images.pexels.com/photos/207963/pexels-photo-207963.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "oliviawilson@example.com",
+    "phoneNumber": 4242447654321,
+    "birthDate": "1985-08-08",
+    "age": 36,
+    "gender": "Female",
+    "address": {
+      "street": "456 Main St",
+      "barangay": "Barangay 8",
+      "postalCode": 5678,
+      "city": "General Santos",
+      "province": "South Cotabato",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 8",
+        "coordinates": [456.789, 45.678]
+      }
+    }
+  },
+
+  {
+    "firstName": "Ava",
+    "lastName": "Moore",
+    "username": "avamoore",
+    "avatar": "https://images.pexels.com/photos/207964/pexels-photo-207964.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "avamoore@example.com",
+    "phoneNumber": 9870535321,
+    "birthDate": "1990-09-09",
+    "age": 31,
+    "gender": "Female",
+    "address": {
+      "street": "456 Main St",
+      "barangay": "Barangay 8",
+      "postalCode": 5678,
+      "city": "General Santos",
+      "province": "South Cotabato",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 8",
+        "coordinates": [456.789, 45.678]
+      }
+    }
+  },
+
+  {
+    "firstName": "Isabella",
+    "lastName": "Taylor",
+    "username": "isabellataylor",
+    "avatar": "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "isabellataylor@example.com",
+    "phoneNumber": 4243321,
+    "birthDate": "1995-10-10",
+    "age": 26,
+    "gender": "Female",
+    "address": {
+      "street": "123 Main St",
+      "barangay": "Barangay 10",
+      "postalCode": 1234,
+      "city": "Cotabato",
+      "province": "Cotabato",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 10",
+        "coordinates": [123.456, 12.345]
+      }
+    }
+  },
+
+  {
+    "firstName": "Sophia",
+    "lastName": "White",
+    "username": "sophiawhite",
+    "avatar": "https://images.pexels.com/photos/207962/pexels-photo-207962.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "sophiawhite@example.com",
+    "phoneNumber": 989535321,
+    "birthDate": "2000-11-11",
+    "age": 21,
+    "gender": "Female",
+    "address": {
+      "street": "456 Main St",
+      "barangay": "Barangay 11",
+      "postalCode": 5678,
+      "city": "Tacloban",
+      "province": "Leyte",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 11",
+        "coordinates": [456.789, 45.678]
+      }
+    }
+  },
+
+  {
+    "firstName": "Charlotte",
+    "lastName": "Harris",
+    "username": "charlotteharris",
+    "avatar": "https://images.pexels.com/photos/207963/pexels-photo-207963.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "charlotteharris@example.com",
+    "phoneNumber": 98793535321,
+    "birthDate": "2005-12-12",
+    "age": 16,
+    "gender": "Female",
+    "address": {
+      "street": "789 Main St",
+      "barangay": "Barangay 12",
+      "postalCode": 9012,
+      "city": "Cebu City",
+      "province": "Cebu",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 12",
+        "coordinates": [789.123, 78.901]
+      }
+    }
+  },
+
+  {
+    "firstName": "Mia",
+    "lastName": "Martin",
+    "username": "miamartin",
+    "avatar": "https://images.pexels.com/photos/207964/pexels-photo-207964.jpeg",
+    "password": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "passwordConfirm": "$2b$12$Nh2DSzw2POEJJdiTm4kCs.ZVEVHyTvE58TanG3kBgYHKfp0Prj0mi",
+    "email": "miamartin@example.com",
+    "phoneNumber": 9432424321,
+    "birthDate": "2010-01-01",
+    "age": 11,
+    "gender": "Female",
+    "address": {
+      "street": "789 Main St",
+      "barangay": "Barangay 12",
+      "postalCode": 9012,
+      "city": "Cebu City",
+      "province": "Cebu",
+      "geocoding": {
+        "type": "Point",
+        "landmark": "Example Landmark 12",
+        "coordinates": [789.123, 78.901]
+      }
+    }
+  }
+]

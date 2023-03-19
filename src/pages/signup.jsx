@@ -99,7 +99,7 @@ const Signup = () => {
         street: '',
         postalCode: '',
         barangay: '',
-        geocoding: { landmark: '', coordinates: [] }
+        geocoding: { landmark: '', coordinates: [], type: 'Point' }
       }
     },
 

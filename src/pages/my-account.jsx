@@ -55,7 +55,7 @@ const MyAccount = () => {
         street: '',
         postalCode: '',
         barangay: '',
-        geocoding: { landmark: '', coordinates: [] }
+        geocoding: { landmark: '', coordinates: [], type: 'Point' }
       }
     },
 
@@ -175,7 +175,8 @@ const MyAccount = () => {
         barangay: currentUser.address.barangay,
         geocoding: {
           coordinates: currentUser.address.geocoding.coordinates,
-          landmark: currentUser.address.geocoding.landmark
+          landmark: currentUser.address.geocoding.landmark,
+          type: 'Point'
         }
       }
     });
