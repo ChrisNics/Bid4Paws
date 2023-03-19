@@ -1,5 +1,4 @@
 import { model, models, Schema } from 'mongoose';
-import Address from './addressModel';
 import bcrypt from 'bcrypt';
 
 const UserSchema = new Schema(
@@ -61,23 +60,48 @@ const UserSchema = new Schema(
       enums: ['Male', 'Female']
     },
     address: {
-      type: Schema.Types.ObjectId,
-      ref: 'Address'
+      street: {
+        type: String,
+        required: [true, 'Please provide your street address']
+      },
+      barangay: {
+        type: String,
+        required: [true, 'Please provide your barangay address']
+      },
+      postalCode: {
+        type: Number,
+        required: [true, 'Please provide your postal code']
+      },
+      city: {
+        type: String,
+        required: [true, 'Please provide your city address']
+      },
+      province: {
+        type: String,
+        required: [true, 'Please provide your province address']
+      },
+      geocoding: {
+        type: {
+          type: String, // Don't do `{ location: { type: String } }`
+          enum: ['Point'], // 'location.type' must be 'Point',
+          default: 'Point'
+          // required: true,
+        },
+        landmark: {
+          type: String,
+          required: [true, 'Please provide landmark']
+        },
+        coordinates: {
+          type: [Number],
+          required: [true, 'Please provide coordinates']
+        }
+      }
     }
   },
   {
     timestamps: true
   }
 );
-
-UserSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'address',
-    model: 'Address'
-  });
-
-  next();
-});
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
