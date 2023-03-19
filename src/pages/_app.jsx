@@ -1,5 +1,5 @@
 import '@/styles/globals.css';
-import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
+import { MantineProvider, ColorSchemeProvider, Loader } from '@mantine/core';
 import { SessionProvider } from 'next-auth/react';
 import { Notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
@@ -75,6 +75,11 @@ const Auth = ({ children }) => {
     }
   }, [session]);
 
-  if (loading) return <h1>LOading</h1>;
+  if (loading)
+    return (
+      <div className="min-h-screen min-w-full flex justify-center items-center">
+        <Loader color="orange" variant="bars" />;
+      </div>
+    );
   return children;
 };

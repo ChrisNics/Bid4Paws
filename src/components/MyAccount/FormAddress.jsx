@@ -1,9 +1,9 @@
-import { TextInput, NumberInput, Tooltip } from '@mantine/core';
+import { TextInput, NumberInput, Tooltip, Skeleton } from '@mantine/core';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 
 const MapboxComponent = dynamic(() => import('@/components/mapBoxComponent'), {
-  loading: () => 'Loading...'
+  loading: () => <Skeleton height={400} animate={true} />
 });
 
 const FormAddress = ({ form, tab }) => {

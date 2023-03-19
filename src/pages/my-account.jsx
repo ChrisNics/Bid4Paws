@@ -2,7 +2,7 @@ import { Tabs, Button } from '@mantine/core';
 import dynamic from 'next/dynamic';
 import showNotification from '../../lib/showNotification';
 import phoneChecker from '../../lib/phoneChecker';
-import { IconPhoto, IconMessageCircle, IconSettings } from '@tabler/icons-react';
+import { IconId, IconAsterisk, IconSettings, IconMapPins } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
 import useCurrentUser from '@/store/useCurrentUser';
@@ -197,10 +197,10 @@ const MyAccount = () => {
         activateTabWithKeyboard={true}
         onTabChange={(i) => setTab(i)}>
         <Tabs.List>
-          <Tabs.Tab value="Personal Information" icon={<IconPhoto size="0.8rem" />}>
+          <Tabs.Tab value="Personal Information" icon={<IconId size="0.8rem" />}>
             Personal Information
           </Tabs.Tab>
-          <Tabs.Tab value="Address" icon={<IconMessageCircle size="0.8rem" />}>
+          <Tabs.Tab value="Address" icon={<IconMapPins size="0.8rem" />}>
             Address
           </Tabs.Tab>
           <Tabs.Tab value="Username and Avatar" icon={<IconSettings size="0.8rem" />}>
@@ -240,6 +240,12 @@ const MyAccount = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  return {
+    props: {} // will be passed to the page component as props
+  };
 };
 
 export default MyAccount;
