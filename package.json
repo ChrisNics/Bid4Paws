@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ebay/nice-modal-react": "^1.2.9",
     "@emotion/css": "^11.10.6",
     "@emotion/react": "^11.10.6",
     "@emotion/server": "^11.10.0",
@@ -28,6 +29,7 @@
     "@react-spring/web": "^9.7.1",
     "@sendbird/uikit-react": "^3.4.1",
     "@tabler/icons-react": "^2.10.0",
+    "antd": "^5.3.1",
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.35.0",
     "clsx": "^1.2.1",

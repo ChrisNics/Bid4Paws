@@ -1,7 +1,7 @@
 import Card from '@/components/MyDogs/Card';
 import { Button } from '@mantine/core';
 import Image from 'next/image';
-import { modals } from '@mantine/modals';
+import NiceModal from '@ebay/nice-modal-react';
 
 const data = {
   link: 'https://mantine.dev/',
@@ -35,6 +35,7 @@ const MyDogs = () => {
             author="Bulldog"
             {...data}
           />
+          <Button onClick={() => NiceModal.show('create-dog')}>Test</Button>
           <Card
             image="https://images.pexels.com/photos/2023384/pexels-photo-2023384.jpeg?auto=compress&cs=tinysrgb&w=1600"
             title="Browny"
