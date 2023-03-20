@@ -35,19 +35,6 @@ const MyDogs = () => {
             author="Bulldog"
             {...data}
           />
-          <Button
-            onClick={() =>
-              modals.openContextModal({
-                modal: 'CreateDog',
-                title: 'Test modal from context',
-                innerProps: {
-                  modalBody:
-                    'This modal was defined in ModalsProvider, you can open it anywhere in you app with useModals hook'
-                }
-              })
-            }>
-            Test
-          </Button>
           <Card
             image="https://images.pexels.com/photos/2023384/pexels-photo-2023384.jpeg?auto=compress&cs=tinysrgb&w=1600"
             title="Browny"
