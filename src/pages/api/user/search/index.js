@@ -1,5 +1,5 @@
-import dbConnect from '@/utils/dbConnect';
 import User from '@/models/userModel';
+import dbConnect from '../../../../../lib/dbConnect';
 import mongoDBErrorHandler from '../../../../../lib/mongoDBErrorHandler';
 
 export default async function handler(req, res) {
@@ -12,8 +12,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: 'Missing required parameters.' });
     }
 
+    console.log(req.query);
     const users = await User.find({
-      location: {
+      'address.geocoding.coordinates': {
         $geoWithin: {
           $centerSphere: [[parseFloat(lng), parseFloat(lat)], parseFloat(radius) / 6371] // radius in km
         }

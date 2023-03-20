@@ -82,18 +82,18 @@ const UserSchema = new Schema(
       },
       geocoding: {
         type: {
-          type: String, // Don't do `{ location: { type: String } }`
-          enum: ['Point'], // 'location.type' must be 'Point',
+          type: String,
+          enum: ['Point'],
           default: 'Point',
           required: true
-        },
-        landmark: {
-          type: String,
-          required: [true, 'Please provide landmark']
         },
         coordinates: {
           type: [Number],
           required: [true, 'Please provide coordinates']
+        },
+        landmark: {
+          type: String,
+          required: [true, 'Please provide landmark']
         }
       }
     }
@@ -102,6 +102,8 @@ const UserSchema = new Schema(
     timestamps: true
   }
 );
+
+UserSchema.index({ 'address.geocoding': '2dsphere' });
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {

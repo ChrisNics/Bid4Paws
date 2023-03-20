@@ -21,7 +21,6 @@ export default async function handler(req, res) {
     try {
       const { userID } = req.query;
       const { password, ...userUpdates } = req.body;
-      console.log(userUpdates);
 
       if (password) {
         return res.status(400).json({ message: 'This API is not for changing password' });
