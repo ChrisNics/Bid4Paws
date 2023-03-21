@@ -1,5 +1,5 @@
 import '@/styles/globals.css';
-import { MantineProvider, ColorSchemeProvider, Loader } from '@mantine/core';
+import { MantineProvider, ColorSchemeProvider, Loader, LoadingOverlay } from '@mantine/core';
 import { SessionProvider } from 'next-auth/react';
 import { Notifications } from '@mantine/notifications';
 import { useEffect, useState } from 'react';
@@ -8,7 +8,17 @@ import { useSession } from 'next-auth/react';
 import ApplicationContainer from '@/components/ApplicationContainer';
 import ThemeToggle from '@/components/ThemeToggle';
 import NiceModal from '@ebay/nice-modal-react';
-import CreateDog from '@/components/MyDogs/Modals/CreateDog';
+import dynamic from 'next/dynamic';
+
+const CreateDog = dynamic(() => import('@/components/MyDogs/Modals/CreateDog'), {
+  loading: () => (
+    <LoadingOverlay
+      visible={true}
+      overlayBlur={2}
+      loader={<Loader color="orange" variant="bars" />}
+    />
+  )
+});
 
 NiceModal.register('create-dog', CreateDog);
 
