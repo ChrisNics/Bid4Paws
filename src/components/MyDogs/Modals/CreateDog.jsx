@@ -73,9 +73,6 @@ const CreateDogs = NiceModal.create(() => {
     console.log(values);
   });
 
-  console.log(form.values);
-  console.log(active);
-
   return (
     <Modal {...antdModal(modal)} footer={null} width={1000}>
       <div className="container mx-auto p-5">

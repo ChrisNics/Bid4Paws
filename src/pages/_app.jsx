@@ -9,6 +9,17 @@ import ApplicationContainer from '@/components/ApplicationContainer';
 import ThemeToggle from '@/components/ThemeToggle';
 import NiceModal from '@ebay/nice-modal-react';
 import dynamic from 'next/dynamic';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider
+} from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+// Create a client
+const queryClient = new QueryClient();
 
 const CreateDog = dynamic(() => import('@/components/MyDogs/Modals/CreateDog'), {
   loading: () => (
@@ -36,39 +47,42 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
   }, [colorScheme]);
 
   return (
-    <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider
-        theme={{
-          colorScheme,
-          fontFamily: 'Roboto, sans-serif',
-          fontFamilyMonospace: 'Monaco, Courier, monospace',
-          headings: { fontFamily: 'Merriweather, serif' },
-          breakpoints: {
-            xs: '23.44em',
-            sm: '40em',
-            md: '48em',
-            lg: '64em',
-            xl: '80em',
-            '2xl': '96em'
-          }
-        }}
-        withGlobalStyles
-        withNormalizeCSS>
-        <Notifications />
-        <SessionProvider session={session}>
-          <NiceModal.Provider>
-            <Auth>
-              <ApplicationContainer>
-                <Component {...pageProps} />
-                <div className="fixed bottom-10 right-10">
-                  <ThemeToggle />
-                </div>
-              </ApplicationContainer>
-            </Auth>
-          </NiceModal.Provider>
-        </SessionProvider>
-      </MantineProvider>
-    </ColorSchemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+        <MantineProvider
+          theme={{
+            colorScheme,
+            fontFamily: 'Roboto, sans-serif',
+            fontFamilyMonospace: 'Monaco, Courier, monospace',
+            headings: { fontFamily: 'Merriweather, serif' },
+            breakpoints: {
+              xs: '23.44em',
+              sm: '40em',
+              md: '48em',
+              lg: '64em',
+              xl: '80em',
+              '2xl': '96em'
+            }
+          }}
+          withGlobalStyles
+          withNormalizeCSS>
+          <Notifications />
+          <SessionProvider session={session}>
+            <NiceModal.Provider>
+              <Auth>
+                <ApplicationContainer>
+                  <Component {...pageProps} />
+                  <ReactQueryDevtools />
+                  <div className="fixed bottom-10 right-10">
+                    <ThemeToggle />
+                  </div>
+                </ApplicationContainer>
+              </Auth>
+            </NiceModal.Provider>
+          </SessionProvider>
+        </MantineProvider>
+      </ColorSchemeProvider>
+    </QueryClientProvider>
   );
 }
 

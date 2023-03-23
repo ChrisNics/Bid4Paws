@@ -1,7 +1,24 @@
 import Image from 'next/image';
 import SingleImageDropZone from '@/components/SingleImageDropZone';
-import { TextInput } from '@mantine/core';
+import { TextInput, Select, Group, Avatar, Text } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
+import breeds from '../../../../dev-data/breeds';
+import { forwardRef } from 'react';
+
+const SelectItem = forwardRef(({ img, label, origin, ...others }, ref) => (
+  <div ref={ref} {...others}>
+    <Group noWrap>
+      <Avatar src={img} />
+
+      <div>
+        <Text size="sm">{label}</Text>
+        <Text size="xs" opacity={0.65}>
+          {origin}
+        </Text>
+      </div>
+    </Group>
+  </div>
+));
 
 const FormBasicInformation = ({ form }) => {
   return (
@@ -33,11 +50,16 @@ const FormBasicInformation = ({ form }) => {
           </div>
         </div>
         <TextInput placeholder="Name" label="Name" withAsterisk {...form.getInputProps('name')} />
-        <TextInput
-          placeholder="Breed"
-          label="Breed"
-          withAsterisk
+
+        <Select
           {...form.getInputProps('breed')}
+          itemComponent={SelectItem}
+          label="Breed"
+          placeholder="Pick one"
+          searchable
+          nothingFound="No options"
+          maxDropdownHeight={280}
+          data={breeds}
         />
         <TextInput
           placeholder="Bloodline"
