@@ -368,9 +368,13 @@ const Signup = () => {
             Back
           </Button>
           {active === 0 ? (
-            <Button onClick={nextStep}>Next step</Button>
+            <Button onClick={nextStep} color="orange">
+              Next step
+            </Button>
           ) : (
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button onClick={handleSubmit} color="orange">
+              Submit
+            </Button>
           )}
         </Group>
       </div>

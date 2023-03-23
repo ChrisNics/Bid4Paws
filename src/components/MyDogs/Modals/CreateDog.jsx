@@ -1,20 +1,80 @@
 import { Modal } from 'antd';
 import NiceModal, { useModal, antdModal } from '@ebay/nice-modal-react';
-import { Stepper, useMantineTheme } from '@mantine/core';
+import { Stepper, useMantineTheme, Group, Button } from '@mantine/core';
 import { useState } from 'react';
 import { useMediaQuery } from '@mantine/hooks';
-import { TextInput, Select, NumberInput } from '@mantine/core';
-import SingleImageDropZone from '@/components/SingleImageDropZone';
-import { DatePicker } from '@mantine/dates';
-import Image from 'next/image';
 import FormBasicInformation from './FormBasicInformation';
 import FormPhysicalCharacteristics from './FormPhysicalCharacteristics';
 import FormAdditionalInformation from './FormAdditionalInformation';
+import { useForm } from '@mantine/form';
+import useCurrentUser from '@/store/useCurrentUser';
 
 const CreateDogs = NiceModal.create(() => {
   const modal = useModal();
   const matches = useMediaQuery(`(min-width: ${useMantineTheme().breakpoints.sm})`);
   const [active, setActive] = useState(0);
+  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
+
+  const nextStep = () =>
+    setActive((current) => {
+      if (form.validate().hasErrors) {
+        return current;
+      }
+      return current < 2 ? current + 1 : current;
+    });
+
+  const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+
+  const validates =
+    active === 0
+      ? {
+          avatar: (value) => (value ? null : "Please provide your dog's avatar"),
+          name: (value) => (value ? null : 'Please provide this field'),
+          breed: (value) => (value ? null : 'Please provide this field'),
+          bloodLine: (value) => (value ? null : 'Please provide this field'),
+          birthDate: (value) => (value ? null : 'Please provide this field')
+        }
+      : active === 1
+      ? {
+          age: (value) => (value ? null : 'Please provide this field'),
+          gender: (value) => (value ? null : 'Please provide this field'),
+          height: (value) => (value ? null : 'Please provide this field'),
+          weight: (value) => (value ? null : 'Please provide this field'),
+          color: (value) => (value ? null : 'Please provide this field')
+        }
+      : {
+          images: (value) => (value.length > 0 ? null : 'Please add atleast one images.'),
+          certificate: (value) => (value ? null : 'Please provide this field'),
+          caption: (value) => (value ? null : 'Please provide your avatar')
+        };
+
+  const form = useForm({
+    initialValues: {
+      // owner: currentUser._id,
+      avatar: '',
+      name: '',
+      breed: '',
+      bloodLine: '',
+      birthDate: '',
+      age: '',
+      gender: '',
+      height: '',
+      weight: '',
+      color: '',
+      images: [],
+      certificate: '',
+      caption: ''
+    },
+
+    validate: { ...validates }
+  });
+
+  const handleSubmit = form.onSubmit((values) => {
+    console.log(values);
+  });
+
+  console.log(form.values);
+  console.log(active);
 
   return (
     <Modal {...antdModal(modal)} footer={null} width={1000}>
@@ -29,15 +89,30 @@ const CreateDogs = NiceModal.create(() => {
           breakpoint="xs"
           orientation={!matches ? 'vertical' : 'horizontal'}>
           <Stepper.Step label="First step" description="Basic Information">
-            <FormBasicInformation />
+            <FormBasicInformation form={form} />
           </Stepper.Step>
           <Stepper.Step label="Second step" description="Physical Characteristics">
-            <FormPhysicalCharacteristics />
+            <FormPhysicalCharacteristics form={form} />
           </Stepper.Step>
           <Stepper.Step label="Second step" description="Additional Information">
-            <FormAdditionalInformation />
+            <FormAdditionalInformation form={form} />
           </Stepper.Step>
         </Stepper>
+
+        <Group position="center" mt="xl">
+          <Button variant="default" onClick={prevStep}>
+            Back
+          </Button>
+          {active !== 2 ? (
+            <Button onClick={nextStep} color="orange">
+              Next step
+            </Button>
+          ) : (
+            <Button onClick={handleSubmit} color="orange">
+              Submit
+            </Button>
+          )}
+        </Group>
       </div>
     </Modal>
   );

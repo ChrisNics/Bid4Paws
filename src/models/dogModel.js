@@ -1,8 +1,10 @@
 import { model, models, Schema } from 'mongoose';
+import User from './userModel';
 
 // Define the schema for the Dog model
 const DogSchema = new Schema(
   {
+    owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     name: {
       type: String,
       required: [true, "Please provide your dog's name"]
