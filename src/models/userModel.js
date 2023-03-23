@@ -67,7 +67,7 @@ const UserSchema = new Schema(
     gender: {
       type: String,
       required: [true, 'Please provide your gender'],
-      enums: ['Male', 'Female']
+      enums: ['male', 'female']
     },
     address: {
       street: {

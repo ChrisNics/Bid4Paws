@@ -8,12 +8,18 @@ import FormPhysicalCharacteristics from './FormPhysicalCharacteristics';
 import FormAdditionalInformation from './FormAdditionalInformation';
 import { useForm } from '@mantine/form';
 import useCurrentUser from '@/store/useCurrentUser';
+import { useMutation } from '@tanstack/react-query';
 
 const CreateDogs = NiceModal.create(() => {
   const modal = useModal();
   const matches = useMediaQuery(`(min-width: ${useMantineTheme().breakpoints.sm})`);
   const [active, setActive] = useState(0);
-  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
+  const { currentUser, updateCurrentUser } = useCurrentUser((state) => ({
+    currentUser: state.currentUser,
+    updateCurrentUser: state.updateCurrentUser
+  }));
+
+  console.log(currentUser);
 
   const nextStep = () =>
     setActive((current) => {
@@ -69,10 +75,45 @@ const CreateDogs = NiceModal.create(() => {
     validate: { ...validates }
   });
 
-  const handleSubmit = form.onSubmit((values) => {
-    console.log(values);
+  const createDogMutation = useMutation({
+    mutationKey: ['createDog'],
+    mutationFn: async (values) => {
+      const res = await fetch(`/api/user/${currentUser._id}/dog`, {
+        method: 'POST',
+        body: JSON.stringify(values),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'An error occurred while creating the dog.');
+      }
+
+      const { data } = await res.json();
+      return data;
+    },
+    onSuccess: (data) => {
+      // Handle successful data update
+      updateCurrentUser((state) => {
+        return {
+          ...state,
+          dogs: [...state.dogs, data]
+        };
+      });
+
+      modal.remove();
+    },
+    onError: (error) => {
+      // Handle error
+      console.log(error);
+    }
   });
 
+  const handleSubmit = form.onSubmit((values) => {
+    createDogMutation.mutate(values);
+  });
   return (
     <Modal {...antdModal(modal)} footer={null} width={1000}>
       <div className="container mx-auto p-5">
@@ -105,7 +146,7 @@ const CreateDogs = NiceModal.create(() => {
               Next step
             </Button>
           ) : (
-            <Button onClick={handleSubmit} color="orange">
+            <Button onClick={handleSubmit} color="orange" loading={createDogMutation.isLoading}>
               Submit
             </Button>
           )}
