@@ -2,14 +2,13 @@ import Card from '@/components/MyDogs/Card';
 import { Button } from '@mantine/core';
 import Image from 'next/image';
 import NiceModal from '@ebay/nice-modal-react';
-
-const data = {
-  link: 'https://mantine.dev/',
-  views: 7847,
-  comments: 5
-};
+import useCurrentUser from '@/store/useCurrentUser';
+import Empty from '@/components/Empty';
 
 const MyDogs = () => {
+  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
+  console.log(currentUser);
+
   return (
     <section>
       <div className="container mx-auto p-5">
@@ -28,41 +27,14 @@ const MyDogs = () => {
           </div>
         </div>
 
+        <Empty />
+
         <div className="grid grid-cols-1 gap-y-5 sm:grid-cols-2 sm:gap-x-5 xl:grid-cols-3">
-          <Card
-            image="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            title="Browny"
-            author="Bulldog"
-            {...data}
-          />
-          <Button onClick={() => NiceModal.show('create-dog')}>Test</Button>
-          <Card
-            image="https://images.pexels.com/photos/2023384/pexels-photo-2023384.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            title="Browny"
-            author="Bulldog"
-            {...data}
-          />
-          <Card
-            image="
-            https://images.pexels.com/photos/733416/pexels-photo-733416.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            title="Browny"
-            author="Bulldog"
-            {...data}
-          />
-          <Card
-            image="
-            https://images.pexels.com/photos/160846/french-bulldog-summer-smile-joy-160846.jpeg?auto=compress&cs=tinysrgb&w=1600"
-            title="Browny"
-            author="Bulldog"
-            {...data}
-          />
-          <Card
-            image="
-            https://images.pexels.com/photos/551628/pexels-photo-551628.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-            title="Browny"
-            author="Bulldog"
-            {...data}
-          />
+          {currentUser.dogs?.map(({ avatar, name, breed, age }) => (
+            <Card avatar={avatar} name={name} breed={breed} age={age} />
+          ))}
+          {/* 
+          <Button onClick={() => NiceModal.show('create-dog')}>Test</Button> */}
         </div>
       </div>
     </section>

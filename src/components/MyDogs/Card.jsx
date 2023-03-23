@@ -60,7 +60,7 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-export default function Card({ image, title, author, views, comments, link }) {
+export default function Card({ avatar, name, breed, age }) {
   const { classes, theme } = useStyles();
 
   return (
@@ -71,36 +71,24 @@ export default function Card({ image, title, author, views, comments, link }) {
       className={classes.card}
       radius="md"
       component="a"
-      href={link}
       target="_blank">
-      <div className={classes.image} style={{ backgroundImage: `url(${image})` }} />
+      <div className={classes.image} style={{ backgroundImage: `url(${avatar})` }} />
       <div className={classes.overlay} />
 
       <div className={classes.content}>
         <div>
           <Text size="lg" className={classes.title} weight={500}>
-            {title}
+            {name}
           </Text>
 
           <Group position="apart" spacing="xs">
             <Text size="sm" className={classes.author}>
-              {author}
+              {breed}
             </Text>
 
-            <Group spacing="lg">
-              <Center>
-                <IconEye size="1rem" stroke={1.5} color={theme.colors.dark[2]} />
-                <Text size="sm" className={classes.bodyText}>
-                  {views}
-                </Text>
-              </Center>
-              <Center>
-                <IconMessageCircle size="1rem" stroke={1.5} color={theme.colors.dark[2]} />
-                <Text size="sm" className={classes.bodyText}>
-                  {comments}
-                </Text>
-              </Center>
-            </Group>
+            <Text size="sm" className={classes.author}>
+              {age} years old
+            </Text>
           </Group>
         </div>
       </div>

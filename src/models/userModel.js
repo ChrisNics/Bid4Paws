@@ -1,8 +1,18 @@
 import { model, models, Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
+import Dog from './dogModel';
 
 const UserSchema = new Schema(
   {
+    dogs: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'Dog'
+        }
+      ],
+      default: []
+    },
     firstName: {
       type: String,
       required: [true, 'Please provide your first name']
@@ -104,6 +114,10 @@ const UserSchema = new Schema(
 );
 
 UserSchema.index({ 'address.geocoding': '2dsphere' });
+
+UserSchema.pre(/^find/, function () {
+  this.populate('dogs');
+});
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
