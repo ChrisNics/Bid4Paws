@@ -5,21 +5,17 @@ import phoneChecker from '../../lib/phoneChecker';
 import { IconId, IconAsterisk, IconSettings, IconMapPins } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
-import useCurrentUser from '@/store/useCurrentUser';
-
 import passwordChecker from '../../lib/passwordChecker';
 import FormPersonalInfo from '@/components/MyAccount/FormPersonalInfo';
 import FormAddress from '@/components/MyAccount/FormAddress';
 import FormUsernameAndAvatar from '@/components/MyAccount/FormUsernameAndAvatar';
 import FormChangePassword from '@/components/MyAccount/FormChangePassword';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const MyAccount = () => {
-  const { currentUser, setCurrentUser } = useCurrentUser((state) => ({
-    currentUser: state.currentUser,
-    setCurrentUser: state.setCurrentUser
-  }));
+  const queryClient = useQueryClient();
   const [tab, setTab] = useState('Personal Information');
-  const [isLoading, setIsLoading] = useState(false);
+  const currentUser = queryClient.getQueryData(['currentUser']);
 
   const formPersonalInfo = useForm({
     initialValues: {
@@ -99,61 +95,6 @@ const MyAccount = () => {
     }
   });
 
-  const updateUser = async (values, isPasswordChange = false) => {
-    const url = isPasswordChange
-      ? `/api/auth/changePassword/${currentUser._id}`
-      : `/api/user/${currentUser._id}`;
-
-    try {
-      setIsLoading(true);
-      const res = await fetch(url, {
-        method: 'PATCH',
-        body: JSON.stringify(values),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        showNotification({
-          title: 'Invalid Credentials',
-          message: errorData.message,
-          color: 'red'
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      const { data, message } = await res.json();
-      setCurrentUser(data);
-      setIsLoading(false);
-      formChangePassword.reset();
-      showNotification({
-        title: 'Success',
-        message: message,
-        color: 'green'
-      });
-    } catch (error) {
-      console.error(error);
-      setIsLoading(false);
-      showNotification({
-        title: 'Error',
-        message: 'An error occurred. Please try again later.',
-        color: 'red'
-      });
-    }
-  };
-
-  const handleSubmit =
-    tab === 'Personal Information'
-      ? formPersonalInfo.onSubmit(async (values) => updateUser(values))
-      : tab === 'Address'
-      ? formAddress.onSubmit(async (values) => updateUser(values))
-      : tab === 'Change Password'
-      ? formChangePassword.onSubmit(async (values) => updateUser(values, true))
-      : formUsernameAndAvatar.onSubmit(async (values) => updateUser(values));
-
   useEffect(() => {
     if (!currentUser) return; // Guard Clause
     formPersonalInfo.setValues({
@@ -186,6 +127,57 @@ const MyAccount = () => {
       avatar: currentUser.avatar
     });
   }, [currentUser]);
+
+  const updateUser = async (values, isPasswordChange = false) => {
+    const url = isPasswordChange
+      ? `/api/auth/changePassword/${currentUser._id}`
+      : `/api/user/${currentUser._id}`;
+
+    const res = await fetch(url, {
+      method: 'PATCH',
+      body: JSON.stringify(values),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || 'Failed to update the user.');
+    }
+
+    return await res.json();
+  };
+
+  const updateUserMutation = useMutation({
+    mutationKey: ['currentUser'],
+    mutationFn: updateUser,
+    onSuccess: ({ data, message }) => {
+      queryClient.setQueryData(['currentUser'], data);
+
+      showNotification({
+        title: 'Success',
+        message,
+        color: 'green'
+      });
+    },
+    onError: (error) => {
+      showNotification({
+        title: 'Failed',
+        message: error,
+        color: 'red'
+      });
+    }
+  });
+
+  const handleSubmit =
+    tab === 'Personal Information'
+      ? formPersonalInfo.onSubmit((values) => updateUserMutation.mutate(values))
+      : tab === 'Address'
+      ? formAddress.onSubmit((values) => updateUserMutation.mutate(values))
+      : tab === 'Change Password'
+      ? formChangePassword.onSubmit((values) => updateUserMutation.mutate(values, true))
+      : formUsernameAndAvatar.onSubmit((values) => updateUserMutation.mutate(values));
 
   return (
     <div className="container mx-auto p-5">
@@ -234,7 +226,11 @@ const MyAccount = () => {
           <Button variant="outline" color="orange" fullWidth>
             Back
           </Button>
-          <Button color="orange" fullWidth onClick={handleSubmit} loading={isLoading}>
+          <Button
+            color="orange"
+            fullWidth
+            onClick={handleSubmit}
+            loading={updateUserMutation.isLoading}>
             Update
           </Button>
         </div>

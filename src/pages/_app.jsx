@@ -88,24 +88,30 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
 
 const Auth = ({ children }) => {
   const { data: session, status } = useSession();
-  const { fetchCurrentUser, loading } = useCurrentUser((state) => ({
-    fetchCurrentUser: state.fetchCurrentUser,
-
-    loading: state.loading
+  const { setCurrentUser } = useCurrentUser((state) => ({
+    setCurrentUser: state.setCurrentUser
   }));
 
-  useEffect(() => {
-    // We need to wait the useSession before calling our customize session
-    if (status !== 'loading') {
-      const fetchUser = async () => {
-        await fetchCurrentUser(session?.id);
-      };
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['currentUser'],
+    enabled: status === 'authenticated',
+    queryFn: async () => {
+      console.log(session.id);
+      const res = await fetch(`/api/user/${session.id}`);
 
-      fetchUser();
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to get current user.');
+      }
+
+      const { data } = await res.json();
+      return data;
     }
-  }, [session]);
+  });
 
-  if (loading)
+  if (error) return <h1>{error}</h1>;
+
+  if (isLoading || status === 'loading')
     return (
       <div className="min-h-screen min-w-full flex justify-center items-center">
         <Loader color="orange" variant="bars" />;

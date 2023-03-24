@@ -8,10 +8,12 @@ export default async function handler(req, res) {
     try {
       const user = await User.findById(req.query.userID);
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'User not found', status: 404 });
       }
 
-      return res.status(200).json({ data: user });
+      return res
+        .status(200)
+        .json({ message: 'User retrieved successfully', status: 200, data: user });
     } catch (error) {
       mongoDBErrorHandler(res, error);
     }
@@ -23,18 +25,20 @@ export default async function handler(req, res) {
       const { password, ...userUpdates } = req.body;
 
       if (password) {
-        return res.status(400).json({ message: 'This API is not for changing password' });
+        return res
+          .status(400)
+          .json({ message: 'This API is not for changing password', status: 400 });
       }
 
       const updatedUser = await User.findByIdAndUpdate(userID, userUpdates, { new: true });
 
       if (!updatedUser) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'User not found', status: 404 });
       }
 
       return res
         .status(200)
-        .json({ success: true, message: 'User updated successfully', data: updatedUser });
+        .json({ message: 'User updated successfully', status: 200, data: updatedUser });
     } catch (error) {
       console.log(error);
       mongoDBErrorHandler(res, error);

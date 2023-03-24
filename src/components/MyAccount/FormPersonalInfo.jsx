@@ -59,8 +59,8 @@ const FormPersonalInfo = ({ form }) => {
             label="Gender"
             placeholder="Gender"
             data={[
-              { value: 'male', label: 'Male' },
-              { value: 'female', label: 'Female' }
+              { value: 'Male', label: 'Male' },
+              { value: 'Female', label: 'Female' }
             ]}
           />
           <NumberInput

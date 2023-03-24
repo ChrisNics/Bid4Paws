@@ -19,8 +19,6 @@ const CreateDogs = NiceModal.create(() => {
     updateCurrentUser: state.updateCurrentUser
   }));
 
-  console.log(currentUser);
-
   const nextStep = () =>
     setActive((current) => {
       if (form.validate().hasErrors) {

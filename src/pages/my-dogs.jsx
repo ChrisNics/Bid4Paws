@@ -22,7 +22,7 @@ const MyDogs = () => {
           </div>
         </div>
 
-        {currentUser.dogs?.length > 0 ? (
+        {currentUser?.dogs?.length > 0 ? (
           <div className="grid grid-cols-1 gap-y-5 sm:grid-cols-2 sm:gap-x-5 xl:grid-cols-3">
             {currentUser.dogs?.map(({ avatar, name, breed, age }) => (
               <Card avatar={avatar} name={name} breed={breed} age={age} />

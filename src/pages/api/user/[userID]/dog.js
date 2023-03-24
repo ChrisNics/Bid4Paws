@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     try {
       const user = await User.findById(userID);
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'User not found', status: 404 });
       }
       // Create the dog
       const dog = await Dog.create({
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       user.dogs.push(dog._id);
       await user.save();
 
-      res.status(200).json({ success: true, data: dog });
+      res.status(200).json({ message: 'Dog created successfully', status: 200, data: dog });
     } catch (error) {
       console.log(error);
       mongoDBErrorHandler(res, error);
