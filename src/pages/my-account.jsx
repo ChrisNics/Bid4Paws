@@ -11,11 +11,13 @@ import FormAddress from '@/components/MyAccount/FormAddress';
 import FormUsernameAndAvatar from '@/components/MyAccount/FormUsernameAndAvatar';
 import FormChangePassword from '@/components/MyAccount/FormChangePassword';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 
 const MyAccount = () => {
   const queryClient = useQueryClient();
+  const { data: session } = useSession();
   const [tab, setTab] = useState('Personal Information');
-  const currentUser = queryClient.getQueryData(['currentUser']);
+  const currentUser = queryClient.getQueryData(['currentUser', session?.id]);
 
   const formPersonalInfo = useForm({
     initialValues: {
@@ -91,7 +93,8 @@ const MyAccount = () => {
     validate: {
       passwordCurrent: (value) => (value ? null : 'Please provide this field'),
       password: (value) => (passwordChecker(value) ? passwordChecker(value) : null),
-      passwordConfirm: (value) => (value ? null : 'Please provide this field')
+      passwordConfirm: (value, values) =>
+        value !== values.password ? 'Passwords did not match' : null
     }
   });
 
@@ -128,10 +131,11 @@ const MyAccount = () => {
     });
   }, [currentUser]);
 
-  const updateUser = async (values, isPasswordChange = false) => {
-    const url = isPasswordChange
-      ? `/api/auth/changePassword/${currentUser._id}`
-      : `/api/user/${currentUser._id}`;
+  const updateUser = async (values) => {
+    const url =
+      tab === 'Change Password'
+        ? `/api/auth/changePassword/${currentUser._id}`
+        : `/api/user/${currentUser._id}`;
 
     const res = await fetch(url, {
       method: 'PATCH',
@@ -150,10 +154,10 @@ const MyAccount = () => {
   };
 
   const updateUserMutation = useMutation({
-    mutationKey: ['currentUser'],
+    mutationKey: ['currentUser', session?.id],
     mutationFn: updateUser,
     onSuccess: ({ data, message }) => {
-      queryClient.setQueryData(['currentUser'], data);
+      queryClient.setQueryData(['currentUser', session?.id], data);
 
       showNotification({
         title: 'Success',
@@ -164,7 +168,7 @@ const MyAccount = () => {
     onError: (error) => {
       showNotification({
         title: 'Failed',
-        message: error,
+        message: error.message,
         color: 'red'
       });
     }

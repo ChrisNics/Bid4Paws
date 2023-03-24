@@ -20,6 +20,8 @@ import showNotification from '../../lib/showNotification';
 import useCurrentUser from '@/store/useCurrentUser';
 import DogFacts from '@/components/DogFacts';
 import signOut from '../../lib/signOut';
+import { useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -54,9 +56,10 @@ const useStyles = createStyles((theme) => ({
 
 export default function AuthenticationImage() {
   const { classes } = useStyles();
-  const { currentUser } = useCurrentUser((state) => ({
-    currentUser: state.currentUser
-  }));
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const currentUser = queryClient.getQueryData(['currentUser', session?.id]);
+  console.log(currentUser);
 
   const form = useForm({
     initialValues: {
@@ -72,7 +75,7 @@ export default function AuthenticationImage() {
 
   const handleSubmit = form.onSubmit(async (values) => {
     if (currentUser) {
-      signOut();
+      signOut(session);
       return;
     }
     const res = await signIn('credentials', { redirect: false, ...values }); // We dont need it to convert it to json, next-auth already handles it.

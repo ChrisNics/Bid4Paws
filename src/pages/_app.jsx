@@ -90,10 +90,13 @@ const Auth = ({ children }) => {
   const { data: session, status } = useSession();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['currentUser'],
-    enabled: status === 'authenticated',
+    queryKey: ['currentUser', session?.id],
+    enabled: status !== 'loading',
     queryFn: async () => {
-      console.log(session.id);
+      if (!session) {
+        return null; // Return empty object if session is not defined
+      }
+
       const res = await fetch(`/api/user/${session.id}`);
 
       if (!res.ok) {
@@ -107,6 +110,7 @@ const Auth = ({ children }) => {
   });
 
   if (error) return <h1>{error}</h1>;
+  console.log(isLoading, status, session);
 
   if (isLoading || status === 'loading')
     return (
