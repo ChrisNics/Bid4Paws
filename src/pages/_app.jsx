@@ -88,9 +88,6 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
 
 const Auth = ({ children }) => {
   const { data: session, status } = useSession();
-  const { setCurrentUser } = useCurrentUser((state) => ({
-    setCurrentUser: state.setCurrentUser
-  }));
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['currentUser'],
