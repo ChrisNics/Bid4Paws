@@ -12,12 +12,15 @@ import FormUsernameAndAvatar from '@/components/MyAccount/FormUsernameAndAvatar'
 import FormChangePassword from '@/components/MyAccount/FormChangePassword';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+import useCurrentUser from '@/hooks/useCurrentUser';
+import LoadingScreen from '@/components/LoadingScreen';
 
 const MyAccount = () => {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const [tab, setTab] = useState('Personal Information');
-  const currentUser = queryClient.getQueryData(['currentUser', session?.id]);
+  const { data: currentUser, isLoading, error } = useCurrentUser(session?.id);
+  console.log(currentUser, isLoading, error);
 
   const formPersonalInfo = useForm({
     initialValues: {
@@ -154,7 +157,6 @@ const MyAccount = () => {
   };
 
   const updateUserMutation = useMutation({
-    mutationKey: ['currentUser', session?.id],
     mutationFn: updateUser,
     onSuccess: ({ data, message }) => {
       queryClient.setQueryData(['currentUser', session?.id], data);
@@ -180,8 +182,10 @@ const MyAccount = () => {
       : tab === 'Address'
       ? formAddress.onSubmit((values) => updateUserMutation.mutate(values))
       : tab === 'Change Password'
-      ? formChangePassword.onSubmit((values) => updateUserMutation.mutate(values, true))
+      ? formChangePassword.onSubmit((values) => updateUserMutation.mutate(values))
       : formUsernameAndAvatar.onSubmit((values) => updateUserMutation.mutate(values));
+
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <div className="container mx-auto p-5">

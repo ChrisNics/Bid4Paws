@@ -7,17 +7,17 @@ import FormBasicInformation from './FormBasicInformation';
 import FormPhysicalCharacteristics from './FormPhysicalCharacteristics';
 import FormAdditionalInformation from './FormAdditionalInformation';
 import { useForm } from '@mantine/form';
-import useCurrentUser from '@/store/useCurrentUser';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 
 const CreateDogs = NiceModal.create(() => {
   const modal = useModal();
   const matches = useMediaQuery(`(min-width: ${useMantineTheme().breakpoints.sm})`);
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
   const [active, setActive] = useState(0);
-  const { currentUser, updateCurrentUser } = useCurrentUser((state) => ({
-    currentUser: state.currentUser,
-    updateCurrentUser: state.updateCurrentUser
-  }));
+
+  const currentUser = queryClient.getQueryData(['currentUser', session?.id]);
 
   const nextStep = () =>
     setActive((current) => {
@@ -74,7 +74,7 @@ const CreateDogs = NiceModal.create(() => {
   });
 
   const createDogMutation = useMutation({
-    mutationKey: ['createDog'],
+    mutationKey: ['currentUser', session?.id],
     mutationFn: async (values) => {
       const res = await fetch(`/api/user/${currentUser._id}/dog`, {
         method: 'POST',
@@ -94,12 +94,11 @@ const CreateDogs = NiceModal.create(() => {
     },
     onSuccess: (data) => {
       // Handle successful data update
-      updateCurrentUser((state) => {
-        return {
-          ...state,
-          dogs: [...state.dogs, data]
-        };
-      });
+
+      queryClient.setQueryData(['currentUser', session?.id], (state) => ({
+        ...state,
+        dogs: [...state.dogs, data]
+      }));
 
       modal.remove();
     },
@@ -112,6 +111,7 @@ const CreateDogs = NiceModal.create(() => {
   const handleSubmit = form.onSubmit((values) => {
     createDogMutation.mutate(values);
   });
+
   return (
     <Modal {...antdModal(modal)} footer={null} width={1000}>
       <div className="container mx-auto p-5">

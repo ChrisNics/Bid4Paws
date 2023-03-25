@@ -2,11 +2,18 @@ import Card from '@/components/MyDogs/Card';
 import { Button } from '@mantine/core';
 import Image from 'next/image';
 import NiceModal from '@ebay/nice-modal-react';
-import useCurrentUser from '@/store/useCurrentUser';
 import Empty from '@/components/MyDogs/Empty';
+import { useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 const MyDogs = () => {
-  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const { data: currentUser, loading, error } = useCurrentUser(session?.id);
+
+  console.log(currentUser, loading, error);
 
   const showModal = () => NiceModal.show('create-dog');
 

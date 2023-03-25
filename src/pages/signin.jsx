@@ -17,7 +17,6 @@ import Link from 'next/link';
 import { signIn } from 'next-auth/react';
 import { useForm } from '@mantine/form';
 import showNotification from '../../lib/showNotification';
-import useCurrentUser from '@/store/useCurrentUser';
 import DogFacts from '@/components/DogFacts';
 import signOut from '../../lib/signOut';
 import { useQueryClient } from '@tanstack/react-query';

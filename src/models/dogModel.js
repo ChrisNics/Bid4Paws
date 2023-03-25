@@ -34,7 +34,7 @@ const DogSchema = new Schema(
     gender: {
       type: String,
       required: [true, "Please provide your dog's gender"],
-      enum: ['male', 'female']
+      enum: ['Male', 'Female']
     },
     height: {
       type: Number,
