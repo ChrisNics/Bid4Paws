@@ -1,5 +1,5 @@
 import { model, models, Schema } from 'mongoose';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import Dog from './dogModel';
 
 const UserSchema = new Schema(
@@ -125,7 +125,8 @@ UserSchema.pre('save', async function (next) {
     return next();
   }
 
-  this.password = await bcrypt.hash(this.password, 12);
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
   this.passwordConfirm = undefined;
   this.passwordResetExpires = undefined;
   this.passwordResetToken = undefined;

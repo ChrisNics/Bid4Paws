@@ -10,17 +10,24 @@ import FormPersonalInfo from '@/components/MyAccount/FormPersonalInfo';
 import FormAddress from '@/components/MyAccount/FormAddress';
 import FormUsernameAndAvatar from '@/components/MyAccount/FormUsernameAndAvatar';
 import FormChangePassword from '@/components/MyAccount/FormChangePassword';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueryClient,
+  dehydrate,
+  QueryClient,
+  useQuery
+} from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import useCurrentUser from '@/hooks/useCurrentUser';
+import useCurrentUser, { getCurrentUser } from '@/hooks/useCurrentUser';
 import LoadingScreen from '@/components/LoadingScreen';
+import { authOptions } from './api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth/next';
 
 const MyAccount = () => {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const [tab, setTab] = useState('Personal Information');
   const { data: currentUser, isLoading, error } = useCurrentUser(session?.id);
-  console.log(currentUser, isLoading, error);
 
   const formPersonalInfo = useForm({
     initialValues: {
@@ -248,8 +255,15 @@ const MyAccount = () => {
 };
 
 export const getServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(['currentUser', session?.id], () => getCurrentUser(session?.id));
+
   return {
-    props: {} // will be passed to the page component as props
+    props: {
+      dehydratedState: dehydrate(queryClient)
+    }
   };
 };
 

@@ -14,9 +14,8 @@ export const authOptions = {
       name: 'Credentials',
       credentials: {},
       async authorize(credentials, req) {
-        await dbConnect();
         const { username, password } = credentials;
-
+        await dbConnect();
         const user = await User.findOne({ username }).select('+password');
 
         if (user) {

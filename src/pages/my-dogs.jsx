@@ -3,19 +3,25 @@ import { Button } from '@mantine/core';
 import Image from 'next/image';
 import NiceModal from '@ebay/nice-modal-react';
 import Empty from '@/components/MyDogs/Empty';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQueryClient, QueryClient, dehydrate } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import { authOptions } from './api/auth/[...nextauth]';
+import { getCurrentUser } from '@/hooks/useCurrentUser';
+import { getServerSession } from 'next-auth';
+import LoadingScreen from '@/components/LoadingScreen';
 
 const MyDogs = () => {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
-  const { data: currentUser, loading, error } = useCurrentUser(session?.id);
+  const { data: currentUser, isLoading, error } = useCurrentUser(session?.id);
 
-  console.log(currentUser, loading, error);
+  console.log(currentUser, isLoading, error);
 
   const showModal = () => NiceModal.show('create-dog');
+
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <section>
@@ -43,12 +49,16 @@ const MyDogs = () => {
   );
 };
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(['currentUser', session?.id], () => getCurrentUser(session?.id));
+
   return {
     props: {
-      data: null
+      dehydratedState: dehydrate(queryClient)
     }
   };
 };
-
 export default MyDogs;

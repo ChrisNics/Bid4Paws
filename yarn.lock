@@ -1374,6 +1374,11 @@ bcrypt@^5.1.0:
     "@mapbox/node-pre-gyp" "^1.0.10"
     node-addon-api "^5.0.0"
 
+bcryptjs@^2.4.3:
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/bcryptjs/-/bcryptjs-2.4.3.tgz#9ab5627b93e60621ff7cdac5da9733027df1d0cb"
+  integrity sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==
+
 binary-extensions@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
@@ -1405,9 +1410,9 @@ browserslist@^4.21.4:
     update-browserslist-db "^1.0.10"
 
 bson@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/bson/-/bson-5.0.1.tgz#4cd3eeeabf6652ef0d6ab600f9a18212d39baac3"
-  integrity sha512-y09gBGusgHtinMon/GVbv1J6FrXhnr/+6hqLlSmEFzkz6PodqF6TxjyvfvY3AfO+oG1mgUtbC86xSbOlwvM62Q==
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-5.1.0.tgz#7b15cd9aa012b8bf9d320fbaefe15cc2fb657de2"
+  integrity sha512-FEecNHkhYRBe7X9KDkdG12xNuz5VHGeH6mCE0B5sBmYtiR/Ux/9vUH/v4NUoBCDr6NuEhvahjoLiiRogptVW0A==
 
 buffer-from@~0.1.1:
   version "0.1.2"
@@ -3599,9 +3604,9 @@ mongodb@5.1.0:
     saslprep "^1.0.3"
 
 mongoose@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-7.0.0.tgz#4b1394fdd56fcf0d6e78c7be9768edcc3254cc26"
-  integrity sha512-U0YPURDld+k/nvvSG1mRClQSjZMRXwQKSU5yb9PslRnOmVz0UlBD7SjSnjUuGT0yk+7BH+kJNimsKqMxYAKkMA==
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-7.0.3.tgz#576375acb436f96cd3350fb63fddbac7ae51ff9c"
+  integrity sha512-3n8vc1/mssuxKa6vfghSocp3MeiCFYzhX36Ok+PsDNNYzHC9tw3rNkAMLemIwZ2jgXqkZ7CfKOxkzjp/d/SWfg==
   dependencies:
     bson "^5.0.1"
     kareem "2.5.1"

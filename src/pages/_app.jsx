@@ -8,18 +8,8 @@ import ApplicationContainer from '@/components/ApplicationContainer';
 import ThemeToggle from '@/components/ThemeToggle';
 import NiceModal from '@ebay/nice-modal-react';
 import dynamic from 'next/dynamic';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider
-} from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import useCurrentUser from '@/hooks/useCurrentUser';
-import LoadingScreen from '@/components/LoadingScreen';
-// Create a client
-const queryClient = new QueryClient();
 
 const CreateDog = dynamic(() => import('@/components/MyDogs/Modals/CreateDog'), {
   loading: () => (
@@ -38,6 +28,8 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
   const toggleColorScheme = (value) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
 
+  const [queryClient] = useState(() => new QueryClient());
+
   useEffect(() => {
     const htmlTag = document.getElementsByTagName('html')[0];
     // Remove the previous colorScheme class
@@ -48,38 +40,40 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-        <MantineProvider
-          theme={{
-            colorScheme,
-            fontFamily: 'Roboto, sans-serif',
-            fontFamilyMonospace: 'Monaco, Courier, monospace',
-            headings: { fontFamily: 'Merriweather, serif' },
-            breakpoints: {
-              xs: '23.44em',
-              sm: '40em',
-              md: '48em',
-              lg: '64em',
-              xl: '80em',
-              '2xl': '96em'
-            }
-          }}
-          withGlobalStyles
-          withNormalizeCSS>
-          <Notifications />
-          <SessionProvider session={session}>
-            <NiceModal.Provider>
-              <ApplicationContainer>
-                <Component {...pageProps} />
-                <ReactQueryDevtools />
-                <div className="fixed bottom-10 right-10">
-                  <ThemeToggle />
-                </div>
-              </ApplicationContainer>
-            </NiceModal.Provider>
-          </SessionProvider>
-        </MantineProvider>
-      </ColorSchemeProvider>
+      <Hydrate state={pageProps.dehydratedState}>
+        <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+          <MantineProvider
+            theme={{
+              colorScheme,
+              fontFamily: 'Roboto, sans-serif',
+              fontFamilyMonospace: 'Monaco, Courier, monospace',
+              headings: { fontFamily: 'Merriweather, serif' },
+              breakpoints: {
+                xs: '23.44em',
+                sm: '40em',
+                md: '48em',
+                lg: '64em',
+                xl: '80em',
+                '2xl': '96em'
+              }
+            }}
+            withGlobalStyles
+            withNormalizeCSS>
+            <Notifications />
+            <SessionProvider session={session}>
+              <NiceModal.Provider>
+                <ApplicationContainer>
+                  <Component {...pageProps} />
+                  <ReactQueryDevtools />
+                  <div className="fixed bottom-10 right-10">
+                    <ThemeToggle />
+                  </div>
+                </ApplicationContainer>
+              </NiceModal.Provider>
+            </SessionProvider>
+          </MantineProvider>
+        </ColorSchemeProvider>
+      </Hydrate>
     </QueryClientProvider>
   );
 }
