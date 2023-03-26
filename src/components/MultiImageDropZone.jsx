@@ -8,18 +8,6 @@ export default function MultiImageDropZone({ hooks, title, images }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const previews = selectedFiles.map((file, index) => {
-    const imageUrl = URL.createObjectURL(file);
-    return (
-      <Image
-        alt="image"
-        key={index}
-        src={imageUrl}
-        imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
-      />
-    );
-  });
-
   const handleDrop = async (acceptedFiles) => {
     setIsLoading(true);
     const promises = acceptedFiles.map(async (file) => {
@@ -39,7 +27,7 @@ export default function MultiImageDropZone({ hooks, title, images }) {
       } sm:gap-x-5 justify-center`}>
       {images.map((image) => (
         <div className="relative border rounded-lg h-60 w-60 overflow-hidden">
-          <Image priority fill alt="image" src={image} quality={50} sizes="240px" />
+          <Image priority fill alt="image" src={image} quality={50} sizes="33vw" />
         </div>
       ))}
       {images.length < 4 && (

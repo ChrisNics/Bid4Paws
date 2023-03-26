@@ -11,13 +11,11 @@ import { authOptions } from './api/auth/[...nextauth]';
 import { getCurrentUser } from '@/hooks/useCurrentUser';
 import { getServerSession } from 'next-auth';
 import LoadingScreen from '@/components/LoadingScreen';
+import { IconPlus } from '@tabler/icons-react';
 
 const MyDogs = () => {
-  const queryClient = useQueryClient();
   const { data: session } = useSession();
   const { data: currentUser, isLoading, error } = useCurrentUser(session?.id);
-
-  console.log(currentUser, isLoading, error);
 
   const showModal = () => NiceModal.show('create-dog');
 
@@ -26,13 +24,18 @@ const MyDogs = () => {
   return (
     <section>
       <div className="container mx-auto p-5">
-        <div className="mb-10 text-center lg:text-left">
+        <div className="flex flex-col gap-y-5 items-center sm:flex-row sm:justify-between mb-10 text-center lg:text-left">
           <div className="flex gap-x-5 max-w-max items-center">
             <h3 className="font-mono text-md">Your Dogs</h3>
             <div className="w-20 h-20 relative rounded-full overflow-hidden ">
-              <Image priority fill alt="image" src="/dogAvatar.png" />
+              <Image priority fill alt="image" src="/dogAvatar.png" quality={50} sizes="33vw" />
             </div>
           </div>
+          {currentUser?.dogs?.length < 4 && currentUser?.dogs?.length !== 0 && (
+            <Button leftIcon={<IconPlus />} color="orange" onClick={showModal}>
+              Add dog
+            </Button>
+          )}
         </div>
 
         {currentUser?.dogs?.length > 0 ? (

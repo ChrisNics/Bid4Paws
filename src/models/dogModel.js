@@ -19,13 +19,11 @@ const DogSchema = new Schema(
     },
     bloodLine: {
       type: String,
-      required: [true, "Please provide your dog's bloodline"],
-      unique: true
+      required: [true, "Please provide your dog's bloodline"]
     },
     birthDate: {
       type: Date,
-      required: [true, "Please provide your dog's birth date"],
-      unique: true
+      required: [true, "Please provide your dog's birth date"]
     },
     age: {
       type: Number,

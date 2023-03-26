@@ -28,6 +28,8 @@ const FormAdditionalInformation = ({ form }) => {
                 priority
                 fill
                 alt="image"
+                quality={50}
+                sizes="33vw"
                 src={
                   form.values.certificate
                     ? form.values.certificate
