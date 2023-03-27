@@ -21,6 +21,9 @@ const UserSchema = new Schema(
       type: String,
       required: [true, 'Please provide your last name']
     },
+    fullName: {
+      type: String
+    },
     username: {
       type: String,
       required: [true, 'Please provide your username'],
@@ -120,16 +123,32 @@ UserSchema.pre(/^find/, function () {
 });
 
 UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
+  // Check if the firstName or lastName fields have been modified
+  if (this.isModified('firstName') || this.isModified('lastName')) {
+    // Update the fullName field with the concatenated firstName and lastName values
     this.fullName = `${this.firstName} ${this.lastName}`;
-    return next();
   }
 
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  this.passwordConfirm = undefined;
-  this.passwordResetExpires = undefined;
-  this.passwordResetToken = undefined;
+  // Hash the password field if it has been modified
+  if (this.isModified('password')) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    this.passwordConfirm = undefined;
+    this.passwordResetExpires = undefined;
+    this.passwordResetToken = undefined;
+  }
+
+  next();
+});
+
+UserSchema.pre('findOneAndUpdate', async function (next) {
+  const updateData = this.getUpdate();
+
+  // Check if the firstName or lastName fields have been modified
+  if (updateData.firstName || updateData.lastName) {
+    // Update the fullName field with the concatenated firstName and lastName values
+    updateData.fullName = `${updateData.firstName} ${updateData.lastName}`;
+  }
   next();
 });
 

@@ -12,6 +12,8 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { MantineLogo } from '@mantine/ds';
 import UserMenu from './UserMenu';
+import useCurrentUser from '@/store/useCurrentUser';
+import _ from 'lodash';
 
 const HEADER_HEIGHT = rem(60);
 
@@ -40,39 +42,11 @@ const useStyles = createStyles((theme) => ({
     zIndex: 1
   },
 
-  dropdown: {
-    position: 'absolute',
-    top: HEADER_HEIGHT,
-    left: 0,
-    right: 0,
-    zIndex: 0,
-    borderTopRightRadius: 0,
-    borderTopLeftRadius: 0,
-    borderTopWidth: 0,
-    overflow: 'hidden',
-
-    [theme.fn.largerThan('sm')]: {
-      display: 'none'
-    }
-  },
-
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: '100%'
-  },
-
-  links: {
-    [theme.fn.smallerThan('sm')]: {
-      display: 'none'
-    }
-  },
-
-  burger: {
-    [theme.fn.largerThan('sm')]: {
-      display: 'none'
-    }
   },
 
   link: {
@@ -107,6 +81,7 @@ export default function Header({ hidden }) {
   const [opened, { toggle, close }] = useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
+  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
 
   const items = links.map((link) => (
     <a
@@ -126,17 +101,24 @@ export default function Header({ hidden }) {
     <MantineHeader height={HEADER_HEIGHT} hidden={true} className={classes.root}>
       <Container className={classes.header}>
         <MantineLogo size={28} />
-        <Group spacing={5} className={classes.links}>
+        <div spacing={5} className="hidden md:flex">
           {items}
-        </Group>
+        </div>
 
-        <UserMenu />
+        {!_.isEmpty(currentUser) && (
+          <div className="hidden md:block">
+            <UserMenu currentUser={currentUser} />
+          </div>
+        )}
 
-        <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
+        <Burger opened={opened} onClick={toggle} className="md:hidden" size="sm" />
 
         <Transition transition="pop-top-right" duration={200} mounted={opened}>
           {(styles) => (
-            <Paper className={classes.dropdown} withBorder style={styles}>
+            <Paper
+              className={`absolute top-16 left-0 right-0 z-0 rounded-t-none border-t-0 overflow-hidden md:hidden`}
+              withBorder
+              style={styles}>
               {items}
             </Paper>
           )}

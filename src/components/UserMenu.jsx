@@ -42,10 +42,11 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-const UserMenu = () => {
+const UserMenu = ({ currentUser }) => {
   const { classes, theme, cx } = useStyles();
   const [userMenuOpened, setUserMenuOpened] = useState(false);
   const { user, tabs } = test;
+  console.log(currentUser);
   return (
     <Menu
       width={260}
@@ -57,9 +58,9 @@ const UserMenu = () => {
       <Menu.Target>
         <UnstyledButton className={cx(classes.user, { [classes.userActive]: userMenuOpened })}>
           <Group spacing={7}>
-            <Avatar src={user.image} alt={user.name} radius="xl" size={20} />
+            <Avatar src={currentUser.avatar} alt={currentUser.fullName} radius="xl" size={20} />
             <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
-              {user.name}
+              {currentUser.fullName}
             </Text>
             <IconChevronDown size={rem(12)} stroke={1.5} />
           </Group>
