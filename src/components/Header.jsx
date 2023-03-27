@@ -11,6 +11,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { MantineLogo } from '@mantine/ds';
+import UserMenu from './UserMenu';
 
 const HEADER_HEIGHT = rem(60);
 
@@ -128,6 +129,8 @@ export default function Header({ hidden }) {
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
+
+        <UserMenu />
 
         <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
 
