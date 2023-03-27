@@ -34,8 +34,19 @@ const UpdateDog = dynamic(() => import('@/components/MyDogs/Modals/UpdateDog'), 
   )
 });
 
+const Prompt = dynamic(() => import('@/components/MyDogs/Modals/Prompt'), {
+  loading: () => (
+    <LoadingOverlay
+      visible={true}
+      overlayBlur={2}
+      loader={<Loader color="orange" variant="bars" />}
+    />
+  )
+});
+
 NiceModal.register('create-dog', CreateDog);
 NiceModal.register('update-dog', UpdateDog);
+NiceModal.register('prompt', Prompt);
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const [colorScheme, setColorScheme] = useState('light');

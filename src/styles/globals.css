@@ -223,3 +223,8 @@ a {
   bottom: -126px;
   animation-delay: 5s;
 }
+
+/* Make antd modal darkmode based on mantine */
+:where(.css-dev-only-do-not-override-ph9edi).ant-modal .ant-modal-content {
+  @apply dark:bg-[#1A1B1E] dark:text-[#C1C2C5];
+}
