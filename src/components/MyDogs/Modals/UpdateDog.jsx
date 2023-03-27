@@ -11,24 +11,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import useCurrentUser from '@/store/useCurrentUser';
 import showNotification from '../../../../lib/showNotification';
+import useDogsStore from '@/store/useDogsStore';
 
-const CreateDogs = NiceModal.create(() => {
+const UpdateDog = NiceModal.create(() => {
   const modal = useModal();
   const matches = useMediaQuery(`(min-width: ${useMantineTheme().breakpoints.sm})`);
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const [active, setActive] = useState(0);
   const currentUser = useCurrentUser((state) => state.currentUser);
-
-  const nextStep = () =>
-    setActive((current) => {
-      if (form.validate().hasErrors) {
-        return current;
-      }
-      return current < 2 ? current + 1 : current;
-    });
-
-  const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+  const { dogToUpdate } = useDogsStore((state) => ({ dogToUpdate: state.dogToUpdate }));
 
   const validates =
     active === 0
@@ -56,29 +48,29 @@ const CreateDogs = NiceModal.create(() => {
   const form = useForm({
     initialValues: {
       owner: currentUser._id,
-      avatar: '',
-      name: '',
-      breed: '',
-      bloodLine: '',
-      birthDate: '',
-      age: '',
-      gender: '',
-      height: '',
-      weight: '',
-      color: '',
-      images: [],
-      certificate: '',
-      caption: ''
+      avatar: dogToUpdate.avatar,
+      name: dogToUpdate.name,
+      breed: dogToUpdate.breed,
+      bloodLine: dogToUpdate.bloodLine,
+      birthDate: dogToUpdate.birthDate,
+      age: dogToUpdate.age,
+      gender: dogToUpdate.gender,
+      height: dogToUpdate.height,
+      weight: dogToUpdate.weight,
+      color: dogToUpdate.color,
+      images: dogToUpdate.images,
+      certificate: dogToUpdate.certificate,
+      caption: dogToUpdate.caption
     },
 
     validate: { ...validates }
   });
 
-  const createDogMutation = useMutation({
+  const updateDogMutation = useMutation({
     mutationKey: ['currentUser', session?.id],
     mutationFn: async (values) => {
-      const res = await fetch(`/api/user/${currentUser._id}/dog`, {
-        method: 'POST',
+      const res = await fetch(`/api/user/${currentUser._id}/dog/${dogToUpdate._id}`, {
+        method: 'PATCH',
         body: JSON.stringify(values),
         headers: {
           'Content-Type': 'application/json'
@@ -87,7 +79,7 @@ const CreateDogs = NiceModal.create(() => {
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || 'An error occurred while creating the dog.');
+        throw new Error(errorData.message || 'An error occurred while updating the dog.');
       }
 
       return await res.json();
@@ -114,7 +106,7 @@ const CreateDogs = NiceModal.create(() => {
   });
 
   const handleSubmit = form.onSubmit((values) => {
-    createDogMutation.mutate(values);
+    updateDogMutation.mutate(values);
   });
 
   return (
@@ -141,22 +133,13 @@ const CreateDogs = NiceModal.create(() => {
         </Stepper>
 
         <Group position="center" mt="xl">
-          <Button variant="default" onClick={prevStep}>
-            Back
+          <Button onClick={handleSubmit} color="orange" loading={updateDogMutation.isLoading}>
+            Update
           </Button>
-          {active !== 2 ? (
-            <Button onClick={nextStep} color="orange">
-              Next step
-            </Button>
-          ) : (
-            <Button onClick={handleSubmit} color="orange" loading={createDogMutation.isLoading}>
-              Submit
-            </Button>
-          )}
         </Group>
       </div>
     </Modal>
   );
 });
 
-export default CreateDogs;
+export default UpdateDog;

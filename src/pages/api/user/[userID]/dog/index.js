@@ -1,7 +1,7 @@
-import dbConnect from '../../../../../lib/dbConnect';
+import dbConnect from '../../../../../../lib/dbConnect';
 import User from '@/models/userModel';
 import Dog from '@/models/dogModel';
-import mongoDBErrorHandler from '../../../../../lib/mongoDBErrorHandler';
+import mongoDBErrorHandler from '../../../../../../lib/mongoDBErrorHandler';
 
 export default async function handler(req, res) {
   await dbConnect();

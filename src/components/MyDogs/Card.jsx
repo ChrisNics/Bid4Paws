@@ -3,12 +3,13 @@ import {
   Card as MantineCard,
   Text,
   Group,
-  Center,
   createStyles,
   getStylesRef,
   rem,
   Button
 } from '@mantine/core';
+import useDogsStore from '@/store/useDogsStore';
+import NiceModal from '@ebay/nice-modal-react';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -43,8 +44,15 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-export default function Card({ avatar, name, breed, age }) {
+export default function Card({ dog }) {
   const { classes, theme } = useStyles();
+  const { setDogToUpdate } = useDogsStore((state) => ({ setDogToUpdate: state.setDogToUpdate }));
+
+  console.log(dog);
+  const handleEdit = () => {
+    setDogToUpdate(dog);
+    NiceModal.show('update-dog');
+  };
 
   return (
     <MantineCard
@@ -55,13 +63,18 @@ export default function Card({ avatar, name, breed, age }) {
       radius="md"
       component="a"
       target="_blank">
-      <div className={classes.image} style={{ backgroundImage: `url(${avatar})` }} />
+      <div className={classes.image} style={{ backgroundImage: `url(${dog.avatar})` }} />
       <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-transparent to-black/90"></div>
 
       <div className="h-full relative flex flex-col justify-end z-1 group">
         <div className="flex justify-center items-center h-full w-full">
           <div className="opacity-0 group-hover:opacity-100 flex flex-col  gap-y-5 transition-opacity duration-300 w-full">
-            <Button leftIcon={<IconEdit size="1rem" />} variant="white" fullWidth h={50}>
+            <Button
+              leftIcon={<IconEdit size="1rem" />}
+              variant="white"
+              fullWidth
+              h={50}
+              onClick={handleEdit}>
               Edit
             </Button>
             <Button
@@ -76,16 +89,16 @@ export default function Card({ avatar, name, breed, age }) {
         </div>
         <div>
           <Text size="lg" className={classes.title} weight={500}>
-            {name}
+            {dog.name}
           </Text>
 
           <Group position="apart" spacing="xs">
             <Text size="sm" className={classes.author}>
-              {breed}
+              {dog.breed}
             </Text>
 
             <Text size="sm" className={classes.author}>
-              {age} years old
+              {dog.age} years old
             </Text>
           </Group>
         </div>

@@ -25,8 +25,8 @@ export default function MultiImageDropZone({ hooks, title, images }) {
       className={`max-w-lg grid grid-cols-1 gap-y-5 ${
         images.length > 0 && 'sm:grid-cols-2'
       } sm:gap-x-5 justify-center`}>
-      {images.map((image) => (
-        <div className="relative border rounded-lg h-60 w-60 overflow-hidden">
+      {images.map((image, index) => (
+        <div className="relative border rounded-lg h-60 w-60 overflow-hidden" key={index}>
           <Image priority fill alt="image" src={image} quality={50} sizes="33vw" />
         </div>
       ))}

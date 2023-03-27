@@ -2,7 +2,7 @@ import Image from 'next/image';
 import SingleImageDropZone from '@/components/SingleImageDropZone';
 import { TextInput, Select, Group, Avatar, Text } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
-import breeds from '../../../../dev-data/breeds';
+import breeds from '../../../../../dev-data/breeds';
 import { forwardRef } from 'react';
 
 const SelectItem = forwardRef(({ img, label, origin, ...others }, ref) => (
