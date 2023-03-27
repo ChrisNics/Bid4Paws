@@ -1,4 +1,4 @@
-import { IconEye, IconMessageCircle } from '@tabler/icons-react';
+import { IconEdit, IconTrash } from '@tabler/icons-react';
 import {
   Card as MantineCard,
   Text,
@@ -6,7 +6,8 @@ import {
   Center,
   createStyles,
   getStylesRef,
-  rem
+  rem,
+  Button
 } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
@@ -25,24 +26,6 @@ const useStyles = createStyles((theme) => ({
     ref: getStylesRef('image'),
     backgroundSize: 'cover',
     transition: 'transform 500ms ease'
-  },
-
-  overlay: {
-    position: 'absolute',
-    top: '20%',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .85) 90%)'
-  },
-
-  content: {
-    height: '100%',
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    zIndex: 1
   },
 
   title: {
@@ -73,9 +56,24 @@ export default function Card({ avatar, name, breed, age }) {
       component="a"
       target="_blank">
       <div className={classes.image} style={{ backgroundImage: `url(${avatar})` }} />
-      <div className={classes.overlay} />
+      <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-transparent to-black/90"></div>
 
-      <div className={classes.content}>
+      <div className="h-full relative flex flex-col justify-end z-1 group">
+        <div className="flex justify-center items-center h-full w-full">
+          <div className="opacity-0 group-hover:opacity-100 flex flex-col  gap-y-5 transition-opacity duration-300 w-full">
+            <Button leftIcon={<IconEdit size="1rem" />} variant="white" fullWidth h={50}>
+              Edit
+            </Button>
+            <Button
+              h={50}
+              fullWidth
+              leftIcon={<IconTrash size="1rem" />}
+              variant="gradient"
+              gradient={{ from: 'orange', to: 'red' }}>
+              Delete
+            </Button>
+          </div>
+        </div>
         <div>
           <Text size="lg" className={classes.title} weight={500}>
             {name}

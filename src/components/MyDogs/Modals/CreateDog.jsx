@@ -19,7 +19,6 @@ const CreateDogs = NiceModal.create(() => {
   const { data: session } = useSession();
   const [active, setActive] = useState(0);
   const currentUser = useCurrentUser((state) => state.currentUser);
-  // const currentUser = queryClient.getQueryData(['currentUser', session?.id]);
 
   const nextStep = () =>
     setActive((current) => {
