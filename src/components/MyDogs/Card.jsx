@@ -10,6 +10,10 @@ import {
 } from '@mantine/core';
 import useDogsStore from '@/store/useDogsStore';
 import NiceModal from '@ebay/nice-modal-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
+import showNotification from '../../../lib/showNotification';
+import useCurrentUser from '@/store/useCurrentUser';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -44,11 +48,56 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-export default function Card({ dog }) {
+const Card = ({ dog }) => {
   const { classes, theme } = useStyles();
   const { setDogToUpdate } = useDogsStore((state) => ({ setDogToUpdate: state.setDogToUpdate }));
+  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
 
-  console.log(dog);
+  console.log(queryClient);
+
+  const deleteDogMutation = useMutation({
+    mutationKey: ['currentUser', session?.id],
+    mutationFn: async () => {
+      const res = await fetch(`/api/user/${currentUser._id}/dog/${dog._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'An error occurred while updating the dog.');
+      }
+
+      return await res.json();
+    },
+    onSettled: ({ data, message }) => {
+      // Handle successful data update
+
+      // Refetch query to trigger re-render
+      queryClient.invalidateQueries(['currentUser', session?.id]);
+      showNotification({
+        title: 'Success',
+        message,
+        color: 'green'
+      });
+    },
+    onError: (error) => {
+      showNotification({
+        title: 'Failed',
+        message: error.message,
+        color: 'red'
+      });
+    }
+  });
+
+  const handleDelete = () => {
+    deleteDogMutation.mutate();
+  };
+
   const handleEdit = () => {
     setDogToUpdate(dog);
     NiceModal.show('update-dog');
@@ -82,7 +131,9 @@ export default function Card({ dog }) {
               fullWidth
               leftIcon={<IconTrash size="1rem" />}
               variant="gradient"
-              gradient={{ from: 'orange', to: 'red' }}>
+              gradient={{ from: 'orange', to: 'red' }}
+              loading={deleteDogMutation.isLoading}
+              onClick={handleDelete}>
               Delete
             </Button>
           </div>
@@ -105,4 +156,6 @@ export default function Card({ dog }) {
       </div>
     </MantineCard>
   );
-}
+};
+
+export default Card;

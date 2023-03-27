@@ -114,7 +114,7 @@ const Auth = ({ children }) => {
       const { data } = await res.json();
       return data;
     },
-    onSuccess: (data) => {
+    onSettled: (data) => {
       setCurrentUser(data);
       console.log(data);
     },
