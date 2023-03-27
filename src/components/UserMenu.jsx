@@ -5,21 +5,12 @@ import {
   IconStar,
   IconDog,
   IconSettings,
-  IconPlayerPause,
   IconTrash,
-  IconSwitchHorizontal,
   IconChevronDown
 } from '@tabler/icons-react';
 import { useState } from 'react';
-
-const test = {
-  user: {
-    name: 'Jane Spoonfighter',
-    email: 'janspoon@fighter.dev',
-    image:
-      'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80'
-  }
-};
+import Link from 'next/link';
+import signOut from '../../lib/signOut';
 
 const useStyles = createStyles((theme) => ({
   user: {
@@ -45,7 +36,6 @@ const useStyles = createStyles((theme) => ({
 const UserMenu = ({ currentUser }) => {
   const { classes, theme, cx } = useStyles();
   const [userMenuOpened, setUserMenuOpened] = useState(false);
-  const { user, tabs } = test;
   console.log(currentUser);
   return (
     <Menu
@@ -67,17 +57,34 @@ const UserMenu = ({ currentUser }) => {
         </UnstyledButton>
       </Menu.Target>
       <Menu.Dropdown>
-        <Menu.Item icon={<IconHeart size="0.9rem" color={theme.colors.red[6]} stroke={1.5} />}>
-          Your swipes
-        </Menu.Item>
-        <Menu.Item icon={<IconStar size="0.9rem" color={theme.colors.yellow[6]} stroke={1.5} />}>
-          Your bids
-        </Menu.Item>
+        <Link href="/my-swipes" passHref legacyBehavior>
+          <Menu.Item icon={<IconHeart size="0.9rem" color={theme.colors.red[6]} stroke={1.5} />}>
+            <span>Your swipes</span>
+          </Menu.Item>
+        </Link>
+        <Link href="my-bids" passHref legacyBehavior>
+          <Menu.Item icon={<IconStar size="0.9rem" color={theme.colors.yellow[6]} stroke={1.5} />}>
+            <span>Your Bids</span>
+          </Menu.Item>
+        </Link>
 
         <Menu.Label>Settings</Menu.Label>
-        <Menu.Item icon={<IconSettings size="0.9rem" stroke={1.5} />}>Account settings</Menu.Item>
-        <Menu.Item icon={<IconDog size="0.9rem" stroke={1.5} />}>My dogs</Menu.Item>
-        <Menu.Item icon={<IconLogout size="0.9rem" stroke={1.5} />}>Logout</Menu.Item>
+        <Link href="my-account" passHref legacyBehavior>
+          <Menu.Item icon={<IconSettings size="0.9rem" stroke={1.5} />}>
+            <span>Account Settings</span>
+          </Menu.Item>
+        </Link>
+        <Link href="my-dogs" passHref legacyBehavior>
+          <Menu.Item icon={<IconDog size="0.9rem" stroke={1.5} />}>My dogs</Menu.Item>
+        </Link>
+        <Link href="/signin" passHref legacyBehavior>
+          <Menu.Item
+            color="red"
+            icon={<IconTrash size="0.9rem" stroke={1.5} />}
+            onClick={() => signOut()}>
+            Logout
+          </Menu.Item>
+        </Link>
 
         <Menu.Divider />
 
