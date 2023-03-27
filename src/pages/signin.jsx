@@ -18,10 +18,11 @@ import { signIn } from 'next-auth/react';
 import { useForm } from '@mantine/form';
 import showNotification from '../../lib/showNotification';
 import DogFacts from '@/components/DogFacts';
-import signOut from '../../lib/signOut';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import useCurrentUser from '@/store/useCurrentUser';
+import { signOut } from 'next-auth/react';
+import { useState } from 'react';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -59,6 +60,7 @@ export default function AuthenticationImage() {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const currentUser = queryClient.getQueryData(['currentUser', session?.id]);
+  const [loading, setIsLoading] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -74,14 +76,16 @@ export default function AuthenticationImage() {
 
   const handleSubmit = form.onSubmit(async (values) => {
     if (currentUser) {
-      signOut(session);
+      signOut();
       return;
     }
+    setIsLoading(true);
     const res = await signIn('credentials', { redirect: false, ...values }); // We dont need it to convert it to json, next-auth already handles it.
     if (!res.ok) {
       showNotification({ title: 'Invalid Credentials', message: res.error, color: 'red' });
       return;
     }
+    setIsLoading(false);
   });
 
   return (
@@ -109,7 +113,7 @@ export default function AuthenticationImage() {
           {...form.getInputProps('password')}
         />
         <Checkbox label="Keep me logged in" mt="xl" size="md" />
-        <Button fullWidth mt="xl" size="md" color="orange" onClick={handleSubmit}>
+        <Button fullWidth mt="xl" size="md" color="orange" onClick={handleSubmit} loading={loading}>
           Login
         </Button>
 
