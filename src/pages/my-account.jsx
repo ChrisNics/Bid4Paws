@@ -22,13 +22,13 @@ const MyAccount = () => {
 
   const formPersonalInfo = useForm({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phoneNumber: '',
-      birthDate: '',
-      age: '',
-      gender: ''
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      email: currentUser.email,
+      age: currentUser.age,
+      gender: currentUser.gender,
+      phoneNumber: currentUser.phoneNumber,
+      birthDate: currentUser.birthDate
     },
 
     validate: {
@@ -49,12 +49,16 @@ const MyAccount = () => {
   const formAddress = useForm({
     initialValues: {
       address: {
-        city: '',
-        province: '',
-        street: '',
-        postalCode: '',
-        barangay: '',
-        geocoding: { landmark: '', coordinates: [], type: 'Point' }
+        city: currentUser.address.city,
+        province: currentUser.address.province,
+        street: currentUser.address.street,
+        postalCode: currentUser.address.postalCode,
+        barangay: currentUser.address.barangay,
+        geocoding: {
+          coordinates: currentUser.address.geocoding.coordinates,
+          landmark: currentUser.address.geocoding.landmark,
+          type: 'Point'
+        }
       }
     },
 
@@ -74,8 +78,8 @@ const MyAccount = () => {
 
   const formUsernameAndAvatar = useForm({
     initialValues: {
-      username: '',
-      avatar: ''
+      username: currentUser.username,
+      avatar: currentUser.avatar
     },
 
     validate: {
@@ -98,39 +102,6 @@ const MyAccount = () => {
         value !== values.password ? 'Passwords did not match' : null
     }
   });
-
-  useEffect(() => {
-    if (!currentUser) return; // Guard Clause
-    formPersonalInfo.setValues({
-      firstName: currentUser.firstName,
-      lastName: currentUser.lastName,
-      email: currentUser.email,
-      age: currentUser.age,
-      gender: currentUser.gender,
-      phoneNumber: currentUser.phoneNumber,
-      birthDate: currentUser.birthDate
-    });
-
-    formAddress.setValues({
-      address: {
-        city: currentUser.address.city,
-        province: currentUser.address.province,
-        street: currentUser.address.street,
-        postalCode: currentUser.address.postalCode,
-        barangay: currentUser.address.barangay,
-        geocoding: {
-          coordinates: currentUser.address.geocoding.coordinates,
-          landmark: currentUser.address.geocoding.landmark,
-          type: 'Point'
-        }
-      }
-    });
-
-    formUsernameAndAvatar.setValues({
-      username: currentUser.username,
-      avatar: currentUser.avatar
-    });
-  }, [currentUser]);
 
   const updateUser = async (values) => {
     const url =
