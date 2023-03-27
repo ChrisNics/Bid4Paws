@@ -23,6 +23,7 @@ import { useSession } from 'next-auth/react';
 import useCurrentUser from '@/store/useCurrentUser';
 import { signOut } from 'next-auth/react';
 import { useState } from 'react';
+import _ from 'lodash';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -59,7 +60,7 @@ export default function AuthenticationImage() {
   const { classes } = useStyles();
   const queryClient = useQueryClient();
   const { data: session } = useSession();
-  const currentUser = queryClient.getQueryData(['currentUser', session?.id]);
+  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
   const [loading, setIsLoading] = useState(false);
 
   const form = useForm({
@@ -75,18 +76,19 @@ export default function AuthenticationImage() {
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
-    if (currentUser) {
-      signOut();
+    if (_.isEmpty(currentUser)) {
+      setIsLoading(true);
+      const res = await signIn('credentials', { redirect: false, ...values }); // We dont need it to convert it to json, next-auth already handles it.
+      if (!res.ok) {
+        showNotification({ title: 'Invalid Credentials', message: res.error, color: 'red' });
+        setIsLoading(false);
+      }
       return;
     }
-    setIsLoading(true);
-    const res = await signIn('credentials', { redirect: false, ...values }); // We dont need it to convert it to json, next-auth already handles it.
-    if (!res.ok) {
-      showNotification({ title: 'Invalid Credentials', message: res.error, color: 'red' });
-      return;
-    }
-    setIsLoading(false);
+    signOut();
+    return;
   });
+  console.log(_.isEmpty(currentUser));
 
   return (
     <div className={classes.wrapper}>

@@ -12,6 +12,7 @@ import { QueryClient, QueryClientProvider, Hydrate, useQuery } from '@tanstack/r
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import useCurrentUser from '@/store/useCurrentUser';
 import LoadingScreen from '@/components/LoadingScreen';
+import _ from 'lodash';
 
 const CreateDog = dynamic(() => import('@/components/MyDogs/Modals/CreateDog'), {
   loading: () => (
@@ -95,15 +96,15 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
 
 const Auth = ({ children }) => {
   const { data: session, status } = useSession();
-  const { setCurrentUser } = useCurrentUser((state) => ({ setCurrentUser: state.setCurrentUser }));
+  const { setCurrentUser } = useCurrentUser((state) => ({
+    setCurrentUser: state.setCurrentUser
+  }));
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['currentUser', session?.id],
     enabled: status !== 'loading',
     queryFn: async () => {
-      if (!session) {
-        return null; // Return empty object if session is not defined
-      }
-
+      if (!session) return {};
       const res = await fetch(`/api/user/${session.id}`);
 
       if (!res.ok) {
