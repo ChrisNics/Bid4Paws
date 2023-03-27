@@ -21,6 +21,7 @@ import DogFacts from '@/components/DogFacts';
 import signOut from '../../lib/signOut';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+import useCurrentUser from '@/store/useCurrentUser';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -58,7 +59,6 @@ export default function AuthenticationImage() {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const currentUser = queryClient.getQueryData(['currentUser', session?.id]);
-  console.log(currentUser);
 
   const form = useForm({
     initialValues: {

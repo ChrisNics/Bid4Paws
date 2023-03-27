@@ -9,6 +9,8 @@ import FormAdditionalInformation from './FormAdditionalInformation';
 import { useForm } from '@mantine/form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+import useCurrentUser from '@/store/useCurrentUser';
+import showNotification from '../../../../lib/showNotification';
 
 const CreateDogs = NiceModal.create(() => {
   const modal = useModal();
@@ -16,8 +18,8 @@ const CreateDogs = NiceModal.create(() => {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const [active, setActive] = useState(0);
-
-  const currentUser = queryClient.getQueryData(['currentUser', session?.id]);
+  const currentUser = useCurrentUser((state) => state.currentUser);
+  // const currentUser = queryClient.getQueryData(['currentUser', session?.id]);
 
   const nextStep = () =>
     setActive((current) => {
@@ -89,22 +91,26 @@ const CreateDogs = NiceModal.create(() => {
         throw new Error(errorData.message || 'An error occurred while creating the dog.');
       }
 
-      const { data } = await res.json();
-      return data;
+      return await res.json();
     },
-    onSuccess: (data) => {
+    onSettled: ({ data, message }) => {
       // Handle successful data update
 
-      queryClient.setQueryData(['currentUser', session?.id], (state) => ({
-        ...state,
-        dogs: [...state.dogs, data]
-      }));
-
+      // Refetch query to trigger re-render
+      queryClient.invalidateQueries(['currentUser', session?.id]);
       modal.remove();
+      showNotification({
+        title: 'Success',
+        message,
+        color: 'green'
+      });
     },
     onError: (error) => {
-      // Handle error
-      console.log(error);
+      showNotification({
+        title: 'Failed',
+        message: error.message,
+        color: 'red'
+      });
     }
   });
 

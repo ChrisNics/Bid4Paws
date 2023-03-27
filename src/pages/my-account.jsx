@@ -1,8 +1,7 @@
 import { Tabs, Button } from '@mantine/core';
-import dynamic from 'next/dynamic';
 import showNotification from '../../lib/showNotification';
 import phoneChecker from '../../lib/phoneChecker';
-import { IconId, IconAsterisk, IconSettings, IconMapPins } from '@tabler/icons-react';
+import { IconId, IconSettings, IconMapPins } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
 import passwordChecker from '../../lib/passwordChecker';
@@ -10,24 +9,16 @@ import FormPersonalInfo from '@/components/MyAccount/FormPersonalInfo';
 import FormAddress from '@/components/MyAccount/FormAddress';
 import FormUsernameAndAvatar from '@/components/MyAccount/FormUsernameAndAvatar';
 import FormChangePassword from '@/components/MyAccount/FormChangePassword';
-import {
-  useMutation,
-  useQueryClient,
-  dehydrate,
-  QueryClient,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import useCurrentUser, { getCurrentUser } from '@/hooks/useCurrentUser';
-import LoadingScreen from '@/components/LoadingScreen';
-import { authOptions } from './api/auth/[...nextauth]';
-import { getServerSession } from 'next-auth/next';
+import useCurrentUser from '@/store/useCurrentUser';
 
 const MyAccount = () => {
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const [tab, setTab] = useState('Personal Information');
-  const { data: currentUser, isLoading, error } = useCurrentUser(session?.id);
+
+  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
 
   const formPersonalInfo = useForm({
     initialValues: {
@@ -165,9 +156,8 @@ const MyAccount = () => {
 
   const updateUserMutation = useMutation({
     mutationFn: updateUser,
-    onSuccess: ({ data, message }) => {
-      queryClient.setQueryData(['currentUser', session?.id], data);
-
+    onSettled: ({ data, message }) => {
+      queryClient.invalidateQueries(['currentUser', session?.id]);
       showNotification({
         title: 'Success',
         message,
@@ -191,8 +181,6 @@ const MyAccount = () => {
       : tab === 'Change Password'
       ? formChangePassword.onSubmit((values) => updateUserMutation.mutate(values))
       : formUsernameAndAvatar.onSubmit((values) => updateUserMutation.mutate(values));
-
-  if (isLoading) return <LoadingScreen />;
 
   return (
     <div className="container mx-auto p-5">
@@ -255,15 +243,8 @@ const MyAccount = () => {
 };
 
 export const getServerSideProps = async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery(['currentUser', session?.id], () => getCurrentUser(session?.id));
-
   return {
-    props: {
-      dehydratedState: dehydrate(queryClient)
-    }
+    props: {}
   };
 };
 
