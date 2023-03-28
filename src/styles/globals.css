@@ -133,15 +133,7 @@ a {
 }
 
 .background {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  background: #ffbe6f;
-  overflow: hidden;
+  @apply fixed w-screen h-screen top-0 left-0 m-0 p-0 bg-[#ffbe6f] dark:bg-black overflow-hidden;
 }
 .background li {
   position: absolute;
@@ -216,6 +208,7 @@ a {
   bottom: -177px;
   animation-delay: 2s;
 }
+
 .background li:nth-child(9) {
   left: 5%;
   width: 126px;
@@ -227,4 +220,9 @@ a {
 /* Make antd modal darkmode based on mantine */
 :where(.css-dev-only-do-not-override-ph9edi).ant-modal .ant-modal-content {
   @apply dark:bg-[#1A1B1E] dark:text-[#C1C2C5];
+}
+
+.mantine-1qein0h,
+.mantine-1x65yxg {
+  padding-right: 0 !important;
 }

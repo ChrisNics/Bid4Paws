@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Blockquote, Text } from '@mantine/core';
+import { useQuery } from '@tanstack/react-query';
 
-function DogFacts({ color = 'black' }) {
+function DogFacts({ color = 'white' }) {
   const [fact, setFact] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,36 +15,22 @@ function DogFacts({ color = 'black' }) {
         'X-RapidAPI-Host': 'dog-facts2.p.rapidapi.com'
       }
     };
-
-    try {
-      const res = await fetch('https://dog-facts2.p.rapidapi.com/facts', options);
-      const data = await res.json();
-      setFact(data.facts[0]);
-      setLoading(false);
-    } catch (err) {
-      setError(err);
-      setLoading(false);
-    }
+    const res = await fetch('https://dog-facts2.p.rapidapi.com/facts', options);
+    return await res.json();
   };
 
-  useEffect(() => {
-    fetchDogFacts();
-
-    // const interval = setInterval(() => {
-    //   fetchDogFacts();
-    // }, 10000);
-
-    // return () => clearInterval(interval);
-  }, []);
-
-  if (error) return null;
+  const { data, isLoading } = useQuery({
+    queryKey: ['dogFacts'],
+    queryFn: fetchDogFacts
+    // refetchInterval: 8000
+  });
 
   return (
     <>
-      {!loading && (
+      {!isLoading && (
         <Blockquote cite="– Fact about dogs" mt={50}>
           <div>
-            <p className={`font-sans text-sm text-${color}`}>{fact}</p>
+            <p className={`font-sans text-sm text-${color} dark:text-[#C1C2C5]`}>{data.facts[0]}</p>
           </div>
         </Blockquote>
       )}

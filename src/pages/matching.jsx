@@ -85,6 +85,7 @@ const matching = () => {
                 <div className="relative h-card w-card md:w-cardSmall md:h-cardSmall  bg-orange-500">
                   <Image
                     priority
+                    fill
                     sizes="33vw"
                     draggable={false}
                     alt="image"

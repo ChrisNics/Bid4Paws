@@ -5,11 +5,9 @@ import {
   PasswordInput,
   Checkbox,
   Button,
-  Title,
   Text,
   Anchor,
-  rem,
-  Blockquote
+  rem
 } from '@mantine/core';
 import ThemeToggle from '@/components/ThemeToggle';
 import Image from 'next/image';
@@ -130,7 +128,7 @@ export default function AuthenticationImage() {
           </Link>
         </Text>
 
-        <DogFacts />
+        <DogFacts color="black" />
       </Paper>
     </div>
   );

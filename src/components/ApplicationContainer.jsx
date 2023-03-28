@@ -19,7 +19,9 @@ export default function ApplicationContainer({ children }) {
       styles={{
         main: {
           background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-          paddingLeft: 0
+          paddingLeft: 0,
+          paddingRight: 0,
+          paddingTop: 0
         }
       }}
       navbarOffsetBreakpoint="sm"
