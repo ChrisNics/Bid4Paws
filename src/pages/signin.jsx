@@ -24,6 +24,7 @@ import useCurrentUser from '@/store/useCurrentUser';
 import { signOut } from 'next-auth/react';
 import { useState } from 'react';
 import _ from 'lodash';
+import { useRouter } from 'next/router';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -58,10 +59,9 @@ const useStyles = createStyles((theme) => ({
 
 export default function AuthenticationImage() {
   const { classes } = useStyles();
-  const queryClient = useQueryClient();
-  const { data: session } = useSession();
   const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
   const [loading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const form = useForm({
     initialValues: {
@@ -82,7 +82,9 @@ export default function AuthenticationImage() {
       if (!res.ok) {
         showNotification({ title: 'Invalid Credentials', message: res.error, color: 'red' });
         setIsLoading(false);
+        return;
       }
+      router.push('/');
       return;
     }
     signOut();
