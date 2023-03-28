@@ -10,9 +10,6 @@ import {
 } from '@mantine/core';
 import useDogsStore from '@/store/useDogsStore';
 import NiceModal from '@ebay/nice-modal-react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
-import useCurrentUser from '@/store/useCurrentUser';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -48,12 +45,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const Card = ({ dog }) => {
-  const { classes, theme } = useStyles();
+  const { classes } = useStyles();
   const { setDogToUpdate } = useDogsStore((state) => ({ setDogToUpdate: state.setDogToUpdate }));
-  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
-  const queryClient = useQueryClient();
-  const { data: session } = useSession();
-
   const handleDelete = () => NiceModal.show('prompt', { dog });
 
   const handleEdit = () => {

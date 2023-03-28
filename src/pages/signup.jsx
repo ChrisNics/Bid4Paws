@@ -318,11 +318,10 @@ const Signup = () => {
                     <Image
                       priority
                       fill
-                      alt="image"
+                      alt="Avatar"
                       src={
-                        form.values.avatar
-                          ? form.values.avatar
-                          : 'https://uploads.commoninja.com/searchengine/wordpress/random-avatars-of-user.png'
+                        form.values.avatar ||
+                        'https://uploads.commoninja.com/searchengine/wordpress/random-avatars-of-user.png'
                       }
                       // imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
                     />

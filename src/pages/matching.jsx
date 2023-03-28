@@ -85,12 +85,11 @@ const matching = () => {
                 <div className="relative h-card w-card md:w-cardSmall md:h-cardSmall  bg-orange-500">
                   <Image
                     priority
-                    fill
+                    sizes="33vw"
                     draggable={false}
                     alt="image"
                     style={{ filter: 'brightness(.80)' }}
                     src="https://images.pexels.com/photos/2023384/pexels-photo-2023384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                    // imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
                   />
 
                   <div className="font-mono absolute bottom-0 left-0 text-white pl-2 pb-2 flex items-center gap-x-5">

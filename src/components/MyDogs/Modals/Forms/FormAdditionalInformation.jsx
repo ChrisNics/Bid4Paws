@@ -31,9 +31,8 @@ const FormAdditionalInformation = ({ form }) => {
                 quality={50}
                 sizes="33vw"
                 src={
-                  form.values.certificate
-                    ? form.values.certificate
-                    : 'https://uploads.commoninja.com/searchengine/wordpress/random-avatars-of-user.png'
+                  form.values.certificate ||
+                  'https://uploads.commoninja.com/searchengine/wordpress/random-avatars-of-user.png'
                 }
               />
             </div>

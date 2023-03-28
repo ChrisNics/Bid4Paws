@@ -64,9 +64,9 @@ const Prompt = NiceModal.create(({ dog }) => {
       okButtonProps={{ type: 'primary', danger: true }}
       cancelText="Cancel">
       <p className="font-sans text-md">
-        Update your dog Deleting <b className="text-orange-500">{dog.name}'s</b> profile means
-        losing all the evidence of their presence in your life. Before you hit that delete button,
-        take a moment to cherish the memories you've created together.
+        Deleting <b className="text-orange-500">{dog.name}'s</b> profile means losing all the
+        evidence of their presence in your life. Before you hit that delete button, take a moment to
+        cherish the memories you've created together.
       </p>
     </Modal>
   );

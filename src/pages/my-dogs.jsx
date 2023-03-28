@@ -20,7 +20,7 @@ const MyDogs = () => {
           <div className="flex gap-x-5 max-w-max items-center">
             <h3 className="font-mono text-md">Your Dogs</h3>
             <div className="w-20 h-20 relative rounded-full overflow-hidden ">
-              <Image priority fill alt="image" src="/dogAvatar.png" quality={50} sizes="33vw" />
+              <Image priority fill alt="Dog Image" src="/dogAvatar.png" quality={50} sizes="33vw" />
             </div>
           </div>
           {currentUser?.dogs?.length < 4 && currentUser?.dogs?.length !== 0 && (

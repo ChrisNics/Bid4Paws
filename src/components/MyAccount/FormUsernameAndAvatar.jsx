@@ -9,15 +9,14 @@ const FormUsernameAndAvatar = ({ form }) => {
         <div className="max-w-sm flex flex-col gap-y-5">
           <div className="relative border rounded-full h-60 w-60 overflow-hidden">
             <Image
+              sizes="33vw"
               priority
               fill
               alt="image"
               src={
-                form.values.avatar
-                  ? form.values.avatar
-                  : 'https://uploads.commoninja.com/searchengine/wordpress/random-avatars-of-user.png'
+                form.values.avatar ||
+                'https://uploads.commoninja.com/searchengine/wordpress/random-avatars-of-user.png'
               }
-              // imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
             />
           </div>
           <SingleImageDropZone

@@ -28,14 +28,14 @@ const FormBasicInformation = ({ form }) => {
           <div className="max-w-sm flex flex-col gap-y-5">
             <div className="relative border rounded-full h-60 w-60 overflow-hidden">
               <Image
+                priority
                 quality={50}
                 sizes="33vw"
                 fill
                 alt="image"
                 src={
-                  form.values.avatar
-                    ? form.values.avatar
-                    : 'https://uploads.commoninja.com/searchengine/wordpress/random-avatars-of-user.png'
+                  form.values.avatar ||
+                  'https://uploads.commoninja.com/searchengine/wordpress/random-avatars-of-user.png'
                 }
               />
             </div>
