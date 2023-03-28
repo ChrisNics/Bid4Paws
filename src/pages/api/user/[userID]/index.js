@@ -1,6 +1,7 @@
 import dbConnect from '../../../../../lib/dbConnect';
 import User from '@/models/userModel';
 import mongoDBErrorHandler from '../../../../../lib/mongoDBErrorHandler';
+import Dog from '@/models/dogModel';
 
 export default async function handler(req, res) {
   await dbConnect();
@@ -34,6 +35,12 @@ export default async function handler(req, res) {
 
       if (!updatedUser) {
         return res.status(404).json({ message: 'User not found', status: 404 });
+      }
+
+      if (userUpdates.address) {
+        console.log('test');
+        // Update the corresponding dogs' addresses
+        await Dog.updateMany({ owner: userID }, { address: updatedUser.address });
       }
 
       return res

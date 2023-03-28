@@ -57,12 +57,52 @@ const DogSchema = new Schema(
     certificate: {
       type: String,
       required: [true, "Please provide your dog's certificate"]
+    },
+    address: {
+      street: {
+        type: String,
+        required: [true, 'Please provide your street address']
+      },
+      barangay: {
+        type: String,
+        required: [true, 'Please provide your barangay address']
+      },
+      postalCode: {
+        type: Number,
+        required: [true, 'Please provide your postal code']
+      },
+      city: {
+        type: String,
+        required: [true, 'Please provide your city address']
+      },
+      province: {
+        type: String,
+        required: [true, 'Please provide your province address']
+      },
+      geocoding: {
+        type: {
+          type: String,
+          enum: ['Point'],
+          default: 'Point',
+          required: true
+        },
+        coordinates: {
+          type: [Number],
+          required: [true, 'Please provide coordinates']
+        },
+        landmark: {
+          type: String,
+          required: [true, 'Please provide landmark']
+        }
+      }
     }
   },
   {
     timestamps: true
   }
 );
+
+DogSchema.index({ 'address.geocoding': '2dsphere' });
 
 // Create the Dog model if it doesn't exist, or use the existing model
 const Dog = models.Dog || model('Dog', DogSchema);

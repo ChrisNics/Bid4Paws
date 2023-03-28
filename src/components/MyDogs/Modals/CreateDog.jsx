@@ -68,7 +68,8 @@ const CreateDogs = NiceModal.create(() => {
       color: '',
       images: [],
       certificate: '',
-      caption: ''
+      caption: '',
+      address: currentUser.address
     },
 
     validate: { ...validates }
