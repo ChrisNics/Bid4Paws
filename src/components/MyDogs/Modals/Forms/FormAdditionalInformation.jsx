@@ -11,7 +11,8 @@ const FormAdditionalInformation = ({ form }) => {
           <MultiImageDropZone
             title="image"
             images={form.values.images}
-            hooks={(value) => form.insertListItem('images', value)}
+            addImage={(value) => form.insertListItem('images', value)}
+            removeImage={(value) => form.removeListItem('images', value)}
           />
 
           {form.errors.images && (
