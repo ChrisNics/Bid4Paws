@@ -17,8 +17,17 @@ export default function ApplicationContainer({ children }) {
   return (
     <AppShell
       styles={{
+        root: {
+          backgroundImage:
+            router.pathname === '/'
+              ? theme.colorScheme === 'light'
+                ? 'url(https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*)'
+                : 'url(https://rare-gallery.com/mocahbig/33220-Dog-Puppy-Baby-AnimalGolden-Retriever-HD-Wallpaper.jpg)'
+              : undefined,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        },
         main: {
-          background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
           paddingLeft: 0,
           paddingRight: 0,
           paddingTop: 0

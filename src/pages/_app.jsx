@@ -12,6 +12,7 @@ import { QueryClient, QueryClientProvider, Hydrate, useQuery } from '@tanstack/r
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import useCurrentUser from '@/store/useCurrentUser';
 import LoadingScreen from '@/components/LoadingScreen';
+import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import _ from 'lodash';
 
 const CreateDog = dynamic(() => import('@/components/MyDogs/Modals/CreateDog'), {
@@ -49,9 +50,16 @@ NiceModal.register('update-dog', UpdateDog);
 NiceModal.register('prompt', Prompt);
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
-  const [colorScheme, setColorScheme] = useState('light');
+  const [colorScheme, setColorScheme] = useLocalStorage({
+    key: 'mantine-color-scheme',
+    defaultValue: 'light',
+    getInitialValueInEffect: true
+  });
+
   const toggleColorScheme = (value) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
+  useHotkeys([['J', () => toggleColorScheme()]]);
 
   const [queryClient] = useState(() => new QueryClient());
 

@@ -3,17 +3,16 @@ import {
   createStyles,
   Header as MantineHeader,
   Container,
-  Group,
   Burger,
   Paper,
   Transition,
   rem
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { MantineLogo } from '@mantine/ds';
 import UserMenu from './UserMenu';
 import useCurrentUser from '@/store/useCurrentUser';
 import _ from 'lodash';
+import Image from 'next/image';
 
 const HEADER_HEIGHT = rem(60);
 
@@ -39,7 +38,11 @@ const links = [
 const useStyles = createStyles((theme) => ({
   root: {
     position: 'relative',
-    zIndex: 1
+    zIndex: 1,
+    background: 'transparent',
+    borderBottom: 'none',
+    height: 'max-content',
+    maxHeight: 'max-content'
   },
 
   header: {
@@ -60,7 +63,8 @@ const useStyles = createStyles((theme) => ({
     fontWeight: 500,
 
     '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0]
+      backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
+      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color
     },
 
     [theme.fn.smallerThan('sm')]: {
@@ -100,8 +104,10 @@ export default function Header({ hidden }) {
   return (
     <MantineHeader height={HEADER_HEIGHT} hidden={true} className={classes.root}>
       <Container className={classes.header}>
-        <MantineLogo size={28} />
-        <div spacing={5} className="hidden md:flex">
+        <div className="flex justify-center items-center">
+          <Image src="/logo-2.gif" alt="Logo" width={150} height={150} priority />
+        </div>
+        <div spacing={5} className="hidden md:flex gap-x-5">
           {items}
         </div>
 
