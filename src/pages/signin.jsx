@@ -97,8 +97,10 @@ export default function AuthenticationImage() {
           <ThemeToggle />
         </div>
 
-        <div className="flex justify-center items-center my-10">
-          <Image src="/logo-2.gif" alt="Logo" width={200} height={200} priority />
+        <div className="flex justify-center items-center my-10 cursor-pointer">
+          <Link href="/" passHref legacyBehavior>
+            <Image src="/logo-2.gif" alt="Logo" width={200} height={200} priority />
+          </Link>
         </div>
 
         <TextInput

@@ -13,6 +13,7 @@ import UserMenu from './UserMenu';
 import useCurrentUser from '@/store/useCurrentUser';
 import _ from 'lodash';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const HEADER_HEIGHT = rem(60);
 
@@ -106,8 +107,10 @@ export default function Header({ hidden }) {
   return (
     <MantineHeader height={HEADER_HEIGHT} hidden={true} className={classes.root}>
       <Container className={classes.header}>
-        <div className="flex justify-center items-center">
-          <Image src="/logo-2.gif" alt="Logo" width={150} height={150} priority />
+        <div className="flex justify-center items-center cursor-pointer">
+          <Link href="/" passHref legacyBehavior>
+            <Image src="/logo-2.gif" alt="Logo" width={150} height={150} priority />
+          </Link>
         </div>
         <div spacing={5} className="hidden md:flex gap-x-5">
           {items}
