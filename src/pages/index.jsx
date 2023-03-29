@@ -85,7 +85,7 @@ const Hero = () => {
         top={-150}
       />
       <Container className={classes.container}>
-        <div className="text-white dark:text-[#C1C2C5]">
+        <div className="text-white dark:text-[#C1C2C5] lg:w-[960px]">
           <TypeAnimation
             sequence={['', 1000, 'Unleash the Power of Perfect Pairing', 1000]}
             repeat={Infinity}

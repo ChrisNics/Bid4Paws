@@ -58,13 +58,13 @@ const useStyles = createStyles((theme) => ({
     padding: `${rem(8)} ${rem(12)}`,
     borderRadius: theme.radius.sm,
     textDecoration: 'none',
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
+    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.white,
     fontSize: theme.fontSizes.sm,
     fontWeight: 500,
 
     '&:hover': {
-      backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
-      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color
+      backgroundColor: theme.colors.orange[0],
+      color: theme.colors.orange[8]
     },
 
     [theme.fn.smallerThan('sm')]: {
@@ -75,8 +75,10 @@ const useStyles = createStyles((theme) => ({
 
   linkActive: {
     '&, &:hover': {
-      backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
-      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color
+      backgroundColor: theme.colorScheme === 'light' ? theme.colors.orange[0] : '#423626',
+      color: theme.colorScheme === 'light' ? theme.colors.orange[5] : theme.colors.orange[5]
+      // backgroundColor: '#423626',
+      // color:
     }
   }
 }));
