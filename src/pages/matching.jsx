@@ -1,12 +1,11 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { Burger, HoverCard } from '@mantine/core';
-import Drawer from '@/components/Matching/Drawer';
-import { useDisclosure } from '@mantine/hooks';
-import { IconHelpSquare } from '@tabler/icons-react';
-import DogFacts from '@/components/DogFacts';
+import { HoverCard, Affix, rem, ActionIcon, Tooltip, Popover } from '@mantine/core';
+import { IconHeart, IconHelpSquare, IconArrowsExchange2 } from '@tabler/icons-react';
 import MovingBackground from '@/components/MovingBackground';
+import DogButton from '@/components/DogButton';
+import useCurrentUser from '@/store/useCurrentUser';
 
 const TinderCard = dynamic(() => import('react-tinder-card'), {
   ssr: false
@@ -14,11 +13,11 @@ const TinderCard = dynamic(() => import('react-tinder-card'), {
 
 const URL = 'https://randomuser.me/api/';
 
-const matching = () => {
-  const [opened, { open, close }] = useDisclosure(false);
+const Matching = () => {
   const [loading, setLoading] = useState(true);
   const [characters, setCharacters] = useState([]);
   const [lastDirection, setLastDirection] = useState();
+  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
 
   const loadData = async () => {
     const response = await fetch(URL);
@@ -82,7 +81,7 @@ const matching = () => {
                 key={characters.length}
                 onSwipe={(dir) => swiped(dir, characters[characters.length - 1])}
                 onCardLeftScreen={() => outOfFrame()}>
-                <div className="relative h-card w-card md:w-cardSmall md:h-cardSmall  bg-orange-500">
+                <div className="relative h-card w-card lg:w-cardSmall lg:h-cardSmall  bg-orange-500">
                   <Image
                     priority
                     fill
@@ -121,16 +120,47 @@ const matching = () => {
         )}
       </div>
 
-      <Drawer opened={opened} open={open} close={close} />
-      <div className="absolute p-2 top-[70%] left-[2%] bg-slate-300 rounded-full">
-        <Burger onClick={open} opened={opened} />
-      </div>
+      <Affix position={{ bottom: rem(100), left: rem(20) }}>
+        <Tooltip
+          label="My swipes"
+          color="orange"
+          position="right-start"
+          withArrow
+          arrowPosition="center">
+          <ActionIcon
+            size="xl"
+            variant="gradient"
+            gradient={{ from: 'red', to: 'orange' }}
+            radius="xl">
+            <IconHeart size="1.2rem" />
+          </ActionIcon>
+        </Tooltip>
+      </Affix>
 
-      <div className="absolute top-0 right-0 max-w-sm">
-        <DogFacts color="white" />
-      </div>
+      <Affix position={{ bottom: rem(50), left: rem(20) }}>
+        <Popover position="right-end" arrowPosition="side" withArrow shadow="md" width={350}>
+          <Popover.Target>
+            <Tooltip
+              label="Change dog"
+              color="orange"
+              position="right-start"
+              withArrow
+              arrowPosition="center">
+              <ActionIcon size="xl" variant="light" radius="xl">
+                <IconArrowsExchange2 size="1.2rem" />
+              </ActionIcon>
+            </Tooltip>
+          </Popover.Target>
+
+          <Popover.Dropdown>
+            {currentUser?.dogs?.map((dog) => (
+              <DogButton name={dog.name} breed={dog.breed} image={dog.avatar} />
+            ))}
+          </Popover.Dropdown>
+        </Popover>
+      </Affix>
     </section>
   );
 };
 
-export default matching;
+export default Matching;
