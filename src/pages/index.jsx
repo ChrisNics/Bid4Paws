@@ -64,8 +64,6 @@ const useStyles = createStyles((theme) => ({
   },
 
   control: {
-    marginTop: `calc(${theme.spacing.xl} * 2)`,
-
     [theme.fn.smallerThan('sm')]: {
       width: '100%'
     }
@@ -99,11 +97,24 @@ const Hero = () => {
           Connect Your Canine Companion with the Perfect Match - The Ultimate Dog Breeding App!
         </Text>
 
-        <Link href="/matching" passHref legacyBehavior>
-          <Button size="xl" color="orange" radius="xl" className={classes.control}>
-            Find My Match
-          </Button>
-        </Link>
+        <div className="flex flex-col self-stretch gap-y-5 mt-10 sm:flex-row sm:gap-y-0 sm:gap-x-5">
+          <Link href="/matching" passHref legacyBehavior>
+            <Button size="xl" color="orange" radius="xl" className={classes.control}>
+              Find My Match
+            </Button>
+          </Link>
+
+          <Link href="/matching" passHref legacyBehavior>
+            <Button
+              size="xl"
+              variant="white"
+              color="orange"
+              radius="xl"
+              className={classes.control}>
+              Get Started
+            </Button>
+          </Link>
+        </div>
 
         <DogFacts />
       </Container>

@@ -144,14 +144,10 @@ const Auth = ({ children }) => {
     }
   });
 
+  console.log(isLoading);
+
   if (error) return <h1>{error}</h1>;
   if (isLoading) return <LoadingScreen />;
 
-  if (isLoading || status === 'loading')
-    return (
-      <div className="min-h-screen min-w-full flex justify-center items-center">
-        <Loader color="orange" variant="bars" />;
-      </div>
-    );
   return children;
 };

@@ -2,10 +2,13 @@ import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { HoverCard, Affix, rem, ActionIcon, Tooltip, Popover } from '@mantine/core';
-import { IconHeart, IconHelpSquare, IconArrowsExchange2 } from '@tabler/icons-react';
+import { IconHeart, IconHelpSquare, IconArrowsExchange2, IconLogout } from '@tabler/icons-react';
 import MovingBackground from '@/components/MovingBackground';
 import DogButton from '@/components/DogButton';
 import useCurrentUser from '@/store/useCurrentUser';
+import Lottie from 'lottie-react';
+import { dogFlirtingAnimation } from '../../dev-data/dogsAnimation';
+import Link from 'next/link';
 
 const TinderCard = dynamic(() => import('react-tinder-card'), {
   ssr: false
@@ -89,13 +92,13 @@ const Matching = () => {
                     draggable={false}
                     alt="image"
                     style={{ filter: 'brightness(.80)' }}
-                    src="https://images.pexels.com/photos/2023384/pexels-photo-2023384.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                    src={characters[characters.length - 1].picture}
                   />
 
                   <div className="font-mono absolute bottom-0 left-0 text-white pl-2 pb-2 flex items-center gap-x-5">
                     <div>
-                      <h3>Tommy Dogs</h3>
-                      <h5>Aspin</h5>
+                      <h3>{characters[characters.length - 1].name}</h3>
+                      <h5>{characters[characters.length - 1].age}</h5>
                     </div>
                     <div className="cursor-pointer">
                       <HoverCard width={280} shadow="md" position="top">
@@ -119,6 +122,31 @@ const Matching = () => {
           </div>
         )}
       </div>
+
+      <Affix position={{ top: rem(40), right: rem(20) }}>
+        <div className="max-w-[200px] max-h-[200px]">
+          <Lottie animationData={dogFlirtingAnimation} loop={true} />
+        </div>
+      </Affix>
+
+      <Affix position={{ top: rem(20), left: rem(20) }}>
+        <Link href="/" passHref legacyBehavior>
+          <Tooltip
+            label="Back"
+            color="orange"
+            position="right-start"
+            withArrow
+            arrowPosition="center">
+            <ActionIcon
+              size="xl"
+              variant="gradient"
+              gradient={{ from: 'red', to: 'orange' }}
+              radius="xl">
+              <IconLogout size="1.2rem" />
+            </ActionIcon>
+          </Tooltip>
+        </Link>
+      </Affix>
 
       <Affix position={{ bottom: rem(100), left: rem(20) }}>
         <Tooltip

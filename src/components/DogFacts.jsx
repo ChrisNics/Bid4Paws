@@ -27,13 +27,13 @@ function DogFacts({ color = 'white' }) {
 
   return (
     <>
-      {!isLoading && (
-        <Blockquote cite="– Fact about dogs" mt={50}>
-          <div>
-            <p className={`font-sans text-sm text-${color} dark:text-[#C1C2C5]`}>{data.facts[0]}</p>
-          </div>
-        </Blockquote>
-      )}
+      <Blockquote cite="– Fact about dogs" mt={50}>
+        <div>
+          <p className={`font-sans text-sm text-${color} dark:text-[#C1C2C5]`}>
+            {data?.facts[0] || 'The are 4 constellations named after dogs.'}
+          </p>
+        </div>
+      </Blockquote>
     </>
   );
 }

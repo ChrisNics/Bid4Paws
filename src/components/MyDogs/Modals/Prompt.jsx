@@ -4,7 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import showNotification from '../../../../lib/showNotification';
 import useCurrentUser from '@/store/useCurrentUser';
 import { useSession } from 'next-auth/react';
-import { Text } from '@mantine/core';
+import Lottie from 'lottie-react';
+import { cryingDogAnimation } from '../../../../dev-data/dogsAnimation';
 
 const Prompt = NiceModal.create(({ dog }) => {
   const modal = useModal();
@@ -63,11 +64,16 @@ const Prompt = NiceModal.create(({ dog }) => {
       confirmLoading={deleteDogMutation.isLoading}
       okButtonProps={{ type: 'primary', danger: true }}
       cancelText="Cancel">
-      <p className="font-sans text-md">
-        Deleting <b className="text-orange-500">{dog.name}'s</b> profile means losing all the
-        evidence of their presence in your life. Before you hit that delete button, take a moment to
-        cherish the memories you've created together.
-      </p>
+      <div className="flex flex-col items-center justify-center gap-y-5">
+        <div className="max-w-[200px] max-h-[200px]">
+          <Lottie animationData={cryingDogAnimation} loop={true} />
+        </div>
+        <p className="font-sans text-md">
+          Deleting <b className="text-orange-500">{dog.name}'s</b> profile means losing all the
+          evidence of their presence in your life. Before you hit that delete button, take a moment
+          to cherish the memories you've created together.
+        </p>
+      </div>
     </Modal>
   );
 });

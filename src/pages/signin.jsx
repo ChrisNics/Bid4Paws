@@ -9,6 +9,7 @@ import {
   Anchor,
   rem
 } from '@mantine/core';
+import { useMantineTheme } from '@mantine/core';
 import ThemeToggle from '@/components/ThemeToggle';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -60,6 +61,7 @@ export default function AuthenticationImage() {
   const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
   const [loading, setIsLoading] = useState(false);
   const router = useRouter();
+  const theme = useMantineTheme();
 
   const form = useForm({
     initialValues: {
@@ -88,7 +90,6 @@ export default function AuthenticationImage() {
     signOut();
     return;
   });
-  console.log(_.isEmpty(currentUser));
 
   return (
     <div className={classes.wrapper}>
@@ -99,7 +100,13 @@ export default function AuthenticationImage() {
 
         <div className="flex justify-center items-center my-10 cursor-pointer">
           <Link href="/" passHref legacyBehavior>
-            <Image src="/logo-2.gif" alt="Logo" width={200} height={200} priority />
+            <Image
+              src={theme.colorScheme === 'light' ? '/logo-light-2.svg' : '/logo-dark.svg'}
+              alt="Logo"
+              width={200}
+              height={200}
+              priority
+            />
           </Link>
         </div>
 

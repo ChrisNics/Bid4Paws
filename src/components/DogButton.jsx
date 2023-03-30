@@ -13,6 +13,8 @@ import useCurrentUser from '@/store/useCurrentUser';
 import showNotification from '../../lib/showNotification';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+import Lottie from 'lottie-react';
+import { dogAnimation } from '../../dev-data/dogsAnimation';
 
 const useStyles = createStyles((theme) => ({
   user: {
@@ -68,8 +70,6 @@ export default function DogButton({ dog }) {
     }
   });
 
-  console.log(updateDogMutation.isLoading, updateDogMutation.data);
-
   const handleUpdate = () => updateDogMutation.mutate();
 
   return (
@@ -77,11 +77,15 @@ export default function DogButton({ dog }) {
       <LoadingOverlay
         visible={updateDogMutation.isLoading}
         overlayBlur={2}
-        loader={<Loader color="orange" variant="bars" />}
+        loader={
+          <div className="max-w-[200px] max-h-[200px]">
+            <Lottie animationData={dogAnimation} loop={true} />
+          </div>
+        }
       />
       <div className="flex items-center gap-x-5">
         <Group>
-          <Avatar src={dog.image} radius="xl" />
+          <Avatar src={dog.avatar} radius="xl" />
 
           <div style={{ flex: 1 }}>
             <Text size="sm" weight={500}>

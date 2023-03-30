@@ -15,6 +15,7 @@ import _ from 'lodash';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMantineTheme } from '@mantine/core';
 
 const HEADER_HEIGHT = rem(60);
 
@@ -96,6 +97,7 @@ export default function Header({ hidden }) {
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles(router);
   const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
+  const theme = useMantineTheme();
 
   const items = links.map((link) => (
     <a
@@ -116,7 +118,19 @@ export default function Header({ hidden }) {
       <Container className={classes.header}>
         <div className="flex justify-center items-center cursor-pointer">
           <Link href="/" passHref legacyBehavior>
-            <Image src="/logo-2.gif" alt="Logo" width={150} height={150} priority />
+            <Image
+              src={
+                theme.colorScheme === 'light'
+                  ? router.pathname === '/'
+                    ? '/logo-light.svg'
+                    : '/logo-light-2.svg'
+                  : '/logo-dark.svg'
+              }
+              alt="Logo"
+              width={150}
+              height={150}
+              priority
+            />
           </Link>
         </div>
         <div spacing={5} className="hidden md:flex gap-x-5">

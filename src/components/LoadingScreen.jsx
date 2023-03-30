@@ -1,9 +1,17 @@
-import { Loader } from '@mantine/core';
+import Lottie from 'lottie-react';
+import { dogKissAnimation } from '../../dev-data/dogsAnimation';
+import DogFacts from './DogFacts';
 
 const LoadingScreen = () => {
   return (
     <div className="min-h-screen min-w-full flex justify-center items-center">
-      <Loader color="orange" variant="bars" />;
+      <div className="flex flex-col gap-y-5 justify-center items-center xl:flex-row xl:gap-y-0 xl:gap-x-5">
+        <div className="max-w-[200px] max-h-[200px]">
+          <Lottie animationData={dogKissAnimation} loop={true} />
+        </div>
+
+        <DogFacts color="black" />
+      </div>
     </div>
   );
 };
