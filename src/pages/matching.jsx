@@ -154,7 +154,7 @@ const Matching = () => {
 
           <Popover.Dropdown>
             {currentUser?.dogs?.map((dog) => (
-              <DogButton name={dog.name} breed={dog.breed} image={dog.avatar} />
+              <DogButton dog={dog} />
             ))}
           </Popover.Dropdown>
         </Popover>

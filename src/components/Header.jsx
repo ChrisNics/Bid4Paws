@@ -14,6 +14,7 @@ import useCurrentUser from '@/store/useCurrentUser';
 import _ from 'lodash';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const HEADER_HEIGHT = rem(60);
 
@@ -36,7 +37,7 @@ const links = [
   }
 ];
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme, router) => ({
   root: {
     position: 'relative',
     zIndex: 1,
@@ -59,7 +60,12 @@ const useStyles = createStyles((theme) => ({
     padding: `${rem(8)} ${rem(12)}`,
     borderRadius: theme.radius.sm,
     textDecoration: 'none',
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.white,
+    color:
+      theme.colorScheme === 'dark'
+        ? theme.colors.dark[0]
+        : router.pathname === '/'
+        ? theme.white
+        : theme.black,
     fontSize: theme.fontSizes.sm,
     fontWeight: 500,
 
@@ -85,9 +91,10 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function Header({ hidden }) {
+  const router = useRouter();
   const [opened, { toggle, close }] = useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
-  const { classes, cx } = useStyles();
+  const { classes, cx } = useStyles(router);
   const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
 
   const items = links.map((link) => (

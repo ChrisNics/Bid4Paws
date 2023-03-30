@@ -5,6 +5,11 @@ import User from './userModel';
 const DogSchema = new Schema(
   {
     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    isCurrent: {
+      type: Boolean,
+      required: [true, 'Please provide if this dog is current'],
+      default: false
+    },
     name: {
       type: String,
       required: [true, "Please provide your dog's name"]
