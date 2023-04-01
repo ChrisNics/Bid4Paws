@@ -38,7 +38,6 @@ export default async function handler(req, res) {
       }
 
       if (userUpdates.address) {
-        console.log('test');
         // Update the corresponding dogs' addresses
         await Dog.updateMany({ owner: userID }, { address: updatedUser.address });
       }

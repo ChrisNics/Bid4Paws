@@ -36,7 +36,7 @@ const useStyles = createStyles((theme) => ({
 const UserMenu = ({ currentUser }) => {
   const { classes, theme, cx } = useStyles();
   const [userMenuOpened, setUserMenuOpened] = useState(false);
-  console.log(currentUser);
+
   return (
     <Menu
       width={260}

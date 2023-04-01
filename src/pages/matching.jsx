@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { HoverCard, Affix, rem, ActionIcon, Tooltip, Popover } from '@mantine/core';
+import { HoverCard, Affix, rem, ActionIcon, Tooltip, Popover, Text } from '@mantine/core';
 import { IconHeart, IconHelpSquare, IconArrowsExchange2, IconLogout } from '@tabler/icons-react';
 import MovingBackground from '@/components/MovingBackground';
 import DogButton from '@/components/DogButton';
@@ -77,48 +77,50 @@ const Matching = () => {
           </div>
         ) : (
           <div>
-            <div>
-              <TinderCard
-                ref={childRefs[childRefs.length - 1]}
-                className="swipe"
-                key={characters.length}
-                onSwipe={(dir) => swiped(dir, characters[characters.length - 1])}
-                onCardLeftScreen={() => outOfFrame()}>
-                <div className="relative h-card w-card lg:w-cardSmall lg:h-cardSmall  bg-orange-500">
-                  <Image
-                    priority
-                    fill
-                    sizes="33vw"
-                    draggable={false}
-                    alt="image"
-                    style={{ filter: 'brightness(.80)' }}
-                    src={characters[characters.length - 1].picture}
-                  />
+            <TinderCard
+              ref={childRefs[childRefs.length - 1]}
+              className="swipe"
+              key={characters.length}
+              onSwipe={(dir) => swiped(dir, characters[characters.length - 1])}
+              onCardLeftScreen={() => outOfFrame()}>
+              <div className="relative h-card w-card lg:w-cardSmall lg:h-cardSmall  bg-orange-500">
+                <Image
+                  priority
+                  fill
+                  sizes="33vw"
+                  draggable={false}
+                  alt="image"
+                  style={{ filter: 'brightness(.80)' }}
+                  src={characters[characters.length - 1].picture}
+                />
 
-                  <div className="font-mono absolute bottom-0 left-0 text-white pl-2 pb-2 flex items-center gap-x-5">
-                    <div>
-                      <h3>{characters[characters.length - 1].name}</h3>
-                      <h5>{characters[characters.length - 1].age}</h5>
-                    </div>
-                    <div className="cursor-pointer">
-                      <HoverCard width={280} shadow="md" position="top">
-                        <HoverCard.Target>
-                          <IconHelpSquare />
-                        </HoverCard.Target>
-                        <HoverCard.Dropdown>
-                          <div>
-                            <p className="font-sans text-black">
-                              Hover card is revealed when user hovers over target element, it will
-                              be hidden once mouse is not over both target and dropdown elements
-                            </p>
-                          </div>
-                        </HoverCard.Dropdown>
-                      </HoverCard>
-                    </div>
+                <div className="font-mono absolute bottom-0 left-0 text-white pl-2 pb-2 flex items-center gap-x-5">
+                  <div>
+                    <h3>{characters[characters.length - 1].name}</h3>
+                    <h5>{characters[characters.length - 1].age}</h5>
+                  </div>
+                  <div className="cursor-pointer">
+                    <HoverCard width={280} shadow="md" position="top">
+                      <HoverCard.Target>
+                        <IconHelpSquare />
+                      </HoverCard.Target>
+                      <HoverCard.Dropdown>
+                        <div>
+                          <p className="font-sans text-black">
+                            Hover card is revealed when user hovers over target element, it will be
+                            hidden once mouse is not over both target and dropdown elements
+                          </p>
+                        </div>
+                      </HoverCard.Dropdown>
+                    </HoverCard>
                   </div>
                 </div>
-              </TinderCard>
-            </div>
+              </div>
+            </TinderCard>
+
+            <Text color="white" size="xl" mt={20}>
+              23 potential matches nearby
+            </Text>
           </div>
         )}
       </div>

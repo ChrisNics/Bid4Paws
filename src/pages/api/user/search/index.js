@@ -12,7 +12,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: 'Missing required parameters.' });
     }
 
-    console.log(req.query);
     const users = await User.find({
       'address.geocoding.coordinates': {
         $geoWithin: {

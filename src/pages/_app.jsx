@@ -144,8 +144,6 @@ const Auth = ({ children }) => {
     }
   });
 
-  console.log(isLoading);
-
   if (error) return <h1>{error}</h1>;
   if (isLoading) return <LoadingScreen />;
 
