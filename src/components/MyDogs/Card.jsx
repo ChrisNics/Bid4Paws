@@ -63,7 +63,10 @@ const Card = ({ dog }) => {
       radius="md"
       component="a"
       target="_blank">
-      <div className={classes.image} style={{ backgroundImage: `url(${dog.avatar})` }} />
+      <div
+        className={classes.image}
+        style={{ backgroundImage: `url(${dog.avatar})`, backgroundPosition: 'center' }}
+      />
       <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-transparent to-black/90"></div>
 
       <div className="h-full relative flex flex-col justify-end z-1 group">
