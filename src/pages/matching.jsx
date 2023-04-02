@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { HoverCard, Affix, rem, ActionIcon, Tooltip, Popover, Text } from '@mantine/core';
+import { HoverCard, Affix, rem, ActionIcon, Tooltip, Popover, Text, Title } from '@mantine/core';
 import { IconHeart, IconHelpSquare, IconArrowsExchange2, IconLogout } from '@tabler/icons-react';
 import MovingBackground from '@/components/MovingBackground';
 import DogButton from '@/components/DogButton';
@@ -118,9 +118,9 @@ const Matching = () => {
               </div>
             </TinderCard>
 
-            <Text color="white" size="xl" mt={20}>
+            <Title color="white" order={3} mt={20}>
               23 potential matches nearby
-            </Text>
+            </Title>
           </div>
         )}
       </div>

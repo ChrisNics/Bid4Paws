@@ -16,33 +16,15 @@ import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import _ from 'lodash';
 
 const CreateDog = dynamic(() => import('@/components/MyDogs/Modals/CreateDog'), {
-  loading: () => (
-    <LoadingOverlay
-      visible={true}
-      overlayBlur={2}
-      loader={<Loader color="orange" variant="bars" />}
-    />
-  )
+  loading: () => <LoadingOverlay overlayOpacity={1} visible={true} loader={<LoadingScreen />} />
 });
 
 const UpdateDog = dynamic(() => import('@/components/MyDogs/Modals/UpdateDog'), {
-  loading: () => (
-    <LoadingOverlay
-      visible={true}
-      overlayBlur={2}
-      loader={<Loader color="orange" variant="bars" />}
-    />
-  )
+  loading: () => <LoadingOverlay overlayOpacity={1} visible={true} loader={<LoadingScreen />} />
 });
 
 const Prompt = dynamic(() => import('@/components/MyDogs/Modals/Prompt'), {
-  loading: () => (
-    <LoadingOverlay
-      visible={true}
-      overlayBlur={2}
-      loader={<Loader color="orange" variant="bars" />}
-    />
-  )
+  loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
 });
 
 NiceModal.register('create-dog', CreateDog);
