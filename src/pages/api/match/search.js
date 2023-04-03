@@ -26,10 +26,11 @@ export default async function handler(req, res) {
       };
 
       const dogCount = await Dog.countDocuments(matchQuery);
-      const randomIndex = Math.random() * dogCount;
-      const randomDog = await Dog.findOne(matchQuery).skip(randomIndex);
+      // const randomIndexes = Array.from({ length: 10 }, () => Math.floor(Math.random() * dogCount)); Comment for now since we have limited numbers of dogs
+      // const randomDogs = await Dog.find(matchQuery).skip(randomIndexes[0]).limit(10);
+      const randomDogs = await Dog.find(matchQuery).limit(10);
 
-      res.status(200).json({ success: true, data: { randomDog, dogCount } });
+      res.status(200).json({ success: true, data: { randomDogs, dogCount } });
     } catch (error) {
       mongoDBErrorHandler(res, error);
     }
