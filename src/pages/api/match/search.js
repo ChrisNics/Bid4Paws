@@ -1,19 +1,18 @@
 import dbConnect from '../../../../lib/dbConnect';
 import mongoDBErrorHandler from '../../../../lib/mongoDBErrorHandler';
 import Dog from '@/models/dogModel';
-import User from '@/models/userModel';
 
 export default async function handler(req, res) {
   await dbConnect();
   if (req.method === 'GET') {
     try {
-      const { lng, lat, radius, userID, dogID } = req.query;
+      const { lng, lat, radius, userID } = req.query;
 
-      if (!lng || !lat || !radius || !userID) {
+      if (!lng || !lat || !radius) {
         return res.status(400).json({ success: false, error: 'Missing required parameters.' });
       }
 
-      const dogs = await Dog.find({
+      const matchQuery = {
         $and: [
           {
             'address.geocoding.coordinates': {
@@ -24,9 +23,13 @@ export default async function handler(req, res) {
           },
           { owner: { $ne: userID } }
         ]
-      });
+      };
 
-      res.status(200).json({ success: true, data: dogs });
+      const dogCount = await Dog.countDocuments(matchQuery);
+      const randomIndex = Math.random() * dogCount;
+      const randomDog = await Dog.findOne(matchQuery).skip(randomIndex);
+
+      res.status(200).json({ success: true, data: { randomDog, dogCount } });
     } catch (error) {
       mongoDBErrorHandler(res, error);
     }

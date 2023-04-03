@@ -1,88 +1,117 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { HoverCard, Affix, rem, ActionIcon, Tooltip, Popover, Text, Title } from '@mantine/core';
+import {
+  HoverCard,
+  Affix,
+  rem,
+  ActionIcon,
+  Tooltip,
+  Popover,
+  Text,
+  Title,
+  LoadingOverlay
+} from '@mantine/core';
 import { IconHeart, IconHelpSquare, IconArrowsExchange2, IconLogout } from '@tabler/icons-react';
 import MovingBackground from '@/components/MovingBackground';
 import DogButton from '@/components/DogButton';
 import useCurrentUser from '@/store/useCurrentUser';
 import Lottie from 'lottie-react';
-import { dogFlirtingAnimation } from '../../dev-data/dogsAnimation';
+import { dogFlirtingAnimation, dogAnimation } from '../../dev-data/dogsAnimation';
 import Link from 'next/link';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const TinderCard = dynamic(() => import('react-tinder-card'), {
   ssr: false
 });
 
-const URL = 'https://randomuser.me/api/';
-
 const Matching = () => {
-  const [loading, setLoading] = useState(true);
-  const [characters, setCharacters] = useState([]);
-  const [lastDirection, setLastDirection] = useState();
   const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
+  const queryClient = useQueryClient();
+  const [direction, setDirection] = useState('');
+  const [characters, setCharacters] = useState();
+  const [count, setCount] = useState(0);
+  const currentDog = currentUser?.dogs?.find((dog) => dog.isCurrent === true);
 
-  const loadData = async () => {
-    const response = await fetch(URL);
-    const responseJSON = await response.json();
-    const person = responseJSON.results[0];
-    const gender = person.gender;
-    const name = person.name.first + ' ' + person.name.last;
-    const age = person.dob.age;
-    const picture = person.picture.large;
-    const { street, city, state } = person.location;
-    const address = street.name + ', ' + city + ', ' + state;
-    const email = person.email;
+  const { data, isLoading, error, isFetching } = useQuery({
+    queryKey: ['random-dog'],
+    queryFn: async () => {
+      const res = await fetch(
+        `/api/match/search?lng=${currentUser?.address?.geocoding?.coordinates[0]}&lat=${currentUser?.address?.geocoding?.coordinates[1]}&radius=100&userID=${currentUser?._id}`
+      );
 
-    const newCharacter = {
-      gender: gender,
-      name: name,
-      age: age,
-      picture: picture,
-      address: address,
-      email: email,
-      phone: person.phone
-    };
-    setCharacters([...characters, newCharacter]);
-    setLoading(false);
-  };
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to search for dogs.');
+      }
+
+      const { data } = await res.json();
+
+      return data;
+    },
+    onSettled: (data) => {
+      setCharacters(data.randomDog);
+    },
+    refetchOnWindowFocus: false
+  });
+
+  const swipeLeftMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch('/api/match', {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: {
+            owner: currentUser?._id,
+            dog: currentDog?._id
+          },
+          to: {
+            owner: data.randomDog.owner,
+            dog: data.randomDog._id
+          }
+        })
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'An error occurred while matching.');
+      }
+
+      return await res.json();
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['random-dog']);
+    },
+    onError: () => {
+      console.log(error);
+    }
+  });
 
   useEffect(() => {
-    loadData();
-  }, []);
-
-  const childRefs = useMemo(
-    () =>
-      Array(characters.length)
-        .fill(0)
-        .map((i) => React.createRef()),
-    [characters.length]
-  );
-
-  const swiped = (direction, character) => {
-    setLastDirection(direction);
-  };
-
-  const outOfFrame = () => {
-    loadData();
-  };
+    if (!direction) return;
+    setCount((state) => state + 1);
+    if (direction === 'left') swipeLeftMutation.mutate();
+    else queryClient.invalidateQueries(['random-dog']);
+    setDirection('');
+  }, [direction]);
 
   return (
     <section className="relative background">
       <MovingBackground />
       <div className="container mx-auto flex justify-center items-center min-h-screen ">
-        {loading ? (
-          <div>
-            <span>Loading...</span>
+        {isFetching ? (
+          <div className="max-w-[200px] max-h-[200px]">
+            <Lottie animationData={dogAnimation} loop={true} />
           </div>
         ) : (
           <div>
             <TinderCard
-              ref={childRefs[childRefs.length - 1]}
+              preventSwipe={['up', 'down']}
               className="swipe"
-              key={characters.length}
-              onSwipe={(dir) => swiped(dir, characters[characters.length - 1])}
-              onCardLeftScreen={() => outOfFrame()}>
+              key={count}
+              onCardLeftScreen={(dir) => setDirection(dir)}>
               <div className="relative h-card w-card lg:w-cardSmall lg:h-cardSmall  bg-orange-500">
                 <Image
                   priority
@@ -91,13 +120,13 @@ const Matching = () => {
                   draggable={false}
                   alt="image"
                   style={{ filter: 'brightness(.80)' }}
-                  src={characters[characters.length - 1].picture}
+                  src={data.randomDog.avatar}
                 />
 
                 <div className="font-mono absolute bottom-0 left-0 text-white pl-2 pb-2 flex items-center gap-x-5">
                   <div>
-                    <h3>{characters[characters.length - 1].name}</h3>
-                    <h5>{characters[characters.length - 1].age}</h5>
+                    <h3>{data.randomDog.name}</h3>
+                    <h5>{data.randomDog.age} years old</h5>
                   </div>
                   <div className="cursor-pointer">
                     <HoverCard width={280} shadow="md" position="top">
@@ -119,7 +148,7 @@ const Matching = () => {
             </TinderCard>
 
             <Title color="white" order={3} mt={20}>
-              23 potential matches nearby
+              {data.dogCount} potential matches nearby
             </Title>
           </div>
         )}
@@ -191,6 +220,12 @@ const Matching = () => {
       </Affix>
     </section>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  return {
+    props: {}
+  };
 };
 
 export default Matching;
