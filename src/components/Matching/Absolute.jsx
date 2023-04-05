@@ -87,7 +87,7 @@ export const MySwipe = ({ open }) => {
 
 export const FlirtingDog = React.memo(() => {
   return (
-    <Affix position={{ top: rem(40), right: rem(20) }}>
+    <Affix position={{ top: rem(5), right: rem(20) }}>
       <CustomLottie animationData={dogFlirtingAnimation} />
     </Affix>
   );

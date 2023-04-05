@@ -28,7 +28,6 @@ const useStyles = createStyles((theme) => ({
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
     paddingBottom: `calc(${theme.spacing.xl} * 6)`,
-    zIndex: 1,
     position: 'relative',
 
     [theme.fn.smallerThan('sm')]: {

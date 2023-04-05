@@ -76,19 +76,14 @@ export default function AuthenticationImage() {
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
-    if (_.isEmpty(currentUser)) {
-      setIsLoading(true);
-      const res = await signIn('credentials', { redirect: false, ...values }); // We dont need it to convert it to json, next-auth already handles it.
-      if (!res.ok) {
-        showNotification({ title: 'Invalid Credentials', message: res.error, color: 'red' });
-        setIsLoading(false);
-        return;
-      }
-      router.push('/');
+    setIsLoading(true);
+    const res = await signIn('credentials', { redirect: false, ...values }); // We dont need it to convert it to json, next-auth already handles it.
+    if (!res.ok) {
+      showNotification({ title: 'Invalid Credentials', message: res.error, color: 'red' });
+      setIsLoading(false);
       return;
     }
-    signOut();
-    return;
+    router.push('/');
   });
 
   return (

@@ -3,6 +3,7 @@ import MovingBackground from '@/components/Matching/MovingBackground';
 import useCurrentUser from '@/store/useCurrentUser';
 import { dogAnimation } from '../../dev-data/dogsAnimation';
 import dbConnect from '../../lib/dbConnect';
+import dynamic from 'next/dynamic';
 import {
   useQuery,
   useMutation,
@@ -14,12 +15,26 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from './api/auth/[...nextauth]';
 import User from '@/models/userModel';
 import baseUrl from '../../dev-data/baseUrl';
-import Card from '@/components/Matching/Card';
+// import Card from '@/components/Matching/Card';
 import { MySwipe, Exit, ChangeDog, FlirtingDog } from '@/components/Matching/Absolute';
 import CustomLottie from '@/components/CustomLottie';
-import { Button } from '@mantine/core';
+import { Drawer, LoadingOverlay, Loader } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import Drawer from '@/components/Matching/Drawer';
+
+const Card = dynamic(() => import('@/components/Matching/Card'), {
+  ssr: false,
+  loading: () => <CustomLottie animationData={dogAnimation} />
+});
+
+const Content = dynamic(() => import('@/components/Matching/Drawer/Content'), {
+  loading: () => (
+    <LoadingOverlay
+      overlayOpacity={1}
+      visible={true}
+      loader={<Loader variant="dots" color="orange" />}
+    />
+  )
+});
 
 const getRandomDogs = async (currentUser) => {
   const res = await fetch(
@@ -130,7 +145,9 @@ const Matching = () => {
         )}
       </div>
 
-      <Drawer close={close} opened={opened} />
+      <Drawer opened={opened} onClose={close}>
+        <Content />
+      </Drawer>
 
       <FlirtingDog />
       <Exit />

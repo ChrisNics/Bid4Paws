@@ -4,18 +4,22 @@ import {
   Header as MantineHeader,
   Container,
   Burger,
-  Paper,
-  Transition,
-  rem
+  rem,
+  useMantineTheme,
+  Loader
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import UserMenu from './UserMenu';
 import useCurrentUser from '@/store/useCurrentUser';
 import _ from 'lodash';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMantineTheme } from '@mantine/core';
+
+const MobileUserMenu = dynamic(() => import('../Header/MobileUserMenu'), {
+  loading: () => <Loader variant="dots" color="orange" />
+});
 
 const HEADER_HEIGHT = rem(60);
 
@@ -81,6 +85,10 @@ const useStyles = createStyles((theme, router) => ({
     }
   },
 
+  linkPaper: {
+    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black
+  },
+
   linkActive: {
     '&, &:hover': {
       backgroundColor: theme.colorScheme === 'light' ? theme.colors.orange[0] : '#423626',
@@ -91,7 +99,7 @@ const useStyles = createStyles((theme, router) => ({
   }
 }));
 
-export default function Header({ hidden }) {
+export default function Header() {
   const router = useRouter();
   const [opened, { toggle, close }] = useDisclosure(false);
   const [active, setActive] = useState(links[0].link);
@@ -99,11 +107,30 @@ export default function Header({ hidden }) {
   const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
   const theme = useMantineTheme();
 
+  const itemsMobile = links.map((link) => (
+    <a
+      key={link.label}
+      href={link.link}
+      className={cx(classes.link, classes.linkPaper, {
+        [classes.linkActive]: active === link.link
+      })}
+      onClick={(event) => {
+        event.preventDefault();
+        setActive(link.link);
+        close();
+      }}>
+      {link.label}
+    </a>
+  ));
+  `~~`;
+
   const items = links.map((link) => (
     <a
       key={link.label}
       href={link.link}
-      className={cx(classes.link, { [classes.linkActive]: active === link.link })}
+      className={cx(classes.link, theme.breakpoints, {
+        [classes.linkActive]: active === link.link
+      })}
       onClick={(event) => {
         event.preventDefault();
         setActive(link.link);
@@ -133,28 +160,25 @@ export default function Header({ hidden }) {
             />
           </Link>
         </div>
+
         <div spacing={5} className="hidden md:flex gap-x-5">
           {items}
         </div>
 
         {!_.isEmpty(currentUser) && (
-          <div className="hidden md:block">
+          <>
             <UserMenu currentUser={currentUser} />
-          </div>
+            {opened && <MobileUserMenu items={itemsMobile} opened={opened} />}
+          </>
         )}
 
-        <Burger opened={opened} onClick={toggle} className="md:hidden" size="sm" />
-
-        <Transition transition="pop-top-right" duration={200} mounted={opened}>
-          {(styles) => (
-            <Paper
-              className={`absolute top-16 left-0 right-0 z-0 rounded-t-none border-t-0 overflow-hidden md:hidden`}
-              withBorder
-              style={styles}>
-              {items}
-            </Paper>
-          )}
-        </Transition>
+        <Burger
+          opened={opened}
+          onClick={toggle}
+          className="md:hidden"
+          size="sm"
+          color={router.pathname === '/' && 'white'}
+        />
       </Container>
     </MantineHeader>
   );

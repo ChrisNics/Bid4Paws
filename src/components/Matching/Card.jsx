@@ -3,10 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { HoverCard, Title } from '@mantine/core';
 import { IconHelpSquare } from '@tabler/icons-react';
-const TinderCard = dynamic(() => import('react-tinder-card'), {
-  ssr: false,
-  loading: () => <h1>loading...</h1>
-});
+import TinderCard from 'react-tinder-card';
 
 const Card = ({ handleCardLeftScreen, randomDog, potentialMatchesCount, count }) => {
   return (

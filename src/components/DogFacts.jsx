@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Blockquote, Text } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
+import React from 'react';
 
 function DogFacts({ color = 'white' }) {
   const [fact, setFact] = useState('');
@@ -38,4 +39,4 @@ function DogFacts({ color = 'white' }) {
   );
 }
 
-export default DogFacts;
+export default React.memo(DogFacts);
