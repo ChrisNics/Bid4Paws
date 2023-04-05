@@ -1,3 +1,5 @@
+import React from 'react';
+
 const MovingBackground = () => {
   return (
     <>
@@ -15,4 +17,4 @@ const MovingBackground = () => {
   );
 };
 
-export default MovingBackground;
+export default React.memo(MovingBackground);

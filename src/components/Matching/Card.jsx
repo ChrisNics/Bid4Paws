@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import React from 'react';
 import Image from 'next/image';
 import { HoverCard, Title } from '@mantine/core';
 import { IconHelpSquare } from '@tabler/icons-react';
@@ -8,6 +9,7 @@ const TinderCard = dynamic(() => import('react-tinder-card'), {
 });
 
 const Card = ({ handleCardLeftScreen, randomDog, potentialMatchesCount, count }) => {
+  console.log('test');
   return (
     <div>
       <TinderCard
@@ -58,4 +60,4 @@ const Card = ({ handleCardLeftScreen, randomDog, potentialMatchesCount, count })
   );
 };
 
-export default Card;
+export default React.memo(Card);

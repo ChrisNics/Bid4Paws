@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import MovingBackground from '@/components/MovingBackground';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import MovingBackground from '@/components/Matching/MovingBackground';
 import useCurrentUser from '@/store/useCurrentUser';
 import Lottie from 'lottie-react';
 import { dogAnimation } from '../../dev-data/dogsAnimation';
@@ -17,6 +17,7 @@ import User from '@/models/userModel';
 import baseUrl from '../../dev-data/baseUrl';
 import Card from '@/components/Matching/Card';
 import { MySwipe, Exit, ChangeDog, FlirtingDog } from '@/components/Matching/Absolute';
+import CustomLottie from '@/components/CustomLottie';
 
 const getRandomDogs = async (currentUser) => {
   const res = await fetch(
@@ -40,8 +41,11 @@ const Matching = () => {
   const [count, setCount] = useState(0);
   const [randomDogs, setRandomDogs] = useState([]);
 
-  const randomDog = randomDogs[randomDogs.length - 1];
-  const currentDog = currentUser?.dogs?.find((dog) => dog.isCurrent === true);
+  const randomDog = useMemo(() => randomDogs[randomDogs.length - 1], [randomDogs]);
+  const currentDog = useMemo(
+    () => currentUser?.dogs?.find((dog) => dog.isCurrent === true),
+    [currentUser]
+  );
 
   const { data, isLoading, error, isFetching } = useQuery({
     queryKey: ['random-dogs'],
@@ -85,7 +89,6 @@ const Matching = () => {
   });
 
   useEffect(() => {
-    console.log(direction);
     if (!direction) return;
 
     if (direction === 'left') swipeLeftMutation.mutate();
@@ -112,9 +115,7 @@ const Matching = () => {
       <MovingBackground />
       <div className="container mx-auto flex justify-center items-center min-h-screen ">
         {isFetching || swipeLeftMutation.isLoading ? (
-          <div className="max-w-[200px] max-h-[200px]">
-            <Lottie animationData={dogAnimation} loop={true} />
-          </div>
+          <CustomLottie animationData={dogAnimation} />
         ) : (
           <Card
             handleCardLeftScreen={handleCardLeftScreen}

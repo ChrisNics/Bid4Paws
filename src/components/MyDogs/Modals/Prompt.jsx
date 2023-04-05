@@ -6,6 +6,7 @@ import useCurrentUser from '@/store/useCurrentUser';
 import { useSession } from 'next-auth/react';
 import Lottie from 'lottie-react';
 import { cryingDogAnimation } from '../../../../dev-data/dogsAnimation';
+import CustomLottie from '@/components/CustomLottie';
 
 const Prompt = NiceModal.create(({ dog }) => {
   const modal = useModal();
@@ -65,9 +66,7 @@ const Prompt = NiceModal.create(({ dog }) => {
       okButtonProps={{ type: 'primary', danger: true }}
       cancelText="Cancel">
       <div className="flex flex-col items-center justify-center gap-y-5">
-        <div className="max-w-[200px] max-h-[200px]">
-          <Lottie animationData={cryingDogAnimation} loop={true} />
-        </div>
+        <CustomLottie animationData={cryingDogAnimation} />
         <p className="font-sans text-md">
           Deleting <b className="text-orange-500">{dog.name}'s</b> profile means losing all the
           evidence of their presence in your life. Before you hit that delete button, take a moment

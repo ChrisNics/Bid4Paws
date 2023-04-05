@@ -10,11 +10,12 @@ import {
 } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
 import useCurrentUser from '@/store/useCurrentUser';
-import showNotification from '../../lib/showNotification';
+import showNotification from '../../../lib/showNotification';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import Lottie from 'lottie-react';
-import { dogAnimation } from '../../dev-data/dogsAnimation';
+import { dogAnimation } from '../../../dev-data/dogsAnimation';
+import CustomLottie from '../CustomLottie';
 
 const useStyles = createStyles((theme) => ({
   user: {
@@ -77,11 +78,7 @@ export default function DogButton({ dog }) {
       <LoadingOverlay
         visible={updateDogMutation.isLoading}
         overlayBlur={2}
-        loader={
-          <div className="max-w-[200px] max-h-[200px]">
-            <Lottie animationData={dogAnimation} loop={true} />
-          </div>
-        }
+        loader={<CustomLottie animationData={dogAnimation} />}
       />
       <div className="flex items-center gap-x-5">
         <Group>

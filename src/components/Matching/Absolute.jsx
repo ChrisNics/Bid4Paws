@@ -5,8 +5,10 @@ import { IconArrowsExchange2, IconLogout, IconHeart } from '@tabler/icons-react'
 import useCurrentUser from '@/store/useCurrentUser';
 import Lottie from 'lottie-react';
 import { dogFlirtingAnimation } from '../../../dev-data/dogsAnimation';
+import React from 'react';
+import CustomLottie from '../CustomLottie';
 
-const DogButton = dynamic(() => import('../DogButton'), {
+const DogButton = dynamic(() => import('./DogButton'), {
   loading: () => <p>Loading...</p>
 });
 
@@ -82,10 +84,10 @@ export const MySwipe = () => {
   );
 };
 
-export const FlirtingDog = () => {
-  <Affix position={{ top: rem(40), right: rem(20) }}>
-    <div className="max-w-[200px] max-h-[200px]">
-      <Lottie animationData={dogFlirtingAnimation} loop={true} />
-    </div>
-  </Affix>;
-};
+export const FlirtingDog = React.memo(() => {
+  return (
+    <Affix position={{ top: rem(40), right: rem(20) }}>
+      <CustomLottie animationData={dogFlirtingAnimation} />
+    </Affix>
+  );
+});
