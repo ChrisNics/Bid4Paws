@@ -63,7 +63,7 @@ export const Exit = () => {
   );
 };
 
-export const MySwipe = () => {
+export const MySwipe = ({ open }) => {
   return (
     <Affix position={{ bottom: rem(100), left: rem(20) }}>
       <Tooltip
@@ -73,6 +73,7 @@ export const MySwipe = () => {
         withArrow
         arrowPosition="center">
         <ActionIcon
+          onClick={open}
           size="xl"
           variant="gradient"
           gradient={{ from: 'red', to: 'orange' }}

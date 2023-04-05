@@ -74,7 +74,7 @@ export default function DogButton({ dog }) {
   const handleUpdate = () => updateDogMutation.mutate();
 
   return (
-    <UnstyledButton className={classes.user} onClick={handleUpdate}>
+    <UnstyledButton className={classes.user} onClick={handleUpdate} disabled={dog.isCurrent}>
       <LoadingOverlay
         visible={updateDogMutation.isLoading}
         overlayBlur={2}

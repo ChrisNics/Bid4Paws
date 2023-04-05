@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import MovingBackground from '@/components/Matching/MovingBackground';
 import useCurrentUser from '@/store/useCurrentUser';
-import Lottie from 'lottie-react';
 import { dogAnimation } from '../../dev-data/dogsAnimation';
 import dbConnect from '../../lib/dbConnect';
 import {
@@ -18,6 +17,9 @@ import baseUrl from '../../dev-data/baseUrl';
 import Card from '@/components/Matching/Card';
 import { MySwipe, Exit, ChangeDog, FlirtingDog } from '@/components/Matching/Absolute';
 import CustomLottie from '@/components/CustomLottie';
+import { Button } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import Drawer from '@/components/Matching/Drawer';
 
 const getRandomDogs = async (currentUser) => {
   const res = await fetch(
@@ -36,6 +38,7 @@ const getRandomDogs = async (currentUser) => {
 
 const Matching = () => {
   const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
+  const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
   const [direction, setDirection] = useState('');
   const [count, setCount] = useState(0);
@@ -47,7 +50,7 @@ const Matching = () => {
     [currentUser]
   );
 
-  const { data, isLoading, error, isFetching } = useQuery({
+  const { data, error, isFetching } = useQuery({
     queryKey: ['random-dogs'],
     queryFn: getRandomDogs.bind(this, currentUser),
     onSettled: (data) => {
@@ -113,6 +116,7 @@ const Matching = () => {
   return (
     <section className="relative background">
       <MovingBackground />
+
       <div className="container mx-auto flex justify-center items-center min-h-screen ">
         {isFetching || swipeLeftMutation.isLoading ? (
           <CustomLottie animationData={dogAnimation} />
@@ -126,9 +130,11 @@ const Matching = () => {
         )}
       </div>
 
+      <Drawer close={close} opened={opened} />
+
       <FlirtingDog />
       <Exit />
-      <MySwipe />
+      <MySwipe open={open} />
       <ChangeDog />
     </section>
   );

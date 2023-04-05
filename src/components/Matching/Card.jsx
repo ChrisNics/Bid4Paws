@@ -9,7 +9,6 @@ const TinderCard = dynamic(() => import('react-tinder-card'), {
 });
 
 const Card = ({ handleCardLeftScreen, randomDog, potentialMatchesCount, count }) => {
-  console.log('test');
   return (
     <div>
       <TinderCard
@@ -18,7 +17,7 @@ const Card = ({ handleCardLeftScreen, randomDog, potentialMatchesCount, count })
         className="swipe"
         key={count}
         onCardLeftScreen={handleCardLeftScreen}>
-        <div className="relative h-card w-card lg:w-cardSmall lg:h-cardSmall ">
+        <div className="relative h-card lg:w-cardSmall lg:h-cardSmall ">
           <Image
             priority
             fill
@@ -54,7 +53,7 @@ const Card = ({ handleCardLeftScreen, randomDog, potentialMatchesCount, count })
       </TinderCard>
 
       <Title color="white" order={3} mt={20}>
-        {potentialMatchesCount} potential matches nearby {count}
+        {potentialMatchesCount} potential matches nearby
       </Title>
     </div>
   );
