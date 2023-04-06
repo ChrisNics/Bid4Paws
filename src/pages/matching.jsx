@@ -54,7 +54,7 @@ const Matching = () => {
   const { data, error, isFetching } = useRandomDogs(currentUser, setRandomDogs);
 
   const swipeLeftMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (randomDog) => {
       const res = await fetch('/api/match', {
         method: 'POST',
         headers: {
@@ -92,7 +92,7 @@ const Matching = () => {
   useEffect(() => {
     if (!direction) return;
 
-    if (direction === 'left') swipeLeftMutation.mutate();
+    if (direction === 'left') swipeLeftMutation.mutate(randomDog);
 
     if (randomDogs.length === 1) {
       queryClient.invalidateQueries(['random-dogs']);

@@ -9,7 +9,6 @@ export const getMySwipes = async (currentDog) => {
   }
 
   const { data } = await res.json();
-
   return data;
 };
 

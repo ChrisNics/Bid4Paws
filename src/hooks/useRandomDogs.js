@@ -14,8 +14,6 @@ export const getRandomDogs = async (currentUser) => {
 
   const { data } = await res.json();
 
-  console.log(data);
-
   return data;
 };
 

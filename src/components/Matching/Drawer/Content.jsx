@@ -29,7 +29,7 @@ const Content = ({ currentDog }) => {
 
       <Tabs.Panel value="my-swipes" pt="xs">
         <div className="grid grid-cols-3 gap-2 sm:gap-5">
-          {mySwipes.map((swipe) => (
+          {mySwipes?.map((swipe) => (
             <Card dog={swipe.to.dog} />
           ))}
         </div>
