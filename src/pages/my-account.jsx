@@ -19,7 +19,6 @@ const MyAccount = () => {
   const [tab, setTab] = useState('Personal Information');
 
   const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
-
   const formPersonalInfo = useForm({
     initialValues: {
       firstName: currentUser.firstName,

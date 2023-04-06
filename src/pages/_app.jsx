@@ -10,7 +10,7 @@ import NiceModal from '@ebay/nice-modal-react';
 import dynamic from 'next/dynamic';
 import { QueryClient, QueryClientProvider, Hydrate, useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import useCurrentUser from '@/store/useCurrentUser';
+import { useCurrentUser } from '@/hooks/useCurrentUser';
 import LoadingScreen from '@/components/LoadingScreen';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import _ from 'lodash';
@@ -97,33 +97,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
 
 const Auth = ({ children }) => {
   const { data: session, status } = useSession();
-  const { setCurrentUser } = useCurrentUser((state) => ({
-    setCurrentUser: state.setCurrentUser
-  }));
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['currentUser', session?.id],
-    enabled: status !== 'loading',
-    queryFn: async () => {
-      if (!session) return {};
-      const res = await fetch(`/api/user/${session.id}`);
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || 'Failed to get current user.');
-      }
-
-      const { data } = await res.json();
-      return data;
-    },
-    onSettled: (data) => {
-      setCurrentUser(data);
-    },
-    onError: (error) => {
-      console.log(error);
-      setCurrentUser({});
-    }
-  });
+  const { data, isLoading, error } = useCurrentUser(status, session);
 
   if (error) return <h1>{error}</h1>;
   if (isLoading) return <LoadingScreen />;
