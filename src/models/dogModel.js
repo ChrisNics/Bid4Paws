@@ -98,6 +98,10 @@ const DogSchema = new Schema(
         landmark: {
           type: String,
           required: [true, 'Please provide landmark']
+        },
+        radius: {
+          type: Number,
+          required: [true, 'Please provide radius']
         }
       }
     }

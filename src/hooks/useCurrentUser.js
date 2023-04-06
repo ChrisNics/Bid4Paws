@@ -20,7 +20,6 @@ export const useCurrentUser = (status, session) =>
     enabled: status !== 'loading',
     queryFn: getCurrentUser.bind(this, session),
     onSettled: (data) => {
-      console.log({ data });
       useCurrentUserStore.getState().setCurrentUser(data);
     },
     onError: (error) => {

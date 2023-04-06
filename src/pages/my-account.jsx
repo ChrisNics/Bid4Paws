@@ -55,6 +55,7 @@ const MyAccount = () => {
         barangay: currentUser.address.barangay,
         geocoding: {
           coordinates: currentUser.address.geocoding.coordinates,
+          radius: currentUser.address.geocoding.radius || 10,
           landmark: currentUser.address.geocoding.landmark,
           type: 'Point'
         }
@@ -69,7 +70,8 @@ const MyAccount = () => {
         postalCode: (value) => (value ? null : 'Please provide this field'),
         barangay: (value) => (value ? null : 'Please provide this field'),
         geocoding: {
-          landmark: (value) => (value ? null : 'Please provide this field')
+          landmark: (value) => (value ? null : 'Please provide this field'),
+          radius: (value) => (value ? null : 'Please provide this field')
         }
       }
     }
