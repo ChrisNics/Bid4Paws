@@ -23,7 +23,10 @@ const MatchSchema = new Schema(
   }
 );
 
-// Create the Dog model if it doesn't exist, or use the existing model
+MatchSchema.pre(/^find/, function () {
+  this.populate('from.dog').populate('to.dog');
+});
+
 const Match = models.Match || model('Match', MatchSchema);
 
 export default Match;

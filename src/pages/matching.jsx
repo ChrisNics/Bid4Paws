@@ -20,6 +20,7 @@ import { MySwipe, Exit, ChangeDog, FlirtingDog } from '@/components/Matching/Abs
 import CustomLottie from '@/components/CustomLottie';
 import { Drawer, LoadingOverlay, Loader } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useRandomDogs, getRandomDogs } from '@/hooks/useRandomDogs';
 
 const Card = dynamic(() => import('@/components/Matching/Card'), {
   ssr: false,
@@ -36,21 +37,6 @@ const Content = dynamic(() => import('@/components/Matching/Drawer/Content'), {
   )
 });
 
-const getRandomDogs = async (currentUser) => {
-  const res = await fetch(
-    `${baseUrl}/api/match/search?lng=${currentUser?.address?.geocoding?.coordinates[0]}&lat=${currentUser?.address?.geocoding?.coordinates[1]}&radius=100&userID=${currentUser?._id}`
-  );
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || 'Failed to search for dogs.');
-  }
-
-  const { data } = await res.json();
-
-  return data;
-};
-
 const Matching = () => {
   const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
   const [opened, { open, close }] = useDisclosure(false);
@@ -65,14 +51,7 @@ const Matching = () => {
     [currentUser]
   );
 
-  const { data, error, isFetching } = useQuery({
-    queryKey: ['random-dogs'],
-    queryFn: getRandomDogs.bind(this, currentUser),
-    onSettled: (data) => {
-      setRandomDogs(data.randomDogs);
-    },
-    refetchOnWindowFocus: false
-  });
+  const { data, error, isFetching } = useRandomDogs(currentUser, setRandomDogs);
 
   const swipeLeftMutation = useMutation({
     mutationFn: async () => {
@@ -99,6 +78,10 @@ const Matching = () => {
       }
 
       return await res.json();
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries(['my-swipes']);
     },
 
     onError: () => {
@@ -146,7 +129,7 @@ const Matching = () => {
       </div>
 
       <Drawer opened={opened} onClose={close}>
-        <Content />
+        <Content currentDog={currentDog} />
       </Drawer>
 
       <FlirtingDog />

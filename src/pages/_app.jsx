@@ -118,7 +118,6 @@ const Auth = ({ children }) => {
     },
     onSettled: (data) => {
       setCurrentUser(data);
-      console.log(data);
     },
     onError: (error) => {
       console.log(error);

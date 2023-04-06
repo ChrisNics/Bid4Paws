@@ -11,16 +11,27 @@ import {
 import { useState } from 'react';
 import Link from 'next/link';
 import signOut from '../../../lib/signOut';
+import { useRouter } from 'next/router';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles((theme, router) => ({
   user: {
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+    color:
+      theme.colorScheme === 'dark'
+        ? theme.colors.dark[0]
+        : router.pathname === '/'
+        ? theme.white
+        : theme.black,
     padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
     borderRadius: theme.radius.sm,
     transition: 'background-color 100ms ease',
 
     '&:hover': {
-      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? theme.colors.dark[8]
+          : router.pathname === '/'
+          ? '#ecf0ef26'
+          : theme.white
     },
 
     [theme.fn.smallerThan('xs')]: {
@@ -29,12 +40,18 @@ const useStyles = createStyles((theme) => ({
   },
 
   userActive: {
-    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white
+    backgroundColor:
+      theme.colorScheme === 'dark'
+        ? theme.colors.dark[8]
+        : router.pathname === '/'
+        ? '#ecf0ef26'
+        : theme.white
   }
 }));
 
 const UserMenu = ({ currentUser }) => {
-  const { classes, theme, cx } = useStyles();
+  const router = useRouter();
+  const { classes, theme, cx } = useStyles(router);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
 
   return (
