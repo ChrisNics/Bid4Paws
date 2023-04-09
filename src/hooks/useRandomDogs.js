@@ -3,6 +3,7 @@ import baseUrl from '../../dev-data/baseUrl';
 import useCurrentUser from '@/store/useCurrentUser';
 
 export const getRandomDogs = async (currentUser, currentDog) => {
+  console.log({ currentDog, currentUser });
   const res = await fetch(
     `${baseUrl}/api/match/search?lng=${currentUser?.address?.geocoding?.coordinates[0]}&lat=${currentUser?.address?.geocoding?.coordinates[1]}&radius=100&userID=${currentUser?._id}&dogID=${currentDog?._id}`
   );

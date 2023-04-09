@@ -4,8 +4,11 @@ import Image from 'next/image';
 import { HoverCard, Title } from '@mantine/core';
 import { IconHelpSquare } from '@tabler/icons-react';
 import TinderCard from 'react-tinder-card';
+import useCurrentUser from '@/store/useCurrentUser';
 
-const Card = ({ handleCardLeftScreen, randomDog, potentialMatchesCount, count }) => {
+const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
+  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
+
   return (
     <div>
       <TinderCard
@@ -50,7 +53,7 @@ const Card = ({ handleCardLeftScreen, randomDog, potentialMatchesCount, count })
       </TinderCard>
 
       <Title color="white" order={3} mt={20}>
-        {potentialMatchesCount} potential matches nearby
+        {nearbyDogs} potential matches nearby
       </Title>
     </div>
   );
