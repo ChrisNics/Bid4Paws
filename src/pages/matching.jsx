@@ -51,7 +51,7 @@ const Matching = () => {
     [currentUser]
   );
 
-  const { data, error, isFetching } = useRandomDogs(currentUser, setRandomDogs);
+  const { data, error, isFetching } = useRandomDogs(currentUser, currentDog, setRandomDogs);
 
   const swipeLeftMutation = useMutation({
     mutationFn: async (randomDog) => {
