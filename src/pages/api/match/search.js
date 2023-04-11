@@ -36,8 +36,9 @@ const getMatchedDogIds = async (dogID) => {
 };
 
 const triggerPusherEvent = async (req, matchedDogIds) => {
+  const { dogID } = req.query;
   const { nearbyDogs } = await findNearbyDogs(req, matchedDogIds);
-  pusher.trigger('match', 'nearby', { nearbyDogs: nearbyDogs.length });
+  pusher.trigger('match', `dog-nearby-${dogID}`, { nearbyDogs: nearbyDogs.length });
 };
 
 const findNearbyDogs = async (req, matchedDogIds) => {
@@ -83,7 +84,7 @@ const handler = async (req, res) => {
       const matchedDogIds = await getMatchedDogIds(dogID);
 
       const { randomDog, nearbyDogs } = await findNearbyDogs(req, matchedDogIds);
-      pusher.trigger('match', 'nearby', { nearbyDogs: nearbyDogs.length });
+      pusher.trigger('match', `dog-nearby-${dogID}`, { nearbyDogs: nearbyDogs.length });
 
       // Watch for changes in the Match collection and trigger a Pusher event if new nearby dogs are found
       const matchStream = Match.watch();

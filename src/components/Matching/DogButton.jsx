@@ -13,7 +13,6 @@ import useCurrentUser from '@/store/useCurrentUser';
 import showNotification from '../../../lib/showNotification';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-import Lottie from 'lottie-react';
 import { dogAnimation } from '../../../dev-data/dogsAnimation';
 import CustomLottie from '../CustomLottie';
 
@@ -61,6 +60,8 @@ export default function DogButton({ dog }) {
 
       // Refetch query to trigger re-render
       queryClient.invalidateQueries(['currentUser', session?.id]);
+      queryClient.invalidateQueries(['swipe-you']);
+      queryClient.invalidateQueries(['my-swipes']);
     },
     onError: (error) => {
       showNotification({

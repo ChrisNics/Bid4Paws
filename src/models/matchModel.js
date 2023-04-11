@@ -1,5 +1,5 @@
-import { model, models, Schema } from 'mongoose';
 import Dog from './dogModel';
+import { model, models, Schema } from 'mongoose';
 
 // Define the schema for the Match model
 const MatchSchema = new Schema(

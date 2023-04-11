@@ -2,12 +2,8 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import MovingBackground from '@/components/Matching/MovingBackground';
 import useCurrentUser from '@/store/useCurrentUser';
 import { dogAnimation } from '../../dev-data/dogsAnimation';
-import dbConnect from '../../lib/dbConnect';
 import dynamic from 'next/dynamic';
-import { useMutation, useQueryClient, QueryClient, dehydrate } from '@tanstack/react-query';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from './api/auth/[...nextauth]';
-import User from '@/models/userModel';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { MySwipe, Exit, ChangeDog, FlirtingDog } from '@/components/Matching/Absolute';
 import CustomLottie from '@/components/CustomLottie';
 import { Drawer, LoadingOverlay, Loader } from '@mantine/core';
@@ -59,7 +55,7 @@ const Matching = () => {
           },
           to: {
             owner: randomDog.owner,
-            dog: randomDog._id
+            dog: randomDog?._id
           }
         })
       });
@@ -74,6 +70,7 @@ const Matching = () => {
 
     onSettled: () => {
       queryClient.invalidateQueries(['my-swipes']);
+      queryClient.invalidateQueries(['swipe-you']);
       queryClient.invalidateQueries(['random-dogs']);
     },
 
@@ -110,12 +107,12 @@ const Matching = () => {
 
     const channel = pusher.subscribe('match');
 
-    channel.bind('nearby', function (data) {
+    channel.bind(`dog-nearby-${currentDog?._id}`, function (data) {
       setNearbyDogs(data.nearbyDogs);
     });
 
     return () => {
-      channel.unbind('nearby');
+      channel.unbind(`dog-nearby-${currentDog?._id}`);
       pusher.unsubscribe('match');
     };
   }, []);
@@ -150,16 +147,8 @@ const Matching = () => {
 };
 
 export const getServerSideProps = async (context) => {
-  await dbConnect();
-  const queryClient = new QueryClient();
-  const session = await getServerSession(context.req, context.res, authOptions);
-  const currentUser = await User.findById(session?.id);
-  await queryClient.prefetchQuery(['random-dogs'], getRandomDogs.bind(this, currentUser));
-
   return {
-    props: {
-      dehydratedState: dehydrate(queryClient)
-    }
+    props: {}
   };
 };
 

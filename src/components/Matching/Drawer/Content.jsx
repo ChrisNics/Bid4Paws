@@ -1,13 +1,14 @@
 import { Tabs, LoadingOverlay, Loader } from '@mantine/core';
 import { IconSwipe, IconHeart } from '@tabler/icons-react';
 import Card from './Card';
-import { useQuery } from '@tanstack/react-query';
-import { useMySwipes, getMySwipes } from '@/hooks/useMySwipes';
+import { useMySwipes } from '@/hooks/useMySwipes';
+import { useSwipeYou } from '@/hooks/useSwipeYou';
 
 const Content = ({ currentDog }) => {
-  const { data: mySwipes, isFetching } = useMySwipes(currentDog);
+  const { data: mySwipes, isFetching: mySwipesFetching } = useMySwipes(currentDog);
+  const { data: swipeYou, isFetching: swipeYouFetching } = useSwipeYou(currentDog);
 
-  if (isFetching)
+  if (mySwipesFetching || swipeYouFetching)
     return (
       <LoadingOverlay
         overlayOpacity={1}
@@ -36,7 +37,11 @@ const Content = ({ currentDog }) => {
       </Tabs.Panel>
 
       <Tabs.Panel value="my-matches" pt="xs">
-        Messages tab content
+        <div className="grid grid-cols-3 gap-2 sm:gap-5">
+          {swipeYou?.map((swipe) => (
+            <Card dog={swipe.from.dog} />
+          ))}
+        </div>
       </Tabs.Panel>
     </Tabs>
   );
