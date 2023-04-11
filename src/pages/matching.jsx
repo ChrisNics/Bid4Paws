@@ -34,18 +34,16 @@ const Matching = () => {
   const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
   const [opened, { open, close }] = useDisclosure(false);
   const queryClient = useQueryClient();
-  const [randomDogs, setRandomDogs] = useState([]);
   const [direction, setDirection] = useState('');
   const [count, setCount] = useState(0);
   const [nearbyDogs, setNearbyDogs] = useState(0);
 
-  const randomDog = useMemo(() => randomDogs[randomDogs.length - 1], [randomDogs]);
   const currentDog = useMemo(
     () => currentUser?.dogs?.find((dog) => dog.isCurrent === true),
     [currentUser]
   );
 
-  const { data, error, isFetching } = useRandomDogs(currentUser, currentDog, setRandomDogs);
+  const { data: randomDog, error, isFetching } = useRandomDogs(currentUser, currentDog);
 
   const swipeLeftMutation = useMutation({
     mutationFn: async (randomDog) => {
@@ -76,6 +74,7 @@ const Matching = () => {
 
     onSettled: () => {
       queryClient.invalidateQueries(['my-swipes']);
+      queryClient.invalidateQueries(['random-dogs']);
     },
 
     onError: () => {
@@ -86,12 +85,10 @@ const Matching = () => {
   useEffect(() => {
     if (!direction) return;
 
-    if (direction === 'left') swipeLeftMutation.mutate(randomDog);
-
-    if (randomDogs.length === 1) {
+    if (direction === 'left') {
+      swipeLeftMutation.mutate(randomDog);
+    } else {
       queryClient.invalidateQueries(['random-dogs']);
-    } else if (randomDogs.length > 1) {
-      setRandomDogs((state) => state.slice(0, -1));
     }
 
     setDirection('');
@@ -106,27 +103,22 @@ const Matching = () => {
   );
 
   useEffect(() => {
-    (async () => {
-      await fetch(
-        `/api/match/nearby?lng=${currentUser?.address?.geocoding?.coordinates[0]}&lat=${currentUser?.address?.geocoding?.coordinates[1]}&radius=100&userID=${currentUser?._id}&dogID=${currentDog?._id}`
-      );
-    })();
-  }, [currentUser, currentDog]);
+    const pusher = new Pusher('effba3036d4404fa793d', {
+      cluster: 'ap1',
+      forceTLS: true
+    });
 
-  let pusher = new Pusher('effba3036d4404fa793d', {
-    cluster: 'ap1',
-    forceTLS: true
-  });
+    const channel = pusher.subscribe('match');
 
-  // Subscribe to the appropriate channel
-  let channel = pusher.subscribe('match');
+    channel.bind('nearby', function (data) {
+      setNearbyDogs(data.nearbyDogs);
+    });
 
-  // Bind a callback function to an event within the subscribed channel
-  channel.bind('nearby', function (data) {
-    // Do what you wish with the data from the event
-    setNearbyDogs(data.nearbyDogs);
-    console.log(data.nearbyDogs, 'data');
-  });
+    return () => {
+      channel.unbind('nearby');
+      pusher.unsubscribe('match');
+    };
+  }, []);
 
   return (
     <section className="relative background">

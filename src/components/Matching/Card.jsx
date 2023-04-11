@@ -1,56 +1,69 @@
 import dynamic from 'next/dynamic';
 import React from 'react';
 import Image from 'next/image';
-import { HoverCard, Title } from '@mantine/core';
+import { HoverCard, Title, Text } from '@mantine/core';
 import { IconHelpSquare } from '@tabler/icons-react';
 import TinderCard from 'react-tinder-card';
-import useCurrentUser from '@/store/useCurrentUser';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
-  const { currentUser } = useCurrentUser((state) => ({ currentUser: state.currentUser }));
-
+  const queryClient = useQueryClient();
+  const handleRefresh = () => {
+    queryClient.invalidateQueries(['random-dogs']);
+  };
   return (
     <div>
-      <TinderCard
-        swipeRequirementType="position"
-        preventSwipe={['up', 'down']}
-        className="swipe"
-        key={count}
-        onCardLeftScreen={handleCardLeftScreen}>
-        <div className="relative h-card lg:w-cardSmall lg:h-cardSmall ">
-          <Image
-            priority
-            fill
-            sizes="33vw"
-            draggable={false}
-            alt="image"
-            style={{ filter: 'brightness(.80)' }}
-            src={randomDog?.avatar}
-          />
+      {randomDog ? (
+        <TinderCard
+          swipeRequirementType="position"
+          preventSwipe={['up', 'down']}
+          className="swipe"
+          key={count}
+          onCardLeftScreen={handleCardLeftScreen}>
+          <div className="relative h-card lg:w-cardSmall lg:h-cardSmall ">
+            <Image
+              priority
+              fill
+              sizes="33vw"
+              draggable={false}
+              alt="image"
+              style={{ filter: 'brightness(.80)' }}
+              src={randomDog?.avatar}
+            />
 
-          <div className="font-mono absolute bottom-0 left-0 text-white pl-2 pb-2 flex items-center gap-x-5">
-            <div>
-              <h3>{randomDog?.name}</h3>
-              <h5>{randomDog?.age} years old</h5>
-            </div>
-            <div className="cursor-pointer">
-              <HoverCard width={280} shadow="md" position="top">
-                <HoverCard.Target>
-                  <IconHelpSquare />
-                </HoverCard.Target>
-                <HoverCard.Dropdown>
-                  <div>
-                    <p className="font-sans text-black">
-                      Hover card is revealed when user hovers over target element, it will be hidden
-                      once mouse is not over both target and dropdown elements
-                    </p>
-                  </div>
-                </HoverCard.Dropdown>
-              </HoverCard>
+            <div className="font-mono absolute bottom-0 left-0 text-white pl-2 pb-2 flex items-center gap-x-5">
+              <div>
+                <h3>{randomDog?.name}</h3>
+                <h5>{randomDog?.age} years old</h5>
+              </div>
+              <div className="cursor-pointer">
+                <HoverCard width={280} shadow="md" position="top">
+                  <HoverCard.Target>
+                    <IconHelpSquare />
+                  </HoverCard.Target>
+                  <HoverCard.Dropdown>
+                    <div>
+                      <p className="font-sans text-black">
+                        Hover card is revealed when user hovers over target element, it will be
+                        hidden once mouse is not over both target and dropdown elements
+                      </p>
+                    </div>
+                  </HoverCard.Dropdown>
+                </HoverCard>
+              </div>
             </div>
           </div>
+        </TinderCard>
+      ) : (
+        <div className="relative h-card lg:w-cardSmall lg:h-cardSmall">
+          <p className="font-sans">
+            No match found at the moment.{' '}
+            <span className="font-mono text-purple-700 cursor-pointer" onClick={handleRefresh}>
+              Refresh
+            </span>
+          </p>
         </div>
-      </TinderCard>
+      )}
 
       <Title color="white" order={3} mt={20}>
         {nearbyDogs} potential matches nearby

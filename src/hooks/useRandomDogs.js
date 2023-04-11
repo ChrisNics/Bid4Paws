@@ -3,7 +3,6 @@ import baseUrl from '../../dev-data/baseUrl';
 import useCurrentUser from '@/store/useCurrentUser';
 
 export const getRandomDogs = async (currentUser, currentDog) => {
-  console.log({ currentDog, currentUser });
   const res = await fetch(
     `${baseUrl}/api/match/search?lng=${currentUser?.address?.geocoding?.coordinates[0]}&lat=${currentUser?.address?.geocoding?.coordinates[1]}&radius=100&userID=${currentUser?._id}&dogID=${currentDog?._id}`
   );
@@ -15,15 +14,12 @@ export const getRandomDogs = async (currentUser, currentDog) => {
 
   const { data } = await res.json();
 
-  return data;
+  return data?.randomDog;
 };
 
-export const useRandomDogs = (currentUser, currentDog, setRandomDogs) =>
+export const useRandomDogs = (currentUser, currentDog) =>
   useQuery({
     queryKey: ['random-dogs'],
     queryFn: getRandomDogs.bind(this, currentUser, currentDog),
-    refetchOnWindowFocus: false,
-    onSettled: (data) => {
-      setRandomDogs(data.randomDogs);
-    }
+    refetchOnWindowFocus: false
   });
