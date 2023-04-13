@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-export const getMySwipes = async (currentDog) => {
-  const res = await fetch(`/api/match?from.dog=${currentDog._id}&status=pending`);
+export const getMutualSwipes = async (currentDog) => {
+  const res = await fetch(`/api/match?status=accept&currentDogID=${currentDog._id}`);
 
   if (!res.ok) {
     const errorData = await res.json();
@@ -12,10 +12,10 @@ export const getMySwipes = async (currentDog) => {
   return data;
 };
 
-export const useMySwipes = (currentDog) =>
+export const useMutualSwipes = (currentDog) =>
   useQuery({
-    queryKey: ['my-swipes'],
-    queryFn: getMySwipes.bind(this, currentDog),
+    queryKey: ['mutual-swipes'],
+    queryFn: getMutualSwipes.bind(this, currentDog),
     refetchOnWindowFocus: false,
 
     onError: (error) => {

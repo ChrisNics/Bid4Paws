@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 export const getSwipeYou = async (currentDog) => {
-  const res = await fetch(`/api/match?to.dog=${currentDog._id}`);
+  const res = await fetch(`/api/match?to.dog=${currentDog._id}&status=pending`);
 
   if (!res.ok) {
     const errorData = await res.json();

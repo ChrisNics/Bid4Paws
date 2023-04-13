@@ -26,7 +26,13 @@ export default async function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      const queryBuilder = new APIQueryBuilder(Match.find(), req.query)
+      const { currentDogID, ...query } = req.query;
+
+      const findQuery = currentDogID
+        ? { $or: [{ 'from.dog': currentDogID }, { 'to.dog': currentDogID }] }
+        : {};
+
+      const queryBuilder = new APIQueryBuilder(Match.find(findQuery), query)
         .filter()
         .sort()
         .limitFields()
@@ -35,12 +41,18 @@ export default async function handler(req, res) {
       const matches = await queryBuilder.query;
 
       if (matches.length === 0) {
-        return res.status(200).json({ status: 200, message: 'No matches found.', data: [] });
+        return res.status(200).json({
+          status: 200,
+          message: 'No matches found.',
+          data: []
+        });
       }
 
-      return res
-        .status(200)
-        .json({ status: 200, message: 'Matches retrieved successfully.', data: matches });
+      return res.status(200).json({
+        status: 200,
+        message: 'Matches retrieved successfully.',
+        data: matches
+      });
     } catch (error) {
       console.log(error);
       mongoDBErrorHandler(res, error);
