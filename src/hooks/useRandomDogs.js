@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import baseUrl from '../../dev-data/baseUrl';
 import useCurrentUser from '@/store/useCurrentUser';
 
-export const getRandomDogs = async (currentUser, currentDog) => {
+export const getRandomDogs = async (currentUser) => {
   const res = await fetch(
-    `${baseUrl}/api/match/search?lng=${currentUser?.address?.geocoding?.coordinates[0]}&lat=${currentUser?.address?.geocoding?.coordinates[1]}&radius=100&userID=${currentUser?._id}&dogID=${currentDog?._id}`
+    `${baseUrl}/api/match/search?lng=${currentUser?.address?.geocoding?.coordinates[0]}&lat=${currentUser?.address?.geocoding?.coordinates[1]}&radius=100&userID=${currentUser?._id}`
   );
 
   if (!res.ok) {
@@ -17,9 +17,9 @@ export const getRandomDogs = async (currentUser, currentDog) => {
   return data?.randomDog;
 };
 
-export const useRandomDogs = (currentUser, currentDog) =>
+export const useRandomDogs = (currentUser) =>
   useQuery({
     queryKey: ['random-dogs'],
-    queryFn: getRandomDogs.bind(this, currentUser, currentDog),
+    queryFn: getRandomDogs.bind(this, currentUser),
     refetchOnWindowFocus: false
   });

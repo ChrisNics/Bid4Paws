@@ -29,6 +29,7 @@ const Card = ({ dog, matchID, showButton = false }) => {
       queryClient.invalidateQueries(['my-swipes']);
       queryClient.invalidateQueries(['swipe-you']);
       queryClient.invalidateQueries(['mutual-swipes']);
+      queryClient.invalidateQueries(['random-dogs']);
     }
   });
 
@@ -54,6 +55,7 @@ const Card = ({ dog, matchID, showButton = false }) => {
       queryClient.invalidateQueries(['my-swipes']);
       queryClient.invalidateQueries(['swipe-you']);
       queryClient.invalidateQueries(['mutual-swipes']);
+      queryClient.invalidateQueries(['random-dogs']);
     }
   });
 

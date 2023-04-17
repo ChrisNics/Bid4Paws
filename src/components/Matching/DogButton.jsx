@@ -62,6 +62,7 @@ export default function DogButton({ dog }) {
       queryClient.invalidateQueries(['currentUser', session?.id]);
       queryClient.invalidateQueries(['swipe-you']);
       queryClient.invalidateQueries(['my-swipes']);
+      queryClient.invalidateQueries(['random-dogs']);
     },
     onError: (error) => {
       showNotification({
