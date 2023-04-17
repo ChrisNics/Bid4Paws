@@ -4,7 +4,7 @@ import useCurrentUser from '@/store/useCurrentUser';
 
 export const getRandomDogs = async (currentUser) => {
   const res = await fetch(
-    `${baseUrl}/api/match/search?lng=${currentUser?.address?.geocoding?.coordinates[0]}&lat=${currentUser?.address?.geocoding?.coordinates[1]}&radius=100&userID=${currentUser?._id}`
+    `${baseUrl}/api/match/search?lng=${currentUser?.address?.geocoding?.coordinates[0]}&lat=${currentUser?.address?.geocoding?.coordinates[1]}&radius=${currentUser?.address?.geocoding?.radius}&userID=${currentUser?._id}`
   );
 
   if (!res.ok) {

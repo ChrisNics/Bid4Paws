@@ -1,7 +1,7 @@
 import { Affix, ActionIcon, rem, Tooltip, Popover } from '@mantine/core';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { IconArrowsExchange2, IconLogout, IconHeart } from '@tabler/icons-react';
+import { IconArrowsExchange2, IconLogout, IconHeart, IconSettings2 } from '@tabler/icons-react';
 import useCurrentUser from '@/store/useCurrentUser';
 import Lottie from 'lottie-react';
 import { dogFlirtingAnimation } from '../../../dev-data/dogsAnimation';
@@ -92,3 +92,22 @@ export const FlirtingDog = React.memo(() => {
     </Affix>
   );
 });
+
+export const Radius = () => {
+  return (
+    <Affix position={{ bottom: rem(150), left: rem(20) }}>
+      <Link href="/my-account" passHref legacyBehavior>
+        <Tooltip
+          label="Settings"
+          color="orange"
+          position="right-start"
+          withArrow
+          arrowPosition="center">
+          <ActionIcon size="xl" variant="light" radius="xl">
+            <IconSettings2 size="1.2rem" />
+          </ActionIcon>
+        </Tooltip>
+      </Link>
+    </Affix>
+  );
+};

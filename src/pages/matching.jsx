@@ -4,7 +4,7 @@ import useCurrentUser from '@/store/useCurrentUser';
 import { dogAnimation } from '../../dev-data/dogsAnimation';
 import dynamic from 'next/dynamic';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MySwipe, Exit, ChangeDog, FlirtingDog } from '@/components/Matching/Absolute';
+import { MySwipe, Exit, ChangeDog, FlirtingDog, Radius } from '@/components/Matching/Absolute';
 import CustomLottie from '@/components/CustomLottie';
 import { Drawer, LoadingOverlay, Loader } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -141,6 +141,7 @@ const Matching = () => {
       <FlirtingDog />
       <Exit />
       <MySwipe open={open} />
+      <Radius />
       <ChangeDog />
     </section>
   );
