@@ -53,6 +53,7 @@ const Content = ({ currentDog }) => {
         <div className="grid grid-cols-3 gap-2 sm:gap-5">
           {mutualSwipes?.map((swipe) => (
             <Card
+              currentDog={currentDog}
               dog={
                 swipe.from.dog._id === currentDog._id
                   ? swipe.to.dog
