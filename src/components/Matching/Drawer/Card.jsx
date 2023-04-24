@@ -88,7 +88,7 @@ const Card = ({ dog, matchID, showButton = false }) => {
   const data1 = {
     message_type: 'MESG',
     user_id: currentDog._id,
-    message: 'Holycrap Amazing'
+    message: `Hello ${dog.name}`
   };
 
   console.log(currentUser._id, dog.owner);
