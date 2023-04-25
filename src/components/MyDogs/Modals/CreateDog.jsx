@@ -78,7 +78,7 @@ const CreateDogs = NiceModal.create(() => {
   const createDogMutation = useMutation({
     mutationKey: ['currentUser', session?.id],
     mutationFn: async (values) => {
-      const res = await fetch(`/api/user/${currentUser._id}/dog`, {
+      const createDogReq = fetch(`/api/user/${currentUser._id}/dog`, {
         method: 'POST',
         body: JSON.stringify(values),
         headers: {
@@ -86,12 +86,40 @@ const CreateDogs = NiceModal.create(() => {
         }
       });
 
-      if (!res.ok) {
-        const errorData = await res.json();
+      const createDogRes = await createDogReq;
+
+      if (!createDogRes.ok) {
+        const errorData = await createDogRes.json();
         throw new Error(errorData.message || 'An error occurred while creating the dog.');
       }
 
-      return await res.json();
+      const { data, message } = await createDogRes.json();
+
+      const createUserReq = fetch(`${process.env.NEXT_PUBLIC_SENDBIRD_URL}/users`, {
+        method: 'POST',
+        body: JSON.stringify({
+          user_id: data._id,
+          nickname: data.name,
+          profile_url: data.avatar,
+          profile_file: 'png',
+          issue_access_token: true
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Api-Token': process.env.NEXT_PUBLIC_SENDBIRD_TOKEN
+        }
+      });
+
+      const createUserRes = await createUserReq;
+
+      if (!createUserRes.ok) {
+        const errorData = await createUserRes.json();
+        throw new Error(errorData.message || 'An error occurred while creating the user.');
+      }
+
+      const userData = await createUserRes.json();
+
+      return { data, message };
     },
     onSettled: ({ data, message }) => {
       // Handle successful data update
