@@ -6,10 +6,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import sendMessage from '../../../../lib/sendMessage';
 import useCurrentUser from '@/store/useCurrentUser';
 import { useMemo } from 'react';
+import { useRouter } from 'next/router';
 
 const Card = ({ dog, matchID, showButton = false }) => {
   const queryClient = useQueryClient();
   const currentUser = useCurrentUser((state) => state.currentUser);
+  const router = useRouter();
 
   const currentDog = useMemo(
     () => currentUser?.dogs?.find((dog) => dog.isCurrent === true),
@@ -116,7 +118,10 @@ const Card = ({ dog, matchID, showButton = false }) => {
         <div className="invisible group-hover:visible text-center text-white  bg-orange-500 rounded-md cursor-pointer hover:bg-white hover:text-orange-500 hover:border-solid  hover:border-orange-500 transition duration-75">
           <h6
             className="font-sans uppercase p-2"
-            onClick={() => sendMessage({ channelBody: data, messageBody: data1 })}>
+            onClick={async () => {
+              await sendMessage({ channelBody: data, messageBody: data1 });
+              window.open('/chat', '_blank');
+            }}>
             Chat now
           </h6>
         </div>

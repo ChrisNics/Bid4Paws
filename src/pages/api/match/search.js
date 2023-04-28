@@ -56,14 +56,17 @@ const findNearbyDogs = async (req, matchedDogIds) => {
   const matchQuery = {
     $and: [
       {
+        gender: { $ne: userDog.gender } // Opposite gender
+      },
+      {
         'address.geocoding.coordinates': {
           $geoWithin: {
-            $centerSphere: [[parseFloat(lng), parseFloat(lat)], parseFloat(radius) / 6371] // radius in km
+            $centerSphere: [[parseFloat(lng), parseFloat(lat)], parseFloat(radius) / 6371]
           }
         }
       },
-      { _id: { $nin: matchedDogIds } }, // Exclude dogs that have already been matched with the current dog
-      { owner: { $ne: userID } } // Exclude all dogs of specific user
+      { _id: { $nin: matchedDogIds } },
+      { owner: { $ne: userID } }
     ]
   };
 
@@ -94,6 +97,7 @@ const handler = async (req, res) => {
       const matchedDogIds = await getMatchedDogIds(dogID);
 
       const { randomDog, nearbyDogs } = await findNearbyDogs(req, matchedDogIds);
+      console.log(dogID);
       pusher.trigger('match', `dog-nearby-${dogID}`, { nearbyDogs: nearbyDogs.length });
 
       // Watch for changes in the Match collection and trigger a Pusher event if new nearby dogs are found
