@@ -27,9 +27,14 @@ const Prompt = dynamic(() => import('@/components/MyDogs/Modals/Prompt'), {
   loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
 });
 
+const PaymentMethod = dynamic(() => import('@/components/Pricing/Modal/PaymentMethod'), {
+  loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
+});
+
 NiceModal.register('create-dog', CreateDog);
 NiceModal.register('update-dog', UpdateDog);
 NiceModal.register('prompt', Prompt);
+NiceModal.register('payment-method', PaymentMethod);
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const [colorScheme, setColorScheme] = useLocalStorage({

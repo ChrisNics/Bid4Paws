@@ -13,6 +13,15 @@ const UserSchema = new Schema(
       ],
       default: []
     },
+    plan: {
+      type: {
+        type: String,
+        enum: ['Free', 'Pro', 'Premium'],
+        default: 'Free'
+      },
+      trial: Number
+    },
+    planToken: String,
     firstName: {
       type: String,
       required: [true, 'Please provide your first name']
