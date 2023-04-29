@@ -19,7 +19,7 @@ const pusher = new Pusher({
 const getCurrentDogId = async (userID) => {
   const user = await User.findOne({ _id: userID });
   const currentDog = user?.dogs.find((dog) => dog.isCurrent);
-  return currentDog?._id ?? user.dogs[user.dogs.length - 1]._id;
+  return currentDog ?? user.dogs[user.dogs.length - 1];
 };
 
 const getMatchedDogIds = async (dogID) => {
@@ -45,18 +45,18 @@ const getMatchedDogIds = async (dogID) => {
 
 const triggerPusherEvent = async (req, matchedDogIds) => {
   const { userID } = req.query;
-  const dogID = await getCurrentDogId(userID);
-  const { nearbyDogs } = await findNearbyDogs(req, matchedDogIds);
-  pusher.trigger('match', `dog-nearby-${dogID}`, { nearbyDogs: nearbyDogs.length });
+  const { _id, gender } = await getCurrentDogId(userID);
+  const { nearbyDogs } = await findNearbyDogs(req, matchedDogIds, gender);
+  pusher.trigger('match', `dog-nearby-${_id}`, { nearbyDogs: nearbyDogs.length });
 };
 
-const findNearbyDogs = async (req, matchedDogIds) => {
+const findNearbyDogs = async (req, matchedDogIds, gender) => {
   const { lng, lat, radius, userID } = req.query;
 
   const matchQuery = {
     $and: [
       {
-        gender: { $ne: userDog.gender } // Opposite gender
+        gender: { $ne: gender } // Opposite gender
       },
       {
         'address.geocoding.coordinates': {
@@ -93,17 +93,16 @@ const handler = async (req, res) => {
         return res.status(400).json({ success: false, error: 'Missing required parameters.' });
       }
 
-      const dogID = await getCurrentDogId(userID);
-      const matchedDogIds = await getMatchedDogIds(dogID);
+      const { _id, gender } = await getCurrentDogId(userID);
+      const matchedDogIds = await getMatchedDogIds(_id);
 
-      const { randomDog, nearbyDogs } = await findNearbyDogs(req, matchedDogIds);
-      console.log(dogID);
-      pusher.trigger('match', `dog-nearby-${dogID}`, { nearbyDogs: nearbyDogs.length });
+      const { randomDog, nearbyDogs } = await findNearbyDogs(req, matchedDogIds, gender);
+      pusher.trigger('match', `dog-nearby-${_id}`, { nearbyDogs: nearbyDogs.length });
 
       // Watch for changes in the Match collection and trigger a Pusher event if new nearby dogs are found
       const matchStream = Match.watch();
       matchStream.on('change', async () => {
-        const matchedDogIds = await getMatchedDogIds(dogID);
+        const matchedDogIds = await getMatchedDogIds(_id);
         await triggerPusherEvent(req, matchedDogIds);
       });
 
