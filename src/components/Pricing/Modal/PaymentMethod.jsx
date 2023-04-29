@@ -126,8 +126,6 @@ const PaymentMethod = NiceModal.create(({ price, plan }) => {
         data: { attributes }
       } = await checkoutRes.json();
 
-      console.log(attributes);
-
       router.push(attributes.checkout_url);
     } catch (error) {
       console.error(error);

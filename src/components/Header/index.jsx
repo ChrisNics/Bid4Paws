@@ -25,8 +25,8 @@ const HEADER_HEIGHT = rem(60);
 
 const links = [
   {
-    link: '/about',
-    label: 'Features'
+    link: '/',
+    label: 'Home'
   },
   {
     link: '/pricing',
@@ -112,32 +112,22 @@ export default function Header() {
       key={link.label}
       href={link.link}
       className={cx(classes.link, classes.linkPaper, {
-        [classes.linkActive]: active === link.link
-      })}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(link.link);
-        close();
-      }}>
+        [classes.linkActive]: router.pathname === link.link
+      })}>
       {link.label}
     </a>
   ));
   `~~`;
 
   const items = links.map((link) => (
-    <a
-      key={link.label}
-      href={link.link}
-      className={cx(classes.link, theme.breakpoints, {
-        [classes.linkActive]: active === link.link
-      })}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(link.link);
-        close();
-      }}>
-      {link.label}
-    </a>
+    <Link key={link.label} href={link.link} legacyBehavior>
+      <a
+        className={cx(classes.link, theme.breakpoints, {
+          [classes.linkActive]: router.pathname === link.link
+        })}>
+        {link.label}
+      </a>
+    </Link>
   ));
 
   return (
