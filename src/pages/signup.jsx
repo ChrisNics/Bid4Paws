@@ -24,6 +24,7 @@ import SingleImageDropZone from '@/components/SingleImageDropZone';
 import passwordChecker from '../../lib/passwordChecker';
 import Image from 'next/image';
 import showNotification from '../../lib/showNotification';
+import NiceModal from '@ebay/nice-modal-react';
 
 const MapboxComponent = dynamic(() => import('@/components/mapBoxComponent'), {
   loading: () => 'Loading...'
@@ -31,6 +32,7 @@ const MapboxComponent = dynamic(() => import('@/components/mapBoxComponent'), {
 
 const Signup = () => {
   const [active, setActive] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const nextStep = () =>
     setActive((current) => {
       if (form.validate().hasErrors) {
@@ -85,6 +87,7 @@ const Signup = () => {
       firstName: '',
       lastName: '',
       username: '',
+      verificationCode: '',
       password: '',
       passwordConfirm: '',
       avatar: '',
@@ -99,7 +102,7 @@ const Signup = () => {
         street: '',
         postalCode: '',
         barangay: '',
-        geocoding: { landmark: '', coordinates: [], type: 'Point' }
+        geocoding: { landmark: '', coordinates: [], type: 'Point', radius: 10 }
       }
     },
 
@@ -107,9 +110,10 @@ const Signup = () => {
   });
 
   const handleSubmit = form.onSubmit(async (values) => {
-    const res = await fetch('/api/auth/signup', {
+    setIsLoading(true);
+    const res = await fetch('/api/auth/send-verification-code', {
       method: 'POST',
-      body: JSON.stringify(values),
+      body: JSON.stringify({ email: values.email }),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -118,15 +122,19 @@ const Signup = () => {
     if (!res.ok) {
       const errorData = await res.json();
       showNotification({ title: 'Invalid Credentials', message: errorData.message, color: 'red' });
+      setIsLoading(false);
       return;
     }
 
     const data = await res.json();
+    // Todo for tomorrow, we should pass the data in through email.
+    NiceModal.show('verification-modal', { values });
     showNotification({
       title: 'Success',
-      message: 'Hooray! You have successfully created an account.',
+      message: 'Please check your email for verification code.',
       color: 'green'
     });
+    setIsLoading(false);
   });
 
   const dateToAge = (birthDate) => {
@@ -140,11 +148,11 @@ const Signup = () => {
   return (
     <section>
       <div className="container mx-auto sm:p-10 lg:p-5">
-        <div className="text-center mt-10 mb-20">
+        <div className="mb-20 mt-10 text-center">
           <h1 className="font-mono text-orange-500 ">Registration Page</h1>
           <p>
             Already have an account?{' '}
-            <span className=" text-orange-500 cursor-pointer hover:text-orange-400 hover:underline transition duration-75">
+            <span className=" cursor-pointer text-orange-500 transition duration-75 hover:text-orange-400 hover:underline">
               <Link href="/signin" legacyBehavior>
                 <a>Sign-in</a>
               </Link>
@@ -160,7 +168,7 @@ const Signup = () => {
           <Stepper.Step label="First step" description="Personal Information">
             <div className="flex flex-col gap-y-5">
               {/* First Children */}
-              <div className="w-full flex flex-col gap-y-5 md:gap-y-0 md:flex-row md:gap-x-5">
+              <div className="flex w-full flex-col gap-y-5 md:flex-row md:gap-x-5 md:gap-y-0">
                 <TextInput
                   {...form.getInputProps('firstName')}
                   placeholder="Your first name"
@@ -189,7 +197,7 @@ const Signup = () => {
               </div>
 
               {/* Third Children */}
-              <div className="flex flex-col gap-y-5 sm:justify-between sm:gap-x-5 sm:flex-row sm:gap-y-0 lg:justify-start">
+              <div className="flex flex-col gap-y-5 sm:flex-row sm:justify-between sm:gap-x-5 sm:gap-y-0 lg:justify-start">
                 <div>
                   <p className="text-sm">Birth Date</p>
                   <DatePicker
@@ -200,7 +208,7 @@ const Signup = () => {
                   />
                 </div>
 
-                <div className="flex flex-col gap-y-5 lg:flex-row lg:gap-y-0 lg:gap-x-5">
+                <div className="flex flex-col gap-y-5 lg:flex-row lg:gap-x-5 lg:gap-y-0">
                   <NumberInput
                     disabled
                     {...form.getInputProps('age')}
@@ -234,7 +242,7 @@ const Signup = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-y-5 md:flex md:flex-row md:gap-y-0 md:gap-x-5">
+              <div className="flex flex-col gap-y-5 md:flex md:flex-row md:gap-x-5 md:gap-y-0">
                 <TextInput
                   {...form.getInputProps('address.city')}
                   placeholder="City"
@@ -251,7 +259,7 @@ const Signup = () => {
                 />
               </div>
 
-              <div className="flex flex-col gap-y-5 md:flex md:flex-row md:gap-y-0 md:gap-x-5">
+              <div className="flex flex-col gap-y-5 md:flex md:flex-row md:gap-x-5 md:gap-y-0">
                 <TextInput
                   {...form.getInputProps('address.street')}
                   placeholder="Street Address"
@@ -297,7 +305,7 @@ const Signup = () => {
               <Tooltip
                 label="Location information is necessary for our app's matchmaking feature to work properly."
                 position="top-start">
-                <p className="text-xs w-max text-orange-500 cursor-pointer">Why we need this?</p>
+                <p className="w-max cursor-pointer text-xs text-orange-500">Why we need this?</p>
               </Tooltip>
 
               <TextInput
@@ -308,13 +316,27 @@ const Signup = () => {
                 className="grow"
                 disabled
               />
+
+              <NumberInput
+                maxLength={4}
+                {...form.getInputProps('address.geocoding.radius')}
+                placeholder="Radius"
+                label="Radius"
+                withAsterisk
+                className="grow"
+                hideControls
+                parser={(value) => {
+                  const parsedValue = value.replace(/\D/g, '');
+                  return parsedValue;
+                }}
+              />
             </div>
           </Stepper.Step>
           <Stepper.Step label="Second step" description="Login credentials">
             <div className="flex flex-col gap-y-5">
-              <div className="flex justify-center items-center">
-                <div className="max-w-sm flex flex-col gap-y-5">
-                  <div className="relative border rounded-full h-60 w-60 overflow-hidden">
+              <div className="flex items-center justify-center">
+                <div className="flex max-w-sm flex-col gap-y-5">
+                  <div className="relative h-60 w-60 overflow-hidden rounded-full border">
                     <Image
                       priority
                       fill
@@ -371,7 +393,7 @@ const Signup = () => {
               Next step
             </Button>
           ) : (
-            <Button onClick={handleSubmit} color="orange">
+            <Button onClick={handleSubmit} color="orange" loading={isLoading}>
               Submit
             </Button>
           )}

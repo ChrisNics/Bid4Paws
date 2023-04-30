@@ -35,6 +35,7 @@ export default function ApplicationContainer({ children }) {
         }
       }}
       navbar={isAdminPage && <AdminNavbar />}
+      header={!isAdminPage && <Header />}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       footer={<Footer />}>

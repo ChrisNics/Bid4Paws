@@ -27,6 +27,10 @@ const UserSchema = new Schema(
       enums: ['admin', 'owner'],
       default: 'owner'
     },
+    verificationCode: {
+      type: String,
+      default: null
+    },
     firstName: {
       type: String,
       required: [true, 'Please provide your first name']
