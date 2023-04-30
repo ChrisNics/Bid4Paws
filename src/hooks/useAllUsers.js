@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 export const getAllUsers = async () => {
-  const res = await fetch('/api/user');
+  const res = await fetch('/api/user?role=owner');
 
   if (!res.ok) {
     const errorData = await res.json();

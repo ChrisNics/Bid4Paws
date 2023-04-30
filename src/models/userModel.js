@@ -22,6 +22,11 @@ const UserSchema = new Schema(
       trial: Number
     },
     planToken: String,
+    role: {
+      type: String,
+      enums: ['admin', 'owner'],
+      default: 'owner'
+    },
     firstName: {
       type: String,
       required: [true, 'Please provide your first name']

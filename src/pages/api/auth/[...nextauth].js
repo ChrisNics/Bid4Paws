@@ -38,12 +38,14 @@ export const authOptions = {
     jwt: ({ token, user, account, profile, isNewUser }) => {
       if (user) {
         token.id = user._id;
+        token.role = user.role;
       }
       return token;
     },
 
     session: ({ session, user, token }) => {
       session.id = token.id;
+      session.role = token.role;
       return session;
     }
   },
