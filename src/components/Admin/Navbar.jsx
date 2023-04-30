@@ -55,22 +55,26 @@ export default function AdminNavbar() {
     console.log(link, label);
     const { classes, cx } = useStyles();
     return (
-      <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
+      <>
         {link ? (
           <Link href={link ? link : null} passHref legacyBehavior>
+            <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
+              <UnstyledButton
+                className={cx(classes.link, { [classes.active]: router.pathname.includes(link) })}>
+                <Icon size="1.2rem" stroke={1.5} />
+              </UnstyledButton>
+            </Tooltip>
+          </Link>
+        ) : (
+          <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
             <UnstyledButton
+              onClick={onClick}
               className={cx(classes.link, { [classes.active]: router.pathname.includes(link) })}>
               <Icon size="1.2rem" stroke={1.5} />
             </UnstyledButton>
-          </Link>
-        ) : (
-          <UnstyledButton
-            onClick={onClick}
-            className={cx(classes.link, { [classes.active]: router.pathname.includes(link) })}>
-            <Icon size="1.2rem" stroke={1.5} />
-          </UnstyledButton>
+          </Tooltip>
         )}
-      </Tooltip>
+      </>
     );
   }
 

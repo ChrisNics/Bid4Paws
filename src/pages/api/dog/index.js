@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       const dogs = await queryBuilder.query;
 
       if (dogs.length === 0) {
-        return res.status(204).end();
+        return res.status(200).json({ data: [] });
       }
 
       return res.status(200).json({ data: dogs });

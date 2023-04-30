@@ -10,6 +10,7 @@ import sortBy from 'lodash/sortBy';
 import { useAllDogs } from '@/hooks/useAllDogs';
 import Image from 'next/image';
 import NiceModal from '@ebay/nice-modal-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const PAGE_SIZE = 15;
 
@@ -27,6 +28,7 @@ const DogsTable = () => {
   const [debouncedQuery] = useDebouncedValue(query, 200);
   const [filterStatus, setFilterStatus] = useState('all');
   const [sortStatus, setSortStatus] = useState({ columnAccessor: 'createdAt', direction: 'asc' });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (allDogsFetching) return;
@@ -50,29 +52,52 @@ const DogsTable = () => {
 
       return true;
     });
-    const paginatedRecords = filteredRecords.slice(from, to);
+    const paginatedRecords = filteredRecords?.slice(from, to);
 
     const sortedRecords = sortBy(paginatedRecords, sortStatus.columnAccessor);
     setRecords(sortStatus.direction === 'desc' ? sortedRecords.reverse() : sortedRecords);
   }, [page, debouncedQuery, filterStatus, sortStatus, allDogsFetching]);
 
-  const handleDelete = async (id) => {
-    const { data, message, status } = await removeVendor(id);
-    if (status === 'success') {
+  const deleteDogMutation = useMutation({
+    mutationFn: async (dog) => {
+      const res = await fetch(`/api/user/${dog.owner}/dog/${dog._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'An error occurred while updating the dog.');
+      }
+
+      return await res.json();
+    },
+    onSettled: ({ data, message }) => {
+      // Handle successful data update
+
+      // Refetch query to trigger re-render
+      console.log(message);
+      console.log('test');
+      queryClient.invalidateQueries(['all-dogs']);
       showNotification({
         title: 'Success',
-        color: 'green',
-        disallowClose: true,
-        message
+        message,
+        color: 'green'
       });
-    } else {
+    },
+    onError: (error) => {
       showNotification({
-        title: 'ERROR',
-        color: 'red',
-        disallowClose: true,
-        message
+        title: 'Failed',
+        message: error.message,
+        color: 'red'
       });
     }
+  });
+
+  const handleDelete = async (dog) => {
+    deleteDogMutation.mutate(dog);
   };
 
   return (
@@ -117,7 +142,7 @@ const DogsTable = () => {
         withBorder
         withColumnBorders
         records={records}
-        fetching={allDogsFetching}
+        fetching={allDogsFetching || deleteDogMutation.isLoading}
         sortStatus={sortStatus}
         onSortStatusChange={setSortStatus}
         columns={[
@@ -174,9 +199,9 @@ const DogsTable = () => {
                   onClick={() => NiceModal.show('update-dog-admin', { dog })}>
                   <IconEdit size={16} />
                 </ActionIcon>
-                {/* <ActionIcon color="red" onClick={handleDelete.bind(this, vendor._id)}>
+                <ActionIcon color="red" onClick={handleDelete.bind(this, dog)}>
                   <IconTrash size={16} />
-                </ActionIcon> */}
+                </ActionIcon>
               </Group>
             )
           }
