@@ -118,10 +118,10 @@ const Matching = () => {
   }, []);
 
   return (
-    <section className="relative background">
+    <section className="background relative">
       <MovingBackground />
 
-      <div className="container mx-auto flex justify-center items-center min-h-screen ">
+      <div className="container mx-auto flex min-h-screen items-center justify-center ">
         {isFetching || swipeLeftMutation.isLoading ? (
           <CustomLottie animationData={dogAnimation} />
         ) : (

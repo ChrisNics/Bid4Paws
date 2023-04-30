@@ -3,12 +3,15 @@ import Header from './Header';
 import Footer from './Footer';
 import { AppShell, useMantineTheme } from '@mantine/core';
 import { useRouter } from 'next/router';
+import AdminNavbar from './Admin/Navbar';
 
 export default function ApplicationContainer({ children }) {
   const theme = useMantineTheme();
   const router = useRouter();
   const isMatching = /^\/(signin|signup|matching|redirect)/.test(router.pathname);
+  const isAdminPage = router.pathname.includes('/admin');
 
+  console.log(isAdminPage);
   if (isMatching) return children;
 
   return (
@@ -31,10 +34,10 @@ export default function ApplicationContainer({ children }) {
           minHeight: 'max-content'
         }
       }}
+      navbar={isAdminPage && <AdminNavbar />}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
-      footer={<Footer />}
-      header={<Header />}>
+      footer={<Footer />}>
       {children}
     </AppShell>
   );

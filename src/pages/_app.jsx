@@ -31,10 +31,15 @@ const PaymentMethod = dynamic(() => import('@/components/Pricing/Modal/PaymentMe
   loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
 });
 
+const UpdateDogAdmin = dynamic(() => import('@/components/Admin/Table/Modals/UpdateDog'), {
+  loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
+});
+
 NiceModal.register('create-dog', CreateDog);
 NiceModal.register('update-dog', UpdateDog);
 NiceModal.register('prompt', Prompt);
 NiceModal.register('payment-method', PaymentMethod);
+NiceModal.register('update-dog-admin', UpdateDogAdmin);
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const [colorScheme, setColorScheme] = useLocalStorage({

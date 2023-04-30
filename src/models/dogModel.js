@@ -10,6 +10,17 @@ const DogSchema = new Schema(
       required: [true, 'Please provide if this dog is current'],
       default: false
     },
+    isApproved: {
+      status: {
+        type: String,
+        enum: ['Approved', 'Declined', 'Pending'],
+        default: 'Pending'
+      },
+      comment: {
+        type: String,
+        default: null
+      }
+    },
     name: {
       type: String,
       required: [true, "Please provide your dog's name"]
