@@ -1,11 +1,20 @@
 import { TextInput, NumberInput, Select, Text } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
+import getAge from 'get-age';
+import formatDate from '../../../lib/formatDate';
 
 const FormPersonalInfo = ({ form }) => {
+  const dateToAge = (birthDate) => {
+    const formattedDate = formatDate(birthDate);
+    const age = getAge(formattedDate);
+
+    form.setFieldValue('birthDate', birthDate);
+    form.setFieldValue('age', age);
+  };
   return (
     <div className="flex flex-col gap-y-5">
       {/* First Children */}
-      <div className="w-full flex flex-col gap-y-5 md:gap-y-0 md:flex-row md:gap-x-5">
+      <div className="flex w-full flex-col gap-y-5 md:flex-row md:gap-x-5 md:gap-y-0">
         <TextInput
           {...form.getInputProps('firstName')}
           placeholder="Your first name"
@@ -34,18 +43,18 @@ const FormPersonalInfo = ({ form }) => {
       </div>
 
       {/* Third Children */}
-      <div className="flex flex-col gap-y-5 sm:justify-between sm:gap-x-5 sm:flex-row sm:gap-y-0 lg:justify-start">
+      <div className="flex flex-col gap-y-5 sm:flex-row sm:justify-between sm:gap-x-5 sm:gap-y-0 lg:justify-start">
         <div>
           <p className="text-sm">Birth Date</p>
           <DatePicker
             {...form.getInputProps('birthDate')}
-            // onChange={dateToAge}
-            // value={form.values.birthDate}
+            onChange={dateToAge}
+            value={form.values.birthDate}
             allowDeselect
           />
         </div>
 
-        <div className="flex flex-col gap-y-5 lg:flex-row lg:gap-y-0 lg:gap-x-5">
+        <div className="flex flex-col gap-y-5 lg:flex-row lg:gap-x-5 lg:gap-y-0">
           <NumberInput
             disabled
             {...form.getInputProps('age')}

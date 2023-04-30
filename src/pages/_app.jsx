@@ -35,11 +35,16 @@ const UpdateDogAdmin = dynamic(() => import('@/components/Admin/Table/Modals/Upd
   loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
 });
 
+const UpdateUserAdmin = dynamic(() => import('@/components/Admin/Table/Modals/UpdateUser'), {
+  loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
+});
+
 NiceModal.register('create-dog', CreateDog);
 NiceModal.register('update-dog', UpdateDog);
 NiceModal.register('prompt', Prompt);
 NiceModal.register('payment-method', PaymentMethod);
 NiceModal.register('update-dog-admin', UpdateDogAdmin);
+NiceModal.register('update-user-admin', UpdateUserAdmin);
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const [colorScheme, setColorScheme] = useLocalStorage({
