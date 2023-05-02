@@ -3,12 +3,15 @@ import { PinInput, Group, Title, LoadingOverlay } from '@mantine/core';
 import { Modal } from 'antd';
 import showNotification from '../../lib/showNotification';
 import { useEffect, useState } from 'react';
+import sendEmail from '../../lib/sendEmail';
+import { useRouter } from 'next/router';
 
 const VerificationModal = NiceModal.create(({ values }) => {
   const modal = useModal();
   const [pin, setPin] = useState();
   const [pinError, setPinError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async () => {
     const res = await fetch('/api/auth/signup', {
@@ -35,32 +38,58 @@ const VerificationModal = NiceModal.create(({ values }) => {
       message: 'Hooray! You have successfully created an account.',
       color: 'green'
     });
-  };
 
+    router.push('/signin');
+  };
   const handleResend = async () => {
     setIsLoading(true);
-    const res = await fetch('/api/auth/send-verification-code?resend', {
-      method: 'POST',
-      body: JSON.stringify({ email: values.email }),
-      headers: {
-        'Content-Type': 'application/json'
+
+    try {
+      const res = await fetch('/api/auth/send-verification-code', {
+        method: 'POST',
+        body: JSON.stringify({ email: values.email }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        showNotification({
+          title: 'Invalid Credentials',
+          message: errorData.message,
+          color: 'red'
+        });
+        setIsLoading(false);
+        return;
       }
-    });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      showNotification({ title: 'Invalid Credentials', message: errorData.message, color: 'red' });
+      const { code, message } = await res.json();
+
+      const resEmail = await sendEmail(
+        {
+          email: values.email,
+          name: values.firstName,
+          code
+        },
+        'template_vomw6h3',
+        'hBhkXIIlD02e6C63g'
+      );
+
+      if (resEmail.status !== 200) {
+        throw new Error('Something went wrong in sending the email');
+      }
+      showNotification({
+        title: 'Success',
+        message: 'Please check your email for verification code.',
+        color: 'green'
+      });
+    } catch (error) {
+      console.error(error);
+      showNotification({ title: 'Error', message: error.message, color: 'red' });
+    } finally {
       setIsLoading(false);
-      return;
     }
-
-    const data = await res.json();
-    showNotification({
-      title: 'Success',
-      message: 'Please check your email for verification code.',
-      color: 'green'
-    });
-    setIsLoading(false);
   };
 
   useEffect(() => {

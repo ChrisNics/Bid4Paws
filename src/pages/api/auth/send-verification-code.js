@@ -21,7 +21,11 @@ export default async function handler(req, res) {
       const newVerification = Verification.create({ email, verificationCode });
       // TODO: Send verification code via email or SMS
 
-      res.status(200).json({ message: 'Verification code sent successfully' });
+      res.status(200).json({
+        message: 'Verification code sent successfully',
+        code: verificationCode,
+        status: 200
+      });
     } catch (error) {
       console.log(error);
       mongoDBErrorHandler(res, error);

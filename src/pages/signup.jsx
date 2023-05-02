@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { DatePicker } from '@mantine/dates';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import sendEmail from '../../lib/sendEmail';
 import {
   Stepper,
   Button,
@@ -79,7 +80,8 @@ const Signup = () => {
           username: (value) => (value ? null : 'Please provide this field'),
           avatar: (value) => (value ? null : 'Please provide your avatar'),
           password: (value) => (passwordChecker(value) ? passwordChecker(value) : null),
-          passwordConfirm: (value) => (value ? null : 'Please provide this field')
+          passwordConfirm: (value, values) =>
+            value !== values.password ? 'Password did not match' : null
         };
 
   const form = useForm({
@@ -111,30 +113,55 @@ const Signup = () => {
 
   const handleSubmit = form.onSubmit(async (values) => {
     setIsLoading(true);
-    const res = await fetch('/api/auth/send-verification-code', {
-      method: 'POST',
-      body: JSON.stringify({ email: values.email }),
-      headers: {
-        'Content-Type': 'application/json'
+
+    try {
+      const res = await fetch('/api/auth/send-verification-code', {
+        method: 'POST',
+        body: JSON.stringify({ email: values.email }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        showNotification({
+          title: 'Invalid Credentials',
+          message: errorData.message,
+          color: 'red'
+        });
+        setIsLoading(false);
+        return;
       }
-    });
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      showNotification({ title: 'Invalid Credentials', message: errorData.message, color: 'red' });
+      const { code, message } = await res.json();
+
+      const resEmail = await sendEmail(
+        {
+          email: values.email,
+          name: values.firstName,
+          code
+        },
+        'template_vomw6h3',
+        'hBhkXIIlD02e6C63g'
+      );
+
+      if (resEmail.status !== 200) {
+        throw new Error('Something went wrong in sending the email');
+      }
+
+      NiceModal.show('verification-modal', { values });
+      showNotification({
+        title: 'Success',
+        message: 'Please check your email for verification code.',
+        color: 'green'
+      });
+    } catch (error) {
+      console.error(error);
+      showNotification({ title: 'Error', message: error.message, color: 'red' });
+    } finally {
       setIsLoading(false);
-      return;
     }
-
-    const data = await res.json();
-    // Todo for tomorrow, we should pass the data in through email.
-    NiceModal.show('verification-modal', { values });
-    showNotification({
-      title: 'Success',
-      message: 'Please check your email for verification code.',
-      color: 'green'
-    });
-    setIsLoading(false);
   });
 
   const dateToAge = (birthDate) => {
