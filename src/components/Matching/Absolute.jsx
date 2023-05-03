@@ -32,7 +32,7 @@ export const ChangeDog = () => {
 
         <Popover.Dropdown>
           {currentUser?.dogs?.map((dog) => (
-            <DogButton dog={dog} />
+            <DogButton dog={dog} key={dog._id} />
           ))}
         </Popover.Dropdown>
       </Popover>

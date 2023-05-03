@@ -67,10 +67,10 @@ const Prompt = NiceModal.create(({ dog }) => {
       cancelText="Cancel">
       <div className="flex flex-col items-center justify-center gap-y-5">
         <CustomLottie animationData={cryingDogAnimation} />
-        <p className="font-sans text-md">
-          Deleting <b className="text-orange-500">{dog.name}'s</b> profile means losing all the
+        <p className="text-md font-sans">
+          Deleting <b className="text-orange-500">{dog.name}&apos;s</b> profile means losing all the
           evidence of their presence in your life. Before you hit that delete button, take a moment
-          to cherish the memories you've created together.
+          to cherish the memories you&apos;ve created together.
         </p>
       </div>
     </Modal>

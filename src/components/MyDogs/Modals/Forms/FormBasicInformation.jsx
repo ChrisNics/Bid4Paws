@@ -24,9 +24,9 @@ const FormBasicInformation = ({ form }) => {
   return (
     <div className="container mx-auto mt-10">
       <div className="flex flex-col gap-y-5">
-        <div className="flex justify-center items-center">
-          <div className="max-w-sm flex flex-col gap-y-5">
-            <div className="relative border rounded-full h-60 w-60 overflow-hidden">
+        <div className="flex items-center justify-center">
+          <div className="flex max-w-sm flex-col gap-y-5">
+            <div className="relative h-60 w-60 overflow-hidden rounded-full border">
               <Image
                 priority
                 quality={50}
@@ -85,5 +85,7 @@ const FormBasicInformation = ({ form }) => {
     </div>
   );
 };
+
+FormBasicInformation.displayName = 'FormBasicInformation';
 
 export default FormBasicInformation;

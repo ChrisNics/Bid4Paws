@@ -31,7 +31,7 @@ const MobileUserMenu = ({ items, opened }) => {
     <Transition transition="pop-top-right" duration={200} mounted={opened}>
       {(styles) => (
         <Paper
-          className={`absolute top-28 left-0 right-0 z-0 rounded-t-none border-t-0 overflow-hidden md:hidden`}
+          className={`absolute left-0 right-0 top-28 z-0 overflow-hidden rounded-t-none border-t-0 md:hidden`}
           withBorder
           style={styles}>
           {items}
@@ -53,8 +53,8 @@ const MobileUserMenu = ({ items, opened }) => {
               <Accordion.Control>
                 <Text size="sm">Settings</Text>
               </Accordion.Control>
-              {settings.map((setting) => (
-                <Link href={setting.link} passHref legacyBehavior>
+              {settings.map((setting, i) => (
+                <Link href={setting.link} passHref legacyBehavior key={i}>
                   <Accordion.Panel>
                     <div className="ml-5 flex gap-x-3">
                       {setting.icon}

@@ -158,4 +158,6 @@ const PaymentMethod = NiceModal.create(({ price, plan }) => {
   );
 });
 
+PaymentMethod.displayName = 'PaymentMethod';
+
 export default PaymentMethod;
