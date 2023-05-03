@@ -3,12 +3,12 @@ import CustomLottie from '@/components/CustomLottie';
 import { dogFlirtingAnimation } from '../../../../dev-data/dogsAnimation';
 import React from 'react';
 
-const FlirtingDog = React.memo(() => {
+const FlirtingDog = () => {
   return (
     <Affix position={{ top: rem(5), right: rem(20) }}>
       <CustomLottie animationData={dogFlirtingAnimation} />
     </Affix>
   );
-});
+};
 
-export default FlirtingDog;
+export default React.memo(FlirtingDog);

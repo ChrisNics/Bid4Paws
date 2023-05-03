@@ -32,7 +32,7 @@ const payment = [
   }
 ];
 
-export const PaymentMethod = NiceModal.create(({ price, plan }) => {
+const PaymentMethod = NiceModal.create(({ price, plan }) => {
   const modal = useModal();
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState('Maya');
@@ -159,3 +159,5 @@ export const PaymentMethod = NiceModal.create(({ price, plan }) => {
 });
 
 PaymentMethod.displayName = 'PaymentMethod';
+
+export default PaymentMethod;
