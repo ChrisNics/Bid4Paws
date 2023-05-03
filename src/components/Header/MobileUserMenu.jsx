@@ -1,6 +1,7 @@
 import { Paper, Accordion, useMantineTheme, rem, Transition, Text } from '@mantine/core';
 import { IconLogout, IconHeart, IconStar, IconDog, IconSettings } from '@tabler/icons-react';
 import Link from 'next/link';
+import signOut from '../../../lib/signOut';
 
 const MobileUserMenu = ({ items, opened }) => {
   const theme = useMantineTheme();
