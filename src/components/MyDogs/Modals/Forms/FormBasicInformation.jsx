@@ -5,20 +5,24 @@ import { DatePicker } from '@mantine/dates';
 import breeds from '../../../../../dev-data/breeds';
 import { forwardRef } from 'react';
 
-const SelectItem = forwardRef(({ img, label, origin, ...others }, ref) => (
-  <div ref={ref} {...others}>
-    <Group noWrap>
-      <Avatar src={img} />
+const SelectItem = forwardRef(function SelectItem({ img, label, origin, ...others }, ref) {
+  return (
+    <div ref={ref} {...others}>
+      <Group noWrap>
+        <Avatar src={img} />
 
-      <div>
-        <Text size="sm">{label}</Text>
-        <Text size="xs" opacity={0.65}>
-          {origin}
-        </Text>
-      </div>
-    </Group>
-  </div>
-));
+        <div>
+          <Text size="sm">{label}</Text>
+          <Text size="xs" opacity={0.65}>
+            {origin}
+          </Text>
+        </div>
+      </Group>
+    </div>
+  );
+});
+
+SelectItem.displayName = 'SelectItem';
 
 export default function FormBasicInformation({ form }) {
   return (
