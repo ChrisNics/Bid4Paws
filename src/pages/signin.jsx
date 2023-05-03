@@ -27,7 +27,7 @@ import { useRouter } from 'next/router';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
-    minHeight: rem(900),
+    minHeight: '100vh',
     backgroundSize: 'cover',
     backgroundPosition: 'bottom',
     backgroundImage:
@@ -41,7 +41,7 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]
     }`,
     position: 'relative',
-    minHeight: rem(900),
+    minHeight: '100vh',
     maxWidth: rem(450),
     paddingTop: rem(80),
 
@@ -89,11 +89,11 @@ export default function AuthenticationImage() {
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
-        <div className="inline-block absolute top-5 right-5">
+        <div className="absolute right-5 top-5 inline-block">
           <ThemeToggle />
         </div>
 
-        <div className="flex justify-center items-center my-10 cursor-pointer">
+        <div className="my-10 flex cursor-pointer items-center justify-center">
           <Link href="/" passHref legacyBehavior>
             <Image
               src={theme.colorScheme === 'light' ? '/logo-light-2.svg' : '/logo-dark.svg'}
