@@ -12,7 +12,7 @@ const Redirect = () => {
 
   useEffect(() => {
     (async () => {
-      const response = await fetch(`/api/planToken?id=${id}&planToken=${planToken}&plan=${plan}`, {
+      const response = await fetch(`/api/plan?id=${id}&planToken=${planToken}&plan=${plan}`, {
         redirect: 'manual'
       });
 
@@ -29,7 +29,7 @@ const Redirect = () => {
 
   return (
     <section id="redirect">
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center">
         <Text>Redirecting...</Text>
       </div>
     </section>

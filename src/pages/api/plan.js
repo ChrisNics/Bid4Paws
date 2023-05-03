@@ -16,6 +16,10 @@ export default async function handler(req, res) {
       }
 
       // Update the user's plan object
+      if (plan === 'Premium') user.plan.swipes = 'unlimited';
+      if (plan === 'Pro') user.plan.swipes = 100;
+      if (plan === 'premium') user.plan.swipes = 10;
+
       user.plan.type = plan;
       user.plan.trial = 30;
       await user.save();

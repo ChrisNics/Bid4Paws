@@ -19,7 +19,14 @@ const UserSchema = new Schema(
         enum: ['Free', 'Pro', 'Premium'],
         default: 'Free'
       },
-      trial: Number
+      trial: {
+        type: Number,
+        default: 30
+      },
+      swipes: {
+        type: Schema.Types.Mixed,
+        default: 10
+      }
     },
     planToken: String,
     role: {
