@@ -20,7 +20,7 @@ const SelectItem = forwardRef(({ img, label, origin, ...others }, ref) => (
   </div>
 ));
 
-const FormBasicInformation = ({ form }) => {
+export default function FormBasicInformation({ form }) {
   return (
     <div className="container mx-auto mt-10">
       <div className="flex flex-col gap-y-5">
@@ -84,8 +84,4 @@ const FormBasicInformation = ({ form }) => {
       </div>
     </div>
   );
-};
-
-FormBasicInformation.displayName = 'FormBasicInformation';
-
-export default FormBasicInformation;
+}
