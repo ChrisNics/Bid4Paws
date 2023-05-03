@@ -5,20 +5,20 @@ import { DatePicker } from '@mantine/dates';
 import breeds from '../../../../../dev-data/breeds';
 import { forwardRef } from 'react';
 
-const SelectItem = forwardRef(({ img, label, origin, ...others }, ref) => (
-  <div ref={ref} {...others}>
-    <Group noWrap>
-      <Avatar src={img} />
+// const SelectItem = forwardRef(({ img, label, origin, ...others }, ref) => (
+//   <div ref={ref} {...others}>
+//     <Group noWrap>
+//       <Avatar src={img} />
 
-      <div>
-        <Text size="sm">{label}</Text>
-        <Text size="xs" opacity={0.65}>
-          {origin}
-        </Text>
-      </div>
-    </Group>
-  </div>
-));
+//       <div>
+//         <Text size="sm">{label}</Text>
+//         <Text size="xs" opacity={0.65}>
+//           {origin}
+//         </Text>
+//       </div>
+//     </Group>
+//   </div>
+// ));
 
 export default function FormBasicInformation({ form }) {
   return (
@@ -52,7 +52,7 @@ export default function FormBasicInformation({ form }) {
         </div>
         <TextInput placeholder="Name" label="Name" withAsterisk {...form.getInputProps('name')} />
 
-        <Select
+        {/* <Select
           {...form.getInputProps('breed')}
           itemComponent={SelectItem}
           label="Breed"
@@ -61,7 +61,7 @@ export default function FormBasicInformation({ form }) {
           nothingFound="No options"
           maxDropdownHeight={280}
           data={breeds}
-        />
+        /> */}
         <TextInput
           placeholder="Bloodline"
           label="Bloodline"
