@@ -24,7 +24,7 @@ const UserSchema = new Schema(
         default: 30
       },
       swipes: {
-        type: Schema.Types.Mixed,
+        type: Number,
         default: 10
       }
     },

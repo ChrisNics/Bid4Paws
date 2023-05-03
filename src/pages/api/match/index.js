@@ -1,14 +1,23 @@
 import dbConnect from '../../../../lib/dbConnect';
 import mongoDBErrorHandler from '../../../../lib/mongoDBErrorHandler';
 import APIQueryBuilder from '../../../../lib/APIQueryBuilder';
+import User from '@/models/userModel';
 import Match from '@/models/matchModel';
 
 export default async function handler(req, res) {
   await dbConnect();
   if (req.method === 'POST') {
     try {
+      const { from } = req.body;
+
+      const updatedUser = await User.findByIdAndUpdate(
+        from.owner,
+        { $inc: { 'plan.swipes': -1 } },
+        { new: true }
+      );
+
       const match = await Match.create(req.body);
-      if (!match) {
+      if (!match || updatedUser) {
         return res.status(404).json({
           message: 'Failed to create match.',
           status: 404
@@ -20,6 +29,7 @@ export default async function handler(req, res) {
         data: match
       });
     } catch (error) {
+      console.log(error);
       mongoDBErrorHandler(res, error);
     }
   }

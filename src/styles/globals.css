@@ -133,7 +133,7 @@ a {
 }
 
 .background {
-  @apply fixed w-screen h-screen top-0 left-0 m-0 p-0 bg-[#ffbe6f] dark:bg-black overflow-hidden;
+  @apply fixed left-0 top-0 m-0 min-h-screen w-screen overflow-hidden bg-[#ffbe6f] p-0 dark:bg-black;
 }
 .background li {
   position: absolute;
