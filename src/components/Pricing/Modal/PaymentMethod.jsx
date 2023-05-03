@@ -7,18 +7,6 @@ import useCurrentUser from '@/store/useCurrentUser';
 import showNotification from '../../../../lib/showNotification';
 import generateRandomString from '../../../../lib/generateRandomString';
 
-const SelectItem = forwardRef(({ img, label, ...others }, ref) => (
-  <div ref={ref} {...others}>
-    <Group noWrap>
-      <Avatar src={img} />
-
-      <div>
-        <Text size="sm">{label}</Text>
-      </div>
-    </Group>
-  </div>
-));
-
 const payment = [
   {
     value: 'gcash',
@@ -38,6 +26,18 @@ const PaymentMethod = NiceModal.create(({ price, plan }) => {
   const [paymentMethod, setPaymentMethod] = useState('Maya');
   const currentUser = useCurrentUser((state) => state.currentUser);
   const mapValue = (oldValue) => (oldValue / 100) * 10000;
+
+  const SelectItem = forwardRef(({ img, label, ...others }, ref) => (
+    <div ref={ref} {...others}>
+      <Group noWrap>
+        <Avatar src={img} />
+
+        <div>
+          <Text size="sm">{label}</Text>
+        </div>
+      </Group>
+    </div>
+  ));
 
   const handleProceed = async () => {
     try {
