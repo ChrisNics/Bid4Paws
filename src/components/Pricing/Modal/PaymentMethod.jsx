@@ -41,6 +41,9 @@ const PaymentMethod = NiceModal.create(({ price, plan }) => {
   const currentUser = useCurrentUser((state) => state.currentUser);
   const mapValue = (oldValue) => (oldValue / 100) * 10000;
 
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const domain = isDevelopment ? 'http://localhost:3000' : 'https://bid4-paws.vercel.app';
+
   const handleProceed = async () => {
     try {
       const planToken = generateRandomString();
@@ -93,9 +96,9 @@ const PaymentMethod = NiceModal.create(({ price, plan }) => {
                 send_email_receipt: false,
                 show_description: true,
                 show_line_items: true,
-                cancel_url: 'http://localhost:3000/pricing',
+                cancel_url: `${domain}/pricing`,
                 description: plan,
-                success_url: `http://localhost:3000/redirect?id=${currentUser._id}&planToken=${planToken}&plan=${plan}`,
+                success_url: `${domain}/redirect?id=${currentUser._id}&planToken=${planToken}&plan=${plan}`,
                 statement_descriptor: 'http://localhost:3000/pricing',
                 reference_number: 'test'
               }
