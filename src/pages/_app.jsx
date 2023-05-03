@@ -27,9 +27,13 @@ const Prompt = dynamic(() => import('@/components/MyDogs/Modals/Prompt'), {
   loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
 });
 
-const PaymentMethod = dynamic(() => import('@/components/Pricing/Modal/PaymentMethod'), {
-  loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
-});
+const PaymentMethod = dynamic(
+  () =>
+    import('@/components/Pricing/Modal/PaymentMethod').then(({ PaymentMethod }) => PaymentMethod),
+  {
+    loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
+  }
+);
 
 const UpdateDogAdmin = dynamic(() => import('@/components/Admin/Table/Modals/UpdateDog'), {
   loading: () => <LoadingOverlay visible={true} loader={<LoadingScreen />} />
