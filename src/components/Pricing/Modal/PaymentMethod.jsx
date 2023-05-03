@@ -69,16 +69,15 @@ const PaymentMethod = NiceModal.create(({ price, plan }) => {
               attributes: {
                 billing: {
                   address: {
-                    line1: 'Blk 3 Lot 17',
-                    line2: 'Cristina Homes',
-                    city: 'Caloocan ',
-                    state: 'NCR',
-                    postal_code: '1400',
+                    line1: currentUser?.address?.geocoding?.landmark,
+                    city: currentUser?.address.city,
+                    state: currentUser?.address.province,
+                    postal_code: currentUser?.address.postalCode,
                     country: 'PH'
                   },
-                  name: 'Christian',
-                  email: 'rocksmeb@gmail.com',
-                  phone: '0928495832'
+                  name: currentUser?.fullName,
+                  email: currentUser?.email,
+                  phone: currentUser?.phoneNumber
                 },
                 line_items: [
                   {
@@ -99,7 +98,7 @@ const PaymentMethod = NiceModal.create(({ price, plan }) => {
                 cancel_url: `${domain}/pricing`,
                 description: plan,
                 success_url: `${domain}/redirect?id=${currentUser._id}&planToken=${planToken}&plan=${plan}`,
-                statement_descriptor: 'http://localhost:3000/pricing',
+                statement_descriptor: `${domain}/`,
                 reference_number: 'test'
               }
             }
