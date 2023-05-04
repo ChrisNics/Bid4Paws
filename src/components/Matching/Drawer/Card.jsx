@@ -8,7 +8,7 @@ import useCurrentUser from '@/store/useCurrentUser';
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 
-const Card = ({ dog, matchID, showButton = false }) => {
+const Card = ({ dog, matchID, showButton = false, swipeYou = false }) => {
   const queryClient = useQueryClient();
   const currentUser = useCurrentUser((state) => state.currentUser);
   const router = useRouter();
@@ -77,10 +77,10 @@ const Card = ({ dog, matchID, showButton = false }) => {
     return <Skeleton height={150} />;
 
   const data = {
-    name: `${currentDog?.name} && ${dog?.name}`,
+    name: `${currentDog?.name} & ${dog?.name}`,
     channel_url: `${currentDog?._id}_${dog?._id}_private_room`,
     is_distinct: true,
-    cover_url: 'https://sendbird.com/main/img/cover/cover_08.jpg',
+    cover_url: dog?.avatar,
     custom_type: 'breeding',
     invited_id: dog?.id,
     user_ids: [currentDog._id, dog?._id],
@@ -96,8 +96,8 @@ const Card = ({ dog, matchID, showButton = false }) => {
   console.log(currentUser._id, dog.owner);
 
   return (
-    <div className="flex flex-col gap-y-5 group">
-      <div className="h-36 w-30 flex items-end relative hover:outline-orange-500 hover:outline-double hover:outline-3 hover:outline-offset-2 cursor-pointer">
+    <div className="group flex flex-col gap-y-5">
+      <div className="w-30 hover:outline-3 relative flex h-36 cursor-pointer items-end hover:outline-double hover:outline-offset-2 hover:outline-orange-500">
         <Overlay color="#000" opacity={0.2} />
         <Image
           priority
@@ -114,10 +114,10 @@ const Card = ({ dog, matchID, showButton = false }) => {
         </Text>
       </div>
 
-      {currentDog && (
-        <div className="invisible group-hover:visible text-center text-white  bg-orange-500 rounded-md cursor-pointer hover:bg-white hover:text-orange-500 hover:border-solid  hover:border-orange-500 transition duration-75">
+      {showButton && (
+        <div className="invisible cursor-pointer rounded-md bg-orange-500  text-center text-white transition duration-75 hover:border-solid hover:border-orange-500  hover:bg-white hover:text-orange-500 group-hover:visible">
           <h6
-            className="font-sans uppercase p-2"
+            className="p-2 font-sans uppercase"
             onClick={async () => {
               await sendMessage({ channelBody: data, messageBody: data1 });
               window.open('/chat', '_blank');
@@ -127,8 +127,8 @@ const Card = ({ dog, matchID, showButton = false }) => {
         </div>
       )}
 
-      {showButton && (
-        <div className="flex gap-x-5 items-center justify-center">
+      {swipeYou && (
+        <div className="flex items-center justify-center gap-x-5">
           <Tooltip label="Accept" color="green">
             <ThemeIcon
               variant="light"

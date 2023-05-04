@@ -102,7 +102,7 @@ const CreateDogs = NiceModal.create(() => {
           nickname: data.name,
           profile_url: data.avatar,
           profile_file: 'png',
-          issue_access_token: true
+          issue_access_token: false
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ const CreateDogs = NiceModal.create(() => {
     <Modal {...antdModal(modal)} footer={null} width={1000}>
       <div className="container mx-auto p-5">
         <div className="mb-10">
-          <h3 className="font-mono text-md">Create New Dog</h3>
+          <h3 className="text-md font-mono">Create New Dog</h3>
         </div>
         <Stepper
           color="orange"

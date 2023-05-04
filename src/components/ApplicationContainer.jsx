@@ -29,7 +29,7 @@ export default function ApplicationContainer({ children }) {
         },
         main: {
           paddingLeft: 0,
-          paddingRight: 0,
+          paddingRight: '0 !important',
           paddingTop: 0,
           minHeight: 'max-content'
         }

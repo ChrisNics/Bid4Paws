@@ -14,12 +14,12 @@ const MyDogs = () => {
   const showModal = () => NiceModal.show('create-dog');
 
   return (
-    <section>
+    <section className="min-h-screen">
       <div className="container mx-auto p-5">
-        <div className="flex flex-col gap-y-5 items-center sm:flex-row sm:justify-between mb-10 text-center lg:text-left">
-          <div className="flex gap-x-5 max-w-max items-center">
-            <h3 className="font-mono text-md">Your Dogs</h3>
-            <div className="w-20 h-20 relative rounded-full overflow-hidden ">
+        <div className="mb-10 flex flex-col items-center gap-y-5 text-center sm:flex-row sm:justify-between lg:text-left">
+          <div className="flex max-w-max items-center gap-x-5">
+            <h3 className="text-md font-mono">Your Dogs</h3>
+            <div className="relative h-20 w-20 overflow-hidden rounded-full ">
               <Image priority fill alt="Dog Image" src="/dogAvatar.png" quality={50} sizes="33vw" />
             </div>
           </div>

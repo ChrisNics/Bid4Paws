@@ -44,7 +44,7 @@ const Content = ({ currentDog }) => {
       <Tabs.Panel value="swipe-you" pt="xs">
         <div className="grid grid-cols-3 gap-2 sm:gap-5">
           {swipeYou?.map((swipe) => (
-            <Card dog={swipe.from.dog} matchID={swipe._id} showButton key={swipe._id} />
+            <Card dog={swipe.from.dog} matchID={swipe._id} swipeYou key={swipe._id} />
           ))}
         </div>
       </Tabs.Panel>
@@ -63,6 +63,7 @@ const Content = ({ currentDog }) => {
               }
               matchID={swipe._id}
               key={swipe._id}
+              showButton
             />
           ))}
         </div>
