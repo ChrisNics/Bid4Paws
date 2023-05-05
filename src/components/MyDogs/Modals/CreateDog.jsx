@@ -153,6 +153,7 @@ const CreateDogs = NiceModal.create(() => {
           <h3 className="text-md font-mono">Create New Dog</h3>
         </div>
         <Stepper
+          allowNextStepsSelect={false}
           color="orange"
           active={active}
           onStepClick={setActive}

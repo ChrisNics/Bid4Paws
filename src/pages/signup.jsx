@@ -187,6 +187,7 @@ const Signup = () => {
           </p>
         </div>
         <Stepper
+          allowNextStepsSelect={false}
           color="orange"
           active={active}
           onStepClick={setActive}
