@@ -20,7 +20,7 @@ const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
           className="swipe"
           key={count}
           onCardLeftScreen={handleCardLeftScreen}>
-          <div className="relative h-card lg:w-cardSmall lg:h-cardSmall ">
+          <div className="h-card lg:w-cardSmall lg:h-cardSmall relative ">
             <Image
               priority
               fill
@@ -31,7 +31,7 @@ const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
               src={randomDog?.avatar}
             />
 
-            <div className="font-mono absolute bottom-0 left-0 text-white pl-2 pb-2 flex items-center gap-x-5">
+            <div className="absolute bottom-0 left-0 flex items-center gap-x-5 pb-2 pl-2 font-mono text-white">
               <div>
                 <h3>{randomDog?.name}</h3>
                 <h5>{randomDog?.age} years old</h5>
@@ -43,10 +43,11 @@ const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
                   </HoverCard.Target>
                   <HoverCard.Dropdown>
                     <div>
-                      <p className="font-sans text-black">
-                        Hover card is revealed when user hovers over target element, it will be
-                        hidden once mouse is not over both target and dropdown elements
-                      </p>
+                      <Text>Height: {randomDog?.height}</Text>
+                      <Text>Weight: {randomDog?.weight}</Text>
+                      <Text>Color: {randomDog?.color}</Text>
+                      <Text>BloodLine: {randomDog?.bloodLine}</Text>
+                      <Text>Caption: {randomDog?.caption}</Text>
                     </div>
                   </HoverCard.Dropdown>
                 </HoverCard>
@@ -55,10 +56,10 @@ const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
           </div>
         </TinderCard>
       ) : (
-        <div className="relative h-card lg:w-cardSmall lg:h-cardSmall">
+        <div className="h-card lg:w-cardSmall lg:h-cardSmall relative">
           <p className="font-sans">
             No match found at the moment.{' '}
-            <span className="font-mono text-purple-700 cursor-pointer" onClick={handleRefresh}>
+            <span className="cursor-pointer font-mono text-purple-700" onClick={handleRefresh}>
               Refresh
             </span>
           </p>
