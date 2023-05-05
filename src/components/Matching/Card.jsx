@@ -6,11 +6,20 @@ import { IconHelpSquare } from '@tabler/icons-react';
 import TinderCard from 'react-tinder-card';
 import { useQueryClient } from '@tanstack/react-query';
 
+const dogProperties = [
+  { label: 'Height', value: 'height' },
+  { label: 'Weight', value: 'weight' },
+  { label: 'Color', value: 'color' },
+  { label: 'BloodLine', value: 'bloodLine' },
+  { label: 'Caption', value: 'caption' }
+];
+
 const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
   const queryClient = useQueryClient();
   const handleRefresh = () => {
     queryClient.invalidateQueries(['random-dogs']);
   };
+  const currentYear = new Date().getFullYear();
   return (
     <div>
       {randomDog ? (
@@ -42,13 +51,16 @@ const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
                     <IconHelpSquare />
                   </HoverCard.Target>
                   <HoverCard.Dropdown>
-                    <div>
-                      <Text>Height: {randomDog?.height}</Text>
-                      <Text>Weight: {randomDog?.weight}</Text>
-                      <Text>Color: {randomDog?.color}</Text>
-                      <Text>BloodLine: {randomDog?.bloodLine}</Text>
-                      <Text>Caption: {randomDog?.caption}</Text>
-                    </div>
+                    {dogProperties.map(({ label, value }) => (
+                      <Text
+                        key={value}
+                        sx={(theme) => ({
+                          // subscribe to color scheme changes
+                          color: theme.colorScheme === 'light' ? theme.black : '#C1C2C5'
+                        })}>
+                        {label}: {randomDog?.[value]}
+                      </Text>
+                    ))}
                   </HoverCard.Dropdown>
                 </HoverCard>
               </div>
