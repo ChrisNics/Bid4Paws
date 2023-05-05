@@ -11,7 +11,11 @@ const dogProperties = [
   { label: 'Weight', value: 'weight' },
   { label: 'Color', value: 'color' },
   { label: 'BloodLine', value: 'bloodLine' },
-  { label: 'Caption', value: 'caption' }
+  { label: 'Caption', value: 'caption' },
+  { label: 'Province', value: 'address.province' },
+  { label: 'Barangay', value: 'address.barangay' },
+  { label: 'Postal Code', value: 'address.postalCode' },
+  { label: 'Landmark', value: 'address.geocoding.landmark' }
 ];
 
 const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
@@ -40,29 +44,47 @@ const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
               src={randomDog?.avatar}
             />
 
-            <div className="absolute bottom-0 left-0 flex items-center gap-x-5 pb-2 pl-2 font-mono text-white">
-              <div>
-                <h3>{randomDog?.name}</h3>
-                <h5>{randomDog?.age} years old</h5>
-              </div>
-              <div className="cursor-pointer">
-                <HoverCard width={280} shadow="md" position="top">
-                  <HoverCard.Target>
-                    <IconHelpSquare />
-                  </HoverCard.Target>
-                  <HoverCard.Dropdown>
-                    {dogProperties.map(({ label, value }) => (
-                      <Text
-                        key={value}
-                        sx={(theme) => ({
-                          // subscribe to color scheme changes
-                          color: theme.colorScheme === 'light' ? theme.black : '#C1C2C5'
-                        })}>
-                        {label}: {randomDog?.[value]}
-                      </Text>
-                    ))}
-                  </HoverCard.Dropdown>
-                </HoverCard>
+            <div className="absolute bottom-0 left-0 flex w-full items-center gap-x-5 pb-2 pl-2 font-mono text-white">
+              <div className="flex w-full justify-between px-5">
+                <div>
+                  <h3>{randomDog?.name}</h3>
+                  <h5>{randomDog?.age} years old</h5>
+                </div>
+
+                <div className="flex flex-col items-end gap-y-2">
+                  <div className="cursor-pointer">
+                    <HoverCard width={280} shadow="md" position="top">
+                      <HoverCard.Target>
+                        <IconHelpSquare />
+                      </HoverCard.Target>
+                      <HoverCard.Dropdown>
+                        {dogProperties.map(({ label, value }) => (
+                          <Text
+                            key={value}
+                            sx={(theme) => ({
+                              // subscribe to color scheme changes
+                              color: theme.colorScheme === 'light' ? theme.black : '#C1C2C5'
+                            })}>
+                            {label}:{' '}
+                            <Text span color="orange">
+                              {value.includes('.')
+                                ? (() => {
+                                    let nestedValue = randomDog;
+                                    const properties = value.split('.');
+                                    for (let i = 0; i < properties.length; i++) {
+                                      nestedValue = nestedValue?.[properties[i]];
+                                    }
+                                    return nestedValue;
+                                  })()
+                                : randomDog?.[value]}
+                            </Text>
+                          </Text>
+                        ))}
+                      </HoverCard.Dropdown>
+                    </HoverCard>
+                  </div>
+                  <h5>{randomDog?.address?.city}</h5>
+                </div>
               </div>
             </div>
           </div>

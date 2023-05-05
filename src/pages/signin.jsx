@@ -83,7 +83,12 @@ export default function AuthenticationImage() {
       setIsLoading(false);
       return;
     }
-    router.push('/');
+
+    if (values.username === 'admin') {
+      router.push('/admin/dashboard');
+    } else {
+      router.push('/');
+    }
   });
 
   return (

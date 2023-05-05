@@ -17,10 +17,7 @@ export default withAuth(
       return NextResponse.redirect(new URL('/signin', request.url));
     }
 
-    if (
-      request.nextUrl.pathname === '/admin' ||
-      (request.nextUrl.pathname === '/' && request.nextauth.token?.role === 'admin')
-    ) {
+    if (request.nextUrl.pathname === '/admin' && request.nextauth.token?.role === 'admin') {
       return NextResponse.redirect(new URL('/admin/dashboard', request.url));
     }
 
