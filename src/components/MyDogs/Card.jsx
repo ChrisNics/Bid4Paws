@@ -54,60 +54,84 @@ const Card = ({ dog }) => {
     NiceModal.show('update-dog');
   };
 
-  return (
-    <MantineCard
-      maw={400}
-      p="lg"
-      shadow="lg"
-      className={classes.card}
-      radius="md"
-      component="a"
-      target="_blank">
-      <div
-        className={classes.image}
-        style={{ backgroundImage: `url(${dog.avatar})`, backgroundPosition: 'center' }}
-      />
-      <div className="absolute top-0 left-0 right-0 bottom-0 bg-gradient-to-b from-transparent to-black/90"></div>
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Approved':
+        return 'bg-green-500';
+      case 'Pending':
+        return 'bg-orange-400';
+      case 'Declined':
+        return 'bg-red-600';
+      default:
+        return '';
+    }
+  };
 
-      <div className="h-full relative flex flex-col justify-end z-1 group">
-        <div className="flex justify-center items-center h-full w-full">
-          <div className="opacity-0 group-hover:opacity-100 flex flex-col  gap-y-5 transition-opacity duration-300 w-full">
-            <Button
-              leftIcon={<IconEdit size="1rem" />}
-              variant="white"
-              fullWidth
-              h={50}
-              onClick={handleEdit}>
-              Edit
-            </Button>
-            <Button
-              h={50}
-              fullWidth
-              leftIcon={<IconTrash size="1rem" />}
-              color="red"
-              // loading={deleteDogMutation.isLoading}
-              onClick={handleDelete}>
-              Delete
-            </Button>
+  const statusColor = getStatusColor(dog?.isApproved?.status);
+
+  return (
+    <div className="flex flex-col gap-y-3">
+      <MantineCard
+        maw={400}
+        p="lg"
+        shadow="lg"
+        className={classes.card}
+        radius="md"
+        component="a"
+        target="_blank">
+        <div
+          className={classes.image}
+          style={{ backgroundImage: `url(${dog.avatar})`, backgroundPosition: 'center' }}
+        />
+        <div className="absolute bottom-0 left-0 right-0 top-0 bg-gradient-to-b from-transparent to-black/90"></div>
+
+        <div className={`absolute -right-5 -top-10 h-24 w-24 rounded-full ${statusColor}`}></div>
+
+        <div className="z-1 group relative flex h-full flex-col justify-end">
+          <div className="flex h-full w-full items-center justify-center">
+            <div className="flex w-full flex-col gap-y-5  opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <Button
+                leftIcon={<IconEdit size="1rem" />}
+                variant="white"
+                fullWidth
+                h={50}
+                onClick={handleEdit}>
+                Edit
+              </Button>
+              <Button
+                h={50}
+                fullWidth
+                leftIcon={<IconTrash size="1rem" />}
+                color="red"
+                // loading={deleteDogMutation.isLoading}
+                onClick={handleDelete}>
+                Delete
+              </Button>
+            </div>
+          </div>
+          <div>
+            <Text size="lg" className={classes.title} weight={500}>
+              {dog.name}
+            </Text>
+
+            <Group position="apart" spacing="xs">
+              <Text size="sm" className={classes.author}>
+                {dog.breed}
+              </Text>
+
+              <Text size="sm" className={classes.author}>
+                {dog.age} years old
+              </Text>
+            </Group>
           </div>
         </div>
+      </MantineCard>
+      {dog?.isApproved?.status === 'Declined' && (
         <div>
-          <Text size="lg" className={classes.title} weight={500}>
-            {dog.name}
-          </Text>
-
-          <Group position="apart" spacing="xs">
-            <Text size="sm" className={classes.author}>
-              {dog.breed}
-            </Text>
-
-            <Text size="sm" className={classes.author}>
-              {dog.age} years old
-            </Text>
-          </Group>
+          <Text color="red">{dog?.isApproved?.comment}</Text>
         </div>
-      </div>
-    </MantineCard>
+      )}
+    </div>
   );
 };
 

@@ -11,6 +11,15 @@ export default async function handler(req, res) {
       const { userID, dogID } = req.query;
 
       const updateQuery = req.body;
+
+      // Check if the update query includes the 'certificate' property
+      const includesCertificateProp = 'certificate' in updateQuery;
+
+      if (includesCertificateProp) {
+        // If the update query includes the 'certificate' property, set isApproved.status to 'Pending' and isApproved.comment to null
+        updateQuery.isApproved = { status: 'Pending', comment: null };
+      }
+
       if ('isCurrent' in updateQuery) {
         // If 'isCurrent' is present in the update query, set it to true and set all other dogs to false
         updateQuery.isCurrent = true;

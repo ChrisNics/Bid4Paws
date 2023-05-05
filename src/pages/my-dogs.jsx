@@ -1,11 +1,12 @@
 import Card from '@/components/MyDogs/Card';
-import { Button } from '@mantine/core';
+import { Button, Text } from '@mantine/core';
 import Image from 'next/image';
 import NiceModal from '@ebay/nice-modal-react';
 import Empty from '@/components/MyDogs/Empty';
 import { useSession } from 'next-auth/react';
 import { IconPlus } from '@tabler/icons-react';
 import useCurrentUser from '@/store/useCurrentUser';
+import Legend from '@/components/MyDogs/Legend';
 
 const MyDogs = () => {
   const { data: session } = useSession();
@@ -29,6 +30,8 @@ const MyDogs = () => {
             </Button>
           )}
         </div>
+
+        <Legend />
 
         {currentUser?.dogs?.length > 0 ? (
           <div className="grid grid-cols-1 gap-y-5 sm:grid-cols-2 sm:gap-x-5 xl:grid-cols-3">

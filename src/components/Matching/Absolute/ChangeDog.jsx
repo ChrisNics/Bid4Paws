@@ -1,10 +1,10 @@
 import dynamic from 'next/dynamic';
-import { Tooltip, Affix, ActionIcon, rem, Popover } from '@mantine/core';
+import { Tooltip, Affix, ActionIcon, rem, Popover, Skeleton } from '@mantine/core';
 import { IconArrowsExchange2 } from '@tabler/icons-react';
 import useCurrentUser from '@/store/useCurrentUser';
 
 const DogButton = dynamic(() => import('../DogButton'), {
-  loading: () => <p>Loading...</p>
+  loading: () => <Skeleton height={60} animate={true} />
 });
 
 const ChangeDog = () => {
@@ -27,7 +27,9 @@ const ChangeDog = () => {
 
         <Popover.Dropdown>
           {currentUser?.dogs?.map((dog) => (
-            <DogButton dog={dog} key={dog._id} />
+            <div className="mt-2">
+              <DogButton dog={dog} key={dog._id} />
+            </div>
           ))}
         </Popover.Dropdown>
       </Popover>
