@@ -347,8 +347,8 @@ const Signup = () => {
               <NumberInput
                 maxLength={4}
                 {...form.getInputProps('address.geocoding.radius')}
-                placeholder="Radius"
-                label="Radius"
+                placeholder="Matchmaking Radius"
+                label="Matchmaking Radius (maximum distance for potential matches)"
                 withAsterisk
                 className="grow"
                 hideControls

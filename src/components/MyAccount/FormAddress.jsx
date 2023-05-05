@@ -13,7 +13,7 @@ const FormAddress = ({ form, tab }) => {
 
   return (
     <div className="flex flex-col gap-y-5">
-      <div className="flex flex-col gap-y-5 md:flex md:flex-row md:gap-y-0 md:gap-x-5">
+      <div className="flex flex-col gap-y-5 md:flex md:flex-row md:gap-x-5 md:gap-y-0">
         <TextInput
           {...form.getInputProps('address.city')}
           placeholder="City"
@@ -30,7 +30,7 @@ const FormAddress = ({ form, tab }) => {
         />
       </div>
 
-      <div className="flex flex-col gap-y-5 md:flex md:flex-row md:gap-y-0 md:gap-x-5">
+      <div className="flex flex-col gap-y-5 md:flex md:flex-row md:gap-x-5 md:gap-y-0">
         <TextInput
           {...form.getInputProps('address.street')}
           placeholder="Street Address"
@@ -79,7 +79,7 @@ const FormAddress = ({ form, tab }) => {
         width="auto"
         label="Location information is necessary for our app's matchmaking feature to work properly."
         position="top-start">
-        <p className="text-xs w-max text-orange-500 cursor-pointer">Why we need this?</p>
+        <p className="w-max cursor-pointer text-xs text-orange-500">Why we need this?</p>
       </Tooltip>
 
       <div className="flex flex-col  gap-y-5">
@@ -95,8 +95,8 @@ const FormAddress = ({ form, tab }) => {
         <NumberInput
           maxLength={4}
           {...form.getInputProps('address.geocoding.radius')}
-          placeholder="Radius"
-          label="Radius"
+          placeholder="Matchmaking Radius"
+          label="Matchmaking Radius (maximum distance for potential matches)"
           withAsterisk
           className="grow"
           hideControls

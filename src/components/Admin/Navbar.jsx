@@ -1,12 +1,6 @@
 import Link from 'next/link';
 import { Navbar, Center, Tooltip, UnstyledButton, createStyles, Stack, rem } from '@mantine/core';
-import {
-  IconHome2,
-  IconDog,
-  IconUser,
-  IconSwitchHorizontal,
-  IconLogout
-} from '@tabler/icons-react';
+import { IconHome2, IconDog, IconUser, IconLogout } from '@tabler/icons-react';
 import { MantineLogo } from '@mantine/ds';
 import { useRouter } from 'next/router';
 import signOut from '../../../lib/signOut';
@@ -101,7 +95,6 @@ export default function AdminNavbar() {
       </Navbar.Section>
       <Navbar.Section>
         <Stack justify="center" spacing={0}>
-          <NavbarLink icon={IconSwitchHorizontal} label="Change account" />
           <NavbarLink icon={IconLogout} label="Logout" onClick={signOut} />
         </Stack>
       </Navbar.Section>
