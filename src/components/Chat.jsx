@@ -11,8 +11,6 @@ const Chat = () => {
     [currentUser]
   );
 
-  console.log(currentDog);
-
   return (
     <div style={{ height: 'calc(100vh - 40px)', width: '100vw' }}>
       <SendbirdApp

@@ -1,6 +1,9 @@
 import { createStyles, Text, Container, ActionIcon, Group, rem } from '@mantine/core';
 import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons-react';
-import { MantineLogo } from '@mantine/ds';
+import { useMantineTheme } from '@mantine/core';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const useStyles = createStyles((theme) => ({
   footer: {
@@ -45,8 +48,10 @@ const useStyles = createStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
 
-    [theme.fn.smallerThan('sm')]: {
-      display: 'none'
+    [theme.fn.smallerThan('md')]: {
+      flexDirection: 'column',
+      rowGap: '15px',
+      marginBlock: '25px'
     }
   },
 
@@ -60,6 +65,7 @@ const useStyles = createStyles((theme) => ({
     fontSize: theme.fontSizes.sm,
     paddingTop: rem(3),
     paddingBottom: rem(3),
+    cursor: 'pointer',
 
     '&:hover': {
       textDecoration: 'underline'
@@ -102,40 +108,27 @@ const data = [
     title: 'About',
     links: [
       {
-        label: 'Features',
-        link: '#'
+        label: 'Home',
+        link: '/'
       },
       {
         label: 'Pricing',
-        link: '#'
+        link: '/pricing'
       },
       {
-        label: 'Support',
-        link: '#'
-      },
-      {
-        label: 'Forums',
-        link: '#'
+        label: 'Learn',
+        link: 'learn'
       }
     ]
   },
   {
-    title: 'Project',
     links: [
       {
-        label: 'Contribute',
+        label: 'Terms and Conditions',
         link: '#'
       },
       {
-        label: 'Media assets',
-        link: '#'
-      },
-      {
-        label: 'Changelog',
-        link: '#'
-      },
-      {
-        label: 'Releases',
+        label: 'FAQ',
         link: '#'
       }
     ]
@@ -152,11 +145,7 @@ const data = [
         link: '#'
       },
       {
-        label: 'Email newsletter',
-        link: '#'
-      },
-      {
-        label: 'GitHub discussions',
+        label: 'Follow on Facebook',
         link: '#'
       }
     ]
@@ -165,16 +154,13 @@ const data = [
 
 export default function Footer() {
   const { classes } = useStyles();
+  const theme = useMantineTheme();
+  const router = useRouter();
   const groups = data.map((group) => {
     const links = group.links.map((link, index) => (
-      <Text
-        key={index}
-        className={classes.link}
-        component="a"
-        href={link.link}
-        onClick={(event) => event.preventDefault()}>
-        {link.label}
-      </Text>
+      <Link passHref legacyBehavior href={link.link} key={index}>
+        <Text className={classes.link}>{link.label}</Text>
+      </Link>
     ));
 
     return (
@@ -189,16 +175,26 @@ export default function Footer() {
     <footer className={classes.footer}>
       <Container className={classes.inner}>
         <div className={classes.logo}>
-          <MantineLogo size={30} />
+          <div className="flex cursor-pointer items-center justify-center">
+            <Link href="/" passHref legacyBehavior>
+              <Image
+                src={theme.colorScheme === 'light' ? '/logo-light-2.svg' : '/logo-light.svg'}
+                alt="Logo"
+                width={150}
+                height={150}
+                priority
+              />
+            </Link>
+          </div>
           <Text size="xs" color="dimmed" className={classes.description}>
-            Build fully functional accessible web applications faster than ever
+            Connect Your Canine Companion with the Perfect Match - The Ultimate Dog Breeding App!
           </Text>
         </div>
         <div className={classes.groups}>{groups}</div>
       </Container>
       <Container className={classes.afterFooter}>
         <Text color="dimmed" size="sm">
-          © 2020 mantine.dev. All rights reserved.
+          © {new Date().getFullYear()} bid4paws. All rights reserved.
         </Text>
 
         <Group spacing={0} className={classes.social} position="right" noWrap>
