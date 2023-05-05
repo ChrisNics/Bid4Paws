@@ -56,8 +56,7 @@ const findNearbyDogs = async (req, matchedDogIds, gender) => {
   const matchQuery = {
     $and: [
       {
-        gender: { $ne: gender }, // Opposite gender
-        'isApproved.status': 'Approved'
+        gender: { $ne: gender } // Opposite gender
       },
       {
         'address.geocoding.coordinates': {
@@ -67,7 +66,8 @@ const findNearbyDogs = async (req, matchedDogIds, gender) => {
         }
       },
       { _id: { $nin: matchedDogIds } },
-      { owner: { $ne: userID } }
+      { owner: { $ne: userID } },
+      { 'isApproved.status': 'Approved' } // Approved status check
     ]
   };
 
