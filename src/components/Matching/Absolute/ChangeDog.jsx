@@ -26,9 +26,9 @@ const ChangeDog = () => {
         </Popover.Target>
 
         <Popover.Dropdown>
-          {currentUser?.dogs?.map((dog) => (
-            <div className="mt-2">
-              <DogButton dog={dog} key={dog._id} />
+          {currentUser?.dogs?.map((dog, i) => (
+            <div className="mt-2" key={dog._id}>
+              <DogButton dog={dog} />
             </div>
           ))}
         </Popover.Dropdown>
