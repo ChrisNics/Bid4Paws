@@ -100,11 +100,13 @@ const handler = async (req, res) => {
       const { randomDog, nearbyDogs } = await findNearbyDogs(req, matchedDogIds, gender);
       pusher.trigger('match', `dog-nearby-${_id}`, { nearbyDogs: nearbyDogs.length });
 
-      // Watch for changes in the Match collection and trigger a Pusher event if new nearby dogs are found
-      const matchStream = Match.watch();
-      matchStream.on('change', async () => {
-        const matchedDogIds = await getMatchedDogIds(_id);
-        await triggerPusherEvent(req, matchedDogIds);
+      // Watch for changes in the 'isApproved.status' field of any dog in the collection
+      const dogStream = Dog.watch();
+      dogStream.on('change', async (change) => {
+        if (change.updateDescription.updatedFields.isApproved) {
+          const matchedDogIds = await getMatchedDogIds(_id);
+          await triggerPusherEvent(req, matchedDogIds);
+        }
       });
 
       res.status(200).json({ success: true, data: { randomDog } });

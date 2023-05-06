@@ -1,7 +1,7 @@
 import { Title } from '@mantine/core';
 import dynamic from 'next/dynamic';
 
-const CountUp = dynamic(() => import('react-countup'), { ssr: false });
+// const CountUp = dynamic(() => import('react-countup'), { ssr: false });
 
 const Box = ({ title, count }) => {
   return (
@@ -11,7 +11,8 @@ const Box = ({ title, count }) => {
         Count
       </Title>
       <Title order={3}>
-        <CountUp end={count} duration={5} />
+        {/* <CountUp end={count} /> */}
+        {count}
       </Title>
     </div>
   );
