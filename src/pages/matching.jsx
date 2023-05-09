@@ -10,9 +10,10 @@ import ChangeDog from '@/components/Matching/Absolute/ChangeDog';
 import FlirtingDog from '@/components/Matching/Absolute/FlirtingDog';
 import Radius from '@/components/Matching/Absolute/Radius';
 import CustomLottie from '@/components/CustomLottie';
-import { Drawer, LoadingOverlay, Loader } from '@mantine/core';
+import { Drawer, LoadingOverlay, Loader, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useRandomDogs, getRandomDogs } from '@/hooks/useRandomDogs';
+import Link from 'next/link';
 import Pusher from 'pusher-js';
 
 const Card = dynamic(() => import('@/components/Matching/Card'), {
@@ -38,10 +39,10 @@ const Matching = () => {
   const [count, setCount] = useState(0);
   const [nearbyDogs, setNearbyDogs] = useState(0);
 
-  const currentDog = useMemo(
-    () => currentUser?.dogs?.find((dog) => dog.isCurrent === true),
-    [currentUser]
-  );
+  const currentDog = useMemo(() => {
+    const approvedDogs = currentUser?.dogs?.filter((dog) => dog.isApproved.status === 'Approved');
+    return approvedDogs.find((dog) => dog.isCurrent === true);
+  }, [currentUser]);
 
   const { data: randomDog, error, isFetching } = useRandomDogs(currentUser);
 
@@ -126,15 +127,27 @@ const Matching = () => {
       <MovingBackground />
 
       <div className="container mx-auto flex min-h-screen items-center justify-center ">
-        {isFetching || swipeLeftMutation.isLoading ? (
-          <CustomLottie animationData={dogAnimation} />
+        {currentDog ? (
+          isFetching || swipeLeftMutation.isLoading ? (
+            <CustomLottie animationData={dogAnimation} />
+          ) : (
+            <Card
+              handleCardLeftScreen={handleCardLeftScreen}
+              count={count}
+              randomDog={randomDog}
+              nearbyDogs={nearbyDogs}
+            />
+          )
         ) : (
-          <Card
-            handleCardLeftScreen={handleCardLeftScreen}
-            count={count}
-            randomDog={randomDog}
-            nearbyDogs={nearbyDogs}
-          />
+          <Text>
+            No Dogs found. Please{' '}
+            <Link href="/my-dogs" passHref legacyBehavior>
+              <Text span color="blue" style={{ cursor: 'pointer' }}>
+                click this
+              </Text>
+            </Link>{' '}
+            to add one.
+          </Text>
         )}
       </div>
 
