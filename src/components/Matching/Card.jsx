@@ -82,8 +82,8 @@ const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
                           </Text>
                         ))}
                         <div className="z-50 flex gap-x-2">
-                          {randomDog?.images.map((image) => (
-                            <PhotoProvider className="z-50">
+                          {randomDog?.images.map((image, i) => (
+                            <PhotoProvider className="z-50" key={i}>
                               <PhotoView src={image}>
                                 <div className="relative h-24 w-24">
                                   <Image
