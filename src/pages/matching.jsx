@@ -74,6 +74,7 @@ const Matching = () => {
     },
 
     onSettled: () => {
+      queryClient.invalidateQueries(['currentUser', currentUser?._id]);
       queryClient.invalidateQueries(['my-swipes']);
       queryClient.invalidateQueries(['swipe-you']);
       queryClient.invalidateQueries(['random-dogs']);
@@ -127,28 +128,49 @@ const Matching = () => {
       <MovingBackground />
 
       <div className="container mx-auto flex min-h-screen items-center justify-center ">
-        {currentDog ? (
-          isFetching || swipeLeftMutation.isLoading ? (
-            <CustomLottie animationData={dogAnimation} />
+        <div>
+          {currentUser.plan.swipes === 0 ? (
+            <Text>
+              Please note, you have used up all your daily swipes. Click{' '}
+              <Link passHref legacyBehavior href="/pricing">
+                <Text color="blue" span style={{ cursor: 'pointer' }}>
+                  this
+                </Text>
+              </Link>{' '}
+              to upgrade your account to premium
+            </Text>
           ) : (
-            <Card
-              handleCardLeftScreen={handleCardLeftScreen}
-              count={count}
-              randomDog={randomDog}
-              nearbyDogs={nearbyDogs}
-            />
-          )
-        ) : (
-          <Text>
-            No Dogs found. Please{' '}
-            <Link href="/my-dogs" passHref legacyBehavior>
-              <Text span color="blue" style={{ cursor: 'pointer' }}>
-                click this
-              </Text>
-            </Link>{' '}
-            to add one.
-          </Text>
-        )}
+            <>
+              {currentDog ? (
+                isFetching || swipeLeftMutation.isLoading ? (
+                  <CustomLottie animationData={dogAnimation} />
+                ) : (
+                  <Card
+                    handleCardLeftScreen={handleCardLeftScreen}
+                    count={count}
+                    randomDog={randomDog}
+                    nearbyDogs={nearbyDogs}
+                  />
+                )
+              ) : (
+                <Text>
+                  No Dogs found. Please{' '}
+                  <Link href="/my-dogs" passHref legacyBehavior>
+                    <Text span color="blue" style={{ cursor: 'pointer' }}>
+                      click this
+                    </Text>
+                  </Link>{' '}
+                  to add one.
+                </Text>
+              )}
+            </>
+          )}
+          <div className="mt-5">
+            <Text>
+              Daily Swipes: {currentUser.plan.type === 'Premium' ? '∞' : currentUser.plan.swipes}
+            </Text>
+          </div>
+        </div>
       </div>
 
       <Drawer opened={opened} onClose={close}>

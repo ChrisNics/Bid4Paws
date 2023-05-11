@@ -15,6 +15,10 @@ import LoadingScreen from '@/components/LoadingScreen';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import _ from 'lodash';
 
+const GetStarted = dynamic(() => import('.').then((o) => o.GetStarted), {
+  loading: () => <LoadingOverlay overlayOpacity={1} visible={true} loader={<LoadingScreen />} />
+});
+
 const CreateDog = dynamic(() => import('@/components/MyDogs/Modals/CreateDog'), {
   loading: () => <LoadingOverlay overlayOpacity={1} visible={true} loader={<LoadingScreen />} />
 });
@@ -50,6 +54,7 @@ NiceModal.register('payment-method', PaymentMethod);
 NiceModal.register('update-dog-admin', UpdateDogAdmin);
 NiceModal.register('update-user-admin', UpdateUserAdmin);
 NiceModal.register('verification-modal', VerificationModal);
+NiceModal.register('get-started', GetStarted);
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const [colorScheme, setColorScheme] = useLocalStorage({

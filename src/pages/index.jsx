@@ -10,7 +10,11 @@ import {
 } from '@mantine/core';
 import DogFacts from '@/components/DogFacts';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { TypeAnimation } from 'react-type-animation';
+
+import { Modal } from 'antd';
+import NiceModal, { useModal, antdModal } from '@ebay/nice-modal-react';
 
 const useStyles = createStyles((theme) => ({
   hero: {
@@ -69,10 +73,50 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
+export const GetStarted = NiceModal.create(() => {
+  const modal = useModal();
+  const router = useRouter();
+
+  return (
+    <Modal {...antdModal(modal)} footer={null} width={1000}>
+      <Title order={3} color="orange">
+        Creating Dogs and Navigating our App: A Step-by-Step Tutorial
+      </Title>
+      <Text>
+        Welcome to our app! Learn how to create your own dogs and navigate through the app with ease
+        in this step-by-step tutorial.
+      </Text>
+      <div className="py-5">
+        <video src="/tutorial.mp4" controls width="100%" />
+      </div>
+      <div className="flex justify-end">
+        <div className="flex gap-x-3">
+          <Button
+            color="orange"
+            onClick={() => {
+              NiceModal.hide('get-started');
+              router.push('/matching');
+            }}>
+            Find Match
+          </Button>
+          <Button
+            variant="outline"
+            color="orange"
+            onClick={() => {
+              NiceModal.hide('get-started');
+              router.push('/my-dogs');
+            }}>
+            Create Dogs
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
+});
+
 const Hero = () => {
   const { classes } = useStyles();
   const theme = useMantineTheme();
-
   return (
     <div className={classes.hero}>
       <Overlay
@@ -96,23 +140,22 @@ const Hero = () => {
           Connect Your Canine Companion with the Perfect Match - The Ultimate Dog Breeding App!
         </Text>
 
-        <div className="flex flex-col self-stretch gap-y-5 mt-10 sm:flex-row sm:gap-y-0 sm:gap-x-5">
+        <div className="mt-10 flex flex-col gap-y-5 self-stretch sm:flex-row sm:gap-x-5 sm:gap-y-0">
           <Link href="/matching" passHref legacyBehavior>
             <Button size="xl" color="orange" radius="xl" className={classes.control}>
               Find My Match
             </Button>
           </Link>
 
-          <Link href="/matching" passHref legacyBehavior>
-            <Button
-              size="xl"
-              variant="white"
-              color="orange"
-              radius="xl"
-              className={classes.control}>
-              Get Started
-            </Button>
-          </Link>
+          <Button
+            size="xl"
+            variant="white"
+            color="orange"
+            radius="xl"
+            className={classes.control}
+            onClick={() => NiceModal.show('get-started')}>
+            Get Started
+          </Button>
         </div>
 
         <DogFacts />

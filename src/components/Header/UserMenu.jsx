@@ -6,6 +6,7 @@ import {
   IconDog,
   IconSettings,
   IconTrash,
+  IconMessage,
   IconChevronDown
 } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -75,15 +76,10 @@ const UserMenu = ({ currentUser }) => {
           </UnstyledButton>
         </Menu.Target>
         <Menu.Dropdown>
-          <Link href="/my-swipes" passHref legacyBehavior>
-            <Menu.Item icon={<IconHeart size="0.9rem" color={theme.colors.red[6]} stroke={1.5} />}>
-              <span>My swipes</span>
-            </Menu.Item>
-          </Link>
-          <Link href="my-bids" passHref legacyBehavior>
+          <Link href="/chat" passHref legacyBehavior>
             <Menu.Item
-              icon={<IconStar size="0.9rem" color={theme.colors.yellow[6]} stroke={1.5} />}>
-              <span>My Bids</span>
+              icon={<IconMessage size="0.9rem" color={theme.colors.red[6]} stroke={1.5} />}>
+              <span>Messages</span>
             </Menu.Item>
           </Link>
 

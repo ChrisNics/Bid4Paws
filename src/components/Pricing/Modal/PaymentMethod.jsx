@@ -83,7 +83,7 @@ const PaymentMethod = NiceModal.create(({ price, plan }) => {
                   {
                     currency: 'PHP',
                     images: [
-                      'https://images.pexels.com/photos/895259/pexels-photo-895259.jpeg?auto=compress&cs=tinysrgb&w=1600'
+                      'https://res.cloudinary.com/dj6gipxny/image/upload/v1683805245/logo-2_z6xpmp.gif'
                     ],
                     amount: mapValue(price),
                     description: plan,

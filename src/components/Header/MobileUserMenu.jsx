@@ -1,5 +1,5 @@
 import { Paper, Accordion, useMantineTheme, rem, Transition, Text } from '@mantine/core';
-import { IconLogout, IconHeart, IconStar, IconDog, IconSettings } from '@tabler/icons-react';
+import { IconLogout, IconMessage, IconDog, IconSettings } from '@tabler/icons-react';
 import Link from 'next/link';
 import signOut from '../../../lib/signOut';
 
@@ -7,14 +7,9 @@ const MobileUserMenu = ({ items, opened }) => {
   const theme = useMantineTheme();
   const settings = [
     {
-      link: '/my-bids',
-      label: 'My bids',
-      icon: <IconStar size={rem(16)} color={theme.colors.yellow[6]} stroke={1.5} />
-    },
-    {
-      link: '/my-swipes',
-      label: 'My swipes',
-      icon: <IconHeart size={rem(16)} color={theme.colors.red[6]} stroke={1.5} />
+      link: '/chat',
+      label: 'Messages',
+      icon: <IconMessage size={rem(16)} color={theme.colors.yellow[6]} stroke={1.5} />
     },
     {
       link: '/my-dogs',
