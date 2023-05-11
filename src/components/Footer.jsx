@@ -114,10 +114,6 @@ const data = [
       {
         label: 'Pricing',
         link: '/pricing'
-      },
-      {
-        label: 'Learn',
-        link: 'learn'
       }
     ]
   },
@@ -125,11 +121,11 @@ const data = [
     links: [
       {
         label: 'Terms and Conditions',
-        link: '#'
+        link: 'https://www.dochub.com/jsfiller-desk15/?requestHash=6d839814f853a8dacec8eb9cac5d8d6931e73c5f076afcccccd7bbdd979eef13&projectId=1271599398&loader=tips&MEDIUM_PDFJS=true&PAGE_REARRANGE_V2_MVP=true&isPageRearrangeV2MVP=true&jsf-page-rearrange-v2=true#d546534888954fa08f23a072a8980fd6'
       },
       {
         label: 'FAQ',
-        link: '#'
+        link: '/faq'
       }
     ]
   },
@@ -137,16 +133,16 @@ const data = [
     title: 'Community',
     links: [
       {
-        label: 'Join Discord',
-        link: '#'
+        label: 'Follow on Instagram',
+        link: 'https://www.instagram.com/bid4paws/?igshid=ZGUzMzM3NWJiOQ%3D%3D&fbclid=IwAR3YAa-d37mVP0eg-iuIQxOqqFzDKT6pVNaL3OfiHeJL39Ohq3R5VPEvT28'
       },
       {
         label: 'Follow on Twitter',
-        link: '#'
+        link: 'https://twitter.com/i/flow/lite/verify_password'
       },
       {
         label: 'Follow on Facebook',
-        link: '#'
+        link: 'https://www.facebook.com/bid4paws?mibextid=ZbWKwL'
       }
     ]
   }
@@ -159,7 +155,9 @@ export default function Footer() {
   const groups = data.map((group) => {
     const links = group.links.map((link, index) => (
       <Link passHref legacyBehavior href={link.link} key={index}>
-        <Text className={classes.link}>{link.label}</Text>
+        <Text className={classes.link} component="a" target="_blank">
+          {link.label}
+        </Text>
       </Link>
     ));
 
@@ -196,18 +194,6 @@ export default function Footer() {
         <Text color="dimmed" size="sm">
           © {new Date().getFullYear()} bid4paws. All rights reserved.
         </Text>
-
-        <Group spacing={0} className={classes.social} position="right" noWrap>
-          <ActionIcon size="lg">
-            <IconBrandTwitter size="1.05rem" stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon size="lg">
-            <IconBrandYoutube size="1.05rem" stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon size="lg">
-            <IconBrandInstagram size="1.05rem" stroke={1.5} />
-          </ActionIcon>
-        </Group>
       </Container>
     </footer>
   );

@@ -4,14 +4,15 @@ import Image from 'next/image';
 import { HoverCard, Title, Text } from '@mantine/core';
 import { IconHelpSquare } from '@tabler/icons-react';
 import TinderCard from 'react-tinder-card';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 import { useQueryClient } from '@tanstack/react-query';
 
 const dogProperties = [
+  { label: 'Caption', value: 'caption' },
   { label: 'Height', value: 'height' },
   { label: 'Weight', value: 'weight' },
   { label: 'Color', value: 'color' },
   { label: 'BloodLine', value: 'bloodLine' },
-  { label: 'Caption', value: 'caption' },
   { label: 'Province', value: 'address.province' },
   { label: 'Barangay', value: 'address.barangay' },
   { label: 'Postal Code', value: 'address.postalCode' },
@@ -53,7 +54,7 @@ const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
 
                 <div className="flex flex-col items-end gap-y-2">
                   <div className="cursor-pointer">
-                    <HoverCard width={280} shadow="md" position="top">
+                    <HoverCard width={350} shadow="md" position="top">
                       <HoverCard.Target>
                         <IconHelpSquare />
                       </HoverCard.Target>
@@ -80,6 +81,23 @@ const Card = ({ handleCardLeftScreen, randomDog, count, nearbyDogs }) => {
                             </Text>
                           </Text>
                         ))}
+                        <div className="z-50 flex gap-x-2">
+                          {randomDog?.images.map((image) => (
+                            <PhotoProvider className="z-50">
+                              <PhotoView src={image}>
+                                <div className="relative h-24 w-24">
+                                  <Image
+                                    priority
+                                    fill
+                                    src={image}
+                                    alt="Random unsplash image"
+                                    // imageProps={{ onLoad: () => URL.revokeObjectURL(imageUrl) }}
+                                  />
+                                </div>
+                              </PhotoView>
+                            </PhotoProvider>
+                          ))}
+                        </div>
                       </HoverCard.Dropdown>
                     </HoverCard>
                   </div>

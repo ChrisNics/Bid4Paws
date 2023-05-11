@@ -6,7 +6,8 @@ import {
   Burger,
   rem,
   useMantineTheme,
-  Loader
+  Loader,
+  Button
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import UserMenu from './UserMenu';
@@ -33,12 +34,8 @@ const links = [
     label: 'Pricing'
   },
   {
-    link: '/learn',
-    label: 'Learn'
-  },
-  {
-    link: '/community',
-    label: 'Community'
+    link: '/faq',
+    label: 'FAQ'
   }
 ];
 
@@ -133,7 +130,7 @@ export default function Header() {
   return (
     <MantineHeader height={HEADER_HEIGHT} hidden={true} className={classes.root}>
       <Container className={classes.header}>
-        <div className="flex justify-center items-center cursor-pointer">
+        <div className="flex cursor-pointer items-center justify-center">
           <Link href="/" passHref legacyBehavior>
             <Image
               src={
@@ -151,16 +148,31 @@ export default function Header() {
           </Link>
         </div>
 
-        <div spacing={5} className="hidden md:flex gap-x-5">
-          {items}
+        <div className="flex gap-x-10">
+          <div spacing={5} className="hidden gap-x-5 md:flex">
+            {items}
+          </div>
+          {_.isEmpty(currentUser) && (
+            <div className="flex gap-x-2">
+              <Link href="/signup" passHref legacyBehavior>
+                <Button color="orange">Signup</Button>
+              </Link>
+              <Link href="/signin" passHref legacyBehavior>
+                <Button variant="white" color="orange">
+                  Login
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
 
         {!_.isEmpty(currentUser) && (
           <>
             <UserMenu currentUser={currentUser} />
-            {opened && <MobileUserMenu items={itemsMobile} opened={opened} />}
           </>
         )}
+
+        {opened && <MobileUserMenu items={itemsMobile} opened={opened} />}
 
         <Burger
           opened={opened}

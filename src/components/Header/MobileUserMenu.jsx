@@ -2,8 +2,11 @@ import { Paper, Accordion, useMantineTheme, rem, Transition, Text } from '@manti
 import { IconLogout, IconMessage, IconDog, IconSettings } from '@tabler/icons-react';
 import Link from 'next/link';
 import signOut from '../../../lib/signOut';
+import useCurrentUser from '@/store/useCurrentUser';
+import _ from 'lodash';
 
 const MobileUserMenu = ({ items, opened }) => {
+  const currentUser = useCurrentUser((state) => state.currentUser);
   const theme = useMantineTheme();
   const settings = [
     {
@@ -32,41 +35,44 @@ const MobileUserMenu = ({ items, opened }) => {
           style={styles}>
           {items}
 
-          <Accordion
-            variant="contained"
-            mt={40}
-            styles={{
-              panel: {
-                cursor: 'pointer',
+          {!_.isEmpty(currentUser) && (
+            <Accordion
+              variant="contained"
+              mt={40}
+              styles={{
+                panel: {
+                  cursor: 'pointer',
 
-                '&:hover': {
-                  background:
-                    theme.colorScheme === 'dark' ? theme.colors.gray[7] : theme.colors.gray[2]
+                  '&:hover': {
+                    background:
+                      theme.colorScheme === 'dark' ? theme.colors.gray[7] : theme.colors.gray[2]
+                  }
                 }
-              }
-            }}>
-            <Accordion.Item value="settings">
-              <Accordion.Control>
-                <Text size="sm">Settings</Text>
-              </Accordion.Control>
-              {settings.map((setting, i) => (
-                <Link href={setting.link} passHref legacyBehavior key={i}>
-                  <Accordion.Panel>
-                    <div className="ml-5 flex gap-x-3">
-                      {setting.icon}
-                      <Text size="sm">{setting.label}</Text>
-                    </div>
-                  </Accordion.Panel>
-                </Link>
-              ))}
-              <Accordion.Panel onClick={() => signOut()}>
-                <div className="ml-5 flex gap-x-3">
-                  <IconLogout size={rem(16)} stroke={1.5} />
-                  <Text size="sm">Logout</Text>
-                </div>
-              </Accordion.Panel>
-            </Accordion.Item>
-          </Accordion>
+              }}>
+              <Accordion.Item value="settings">
+                <Accordion.Control>
+                  <Text size="sm">Settings</Text>
+                </Accordion.Control>
+
+                {settings.map((setting, i) => (
+                  <Link href={setting.link} passHref legacyBehavior key={i}>
+                    <Accordion.Panel>
+                      <div className="ml-5 flex gap-x-3">
+                        {setting.icon}
+                        <Text size="sm">{setting.label}</Text>
+                      </div>
+                    </Accordion.Panel>
+                  </Link>
+                ))}
+                <Accordion.Panel onClick={() => signOut()}>
+                  <div className="ml-5 flex gap-x-3">
+                    <IconLogout size={rem(16)} stroke={1.5} />
+                    <Text size="sm">Logout</Text>
+                  </div>
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
+          )}
         </Paper>
       )}
     </Transition>
