@@ -4,6 +4,7 @@ import { IconHome2, IconDog, IconUser, IconLogout } from '@tabler/icons-react';
 import { MantineLogo } from '@mantine/ds';
 import { useRouter } from 'next/router';
 import signOut from '../../../lib/signOut';
+import Image from 'next/image';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -88,7 +89,7 @@ export default function AdminNavbar() {
         top: 0
       })}>
       <Center>
-        <MantineLogo type="mark" inverted size={30} />
+        <Image src="/logo-light.svg" alt="Logo" width={150} height={150} priority />
       </Center>
       <Navbar.Section grow mt={50}>
         <Stack justify="center" spacing={0}>
