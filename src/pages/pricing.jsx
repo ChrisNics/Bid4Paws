@@ -9,19 +9,11 @@ const Pricing = () => {
           Pricing
         </Title>
         <div className="flex flex-col items-center justify-center gap-y-5 sm:flex-row sm:items-stretch sm:gap-x-5 sm:gap-y-0">
-          <Card plan="Free" features={['10 daily', 'Basic features']} />
-          <Card
-            plan="Pro"
-            features={['100 swipes daily', 'More profile features like badges, stickers, etc.']}
-            price={499}
-          />
+          <Card plan="Free" features={['10 daily', 'Maximum of 1 Dog']} />
+          <Card plan="Pro" features={['100 swipes daily', 'Maximum of 2 Dogs']} price={499} />
           <Card
             plan="Premium"
-            features={[
-              'TRULY Unlimited Swipes',
-              'More profile features like badges, stickers, etc.',
-              'Advance Filterization'
-            ]}
+            features={['TRULY Unlimited Swipes', 'Maximum of 4 Dogs ', 'Advance Filterization']}
             price={999}
           />
         </div>

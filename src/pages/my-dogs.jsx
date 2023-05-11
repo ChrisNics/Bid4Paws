@@ -13,6 +13,8 @@ const MyDogs = () => {
   const currentUser = useCurrentUser((state) => state.currentUser);
 
   const showModal = () => NiceModal.show('create-dog');
+  const maxDogs =
+    currentUser?.plan.type === 'Premium' ? 4 : currentUser?.plan.type === 'Pro' ? 2 : 1;
 
   return (
     <section className="min-h-screen">
@@ -24,7 +26,7 @@ const MyDogs = () => {
               <Image priority fill alt="Dog Image" src="/dogAvatar.png" quality={50} sizes="33vw" />
             </div>
           </div>
-          {currentUser?.dogs?.length < 4 && currentUser?.dogs?.length !== 0 && (
+          {currentUser?.dogs?.length < maxDogs && currentUser?.dogs?.length !== 0 && (
             <Button leftIcon={<IconPlus />} color="orange" onClick={showModal}>
               Add dog
             </Button>
