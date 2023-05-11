@@ -83,6 +83,8 @@ export default function AdminNavbar() {
         backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
           .background,
         position: 'relative',
+        height: 'auto !important',
+        minHeight: '100vh',
         top: 0
       })}>
       <Center>
