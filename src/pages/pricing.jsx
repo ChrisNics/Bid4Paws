@@ -13,7 +13,7 @@ const Pricing = () => {
           <Card plan="Pro" features={['100 swipes daily', 'Maximum of 2 Dogs']} price={499} />
           <Card
             plan="Premium"
-            features={['TRULY Unlimited Swipes', 'Maximum of 4 Dogs ', 'Advance Filterization']}
+            features={['TRULY Unlimited Swipes', 'Maximum of 4 Dogs ']}
             price={999}
           />
         </div>
