@@ -18,7 +18,7 @@ export default class _Document extends Document {
             type="text/css"
           />
         </Head>
-        <body className="debug-screens">
+        <body className={`${process.env.NODE_ENV === 'development' ? 'debug-screens' : ''}`}>
           <Main />
           <NextScript />
         </body>
